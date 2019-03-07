@@ -12,11 +12,11 @@ pipeline {
     npm_config_cache = 'npm-cache'
   }
   stages {
-    stage('Install Packages') {
-      steps {
-        sh 'npm install'
-      }
-    }
+    // stage('Install Packages') {
+    //   steps {
+    //     sh 'npm install'
+    //   }
+    // }
     // stage('Test and Build') {
     //   parallel {
     //     stage('Run Tests') {
