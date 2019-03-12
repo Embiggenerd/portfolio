@@ -15,8 +15,8 @@ pipeline {
           }
           steps {
             withAWS(region:'us-west-2',credentials:'AKIAIFD2LLNVE3GOH4SQ') {
-              s3Delete(bucket: 'stage,igoratakhanov.com')
-              s3Upload(bucket: 'igor.atakhanov.com');
+              s3Delete(bucket: 'stage.igoratakhanov.com', path: '**/*')
+              s3Upload(file: './' bucket: 'igor.atakhanov.com', path:"./");
             }
             mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'igoratakhanov@gmail.com')
           }
