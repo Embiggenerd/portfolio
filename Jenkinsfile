@@ -20,6 +20,7 @@ pipeline {
           //   }
           //   mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'igoratakhanov@gmail.com')
           // }
+          
           steps {
             echo "deploying to stage.igoratakhanov.com"
           }
