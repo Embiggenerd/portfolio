@@ -31,33 +31,41 @@ pipeline {
     //     }
     //   }
     // }
-    stage('Deployment') {
-      parallel {
-        stage('Staging') {
-          when {
-            branch 'staging'
-          }
-          steps {
-            withAWS(region:'us-west-2',credentials:'AKIAIFD2LLNVE3GOH4SQ') {
-              s3Delete(bucket: 'igoratakhanov.com', path:'**/*')
-              s3Upload(bucket: 'igoratakhanov.com', workingDir:'build', includePathPattern:'**/*');
-            }
-            mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'igoratakhanov@gmail.com')
-          }
+  //   stage('Deployment') {
+  //     parallel {
+  //       stage('Staging') {
+  //         when {
+  //           branch 'staging'
+  //         }
+  //         steps {
+  //           withAWS(region:'us-west-2',credentials:'AKIAIFD2LLNVE3GOH4SQ') {
+  //             s3Delete(bucket: 'igoratakhanov.com', path:'**/*')
+  //             s3Upload(bucket: 'igoratakhanov.com', workingDir:'build', includePathPattern:'**/*');
+  //           }
+  //           mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'igoratakhanov@gmail.com')
+  //         }
+  //       }
+  //       stage('Production') {
+  //         when {
+  //           branch 'production'
+  //         }
+  //         steps {
+  //           withAWS(region:'us-west-2',credentials:'AKIAIFD2LLNVE3GOH4SQ') {
+  //             s3Delete(bucket: 'stage.igoratakhanov.com', path:'**/*')
+  //             s3Upload(bucket: 'stage.igoratakhanov.com', workingDir:'build', includePathPattern:'**/*');
+  //           }
+  //           mail(subject: 'Production Build', body: 'New Deployment to Production', to: 'igoratakhanov@gmail.com')
+  //         }
+  //       }
+  //     }
+  //   }
+      stage('Staging') {
+        when {
+          branch "staging"
         }
-        stage('Production') {
-          when {
-            branch 'production'
-          }
-          steps {
-            withAWS(region:'us-west-2',credentials:'AKIAIFD2LLNVE3GOH4SQ') {
-              s3Delete(bucket: 'stage.igoratakhanov.com', path:'**/*')
-              s3Upload(bucket: 'stage.igoratakhanov.com', workingDir:'build', includePathPattern:'**/*');
-            }
-            mail(subject: 'Production Build', body: 'New Deployment to Production', to: 'igoratakhanov@gmail.com')
-          }
-        }
+        echo "deploying to stage.igoratakhanov.com ..."
       }
-    }
-  }
+   }
+
+
 }
