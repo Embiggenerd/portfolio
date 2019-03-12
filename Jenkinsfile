@@ -30,13 +30,13 @@ pipeline {
           when {
             branch 'production'
           }
-          // steps {
-          //   withAWS(region:'us-west-2',credentials:'AKIAIFD2LLNVE3GOH4SQ') {
-          //     s3Delete(bucket: 'stage.igor atakhanov.com', path:'**/*')
-          //     s3Upload(bucket: 'stage.igoratakhanov.com', workingDir:'build', includePathPattern:'**/*');
-          //   }
-          //   mail(subject: 'Production Build', body: 'New Deployment to Production', to: 'igoratakhanov@gmail.com')
-          // }
+          steps {
+            withAWS(region:'us-west-2',credentials:'AKIAIFD2LLNVE3GOH4SQ') {
+              s3Delete(bucket: 'stage.igor atakhanov.com', path:'**/*')
+              // s3Upload(bucket: 'stage.igoratakhanov.com', workingDir:'build', includePathPattern:'**/*');
+            }
+            // mail(subject: 'Production Build', body: 'New Deployment to Production', to: 'igoratakhanov@gmail.com')
+          }
           steps {
             echo "delpoying to igoratakhanov.com"
           }
