@@ -13,17 +13,17 @@ pipeline {
           when {
             branch 'staging'
           }
-          // steps {
-          //   withAWS(region:'us-west-2',credentials:'AKIAIFD2LLNVE3GOH4SQ') {
-          //     s3Delete(bucket: 'igoratakhanov.com', path:'**/*')
-          //     s3Upload(bucket: 'igoratakhanov.com', workingDir:'build', includePathPattern:'**/*');
-          //   }
-          //   mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'igoratakhanov@gmail.com')
-          // }
-          
           steps {
-            echo "deploying to stage.igoratakhanov.com"
+            withAWS(region:'us-west-2',credentials:'AKIAIFD2LLNVE3GOH4SQ') {
+              s3Delete(bucket: 'stage,igoratakhanov.com')
+              s3Upload(bucket: 'igor.atakhanov.com');
+            }
+            mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'igoratakhanov@gmail.com')
           }
+          
+          // steps {
+          //   echo "deploying to stage.igoratakhanov.com"
+          // }
           
         }
         stage('Production') {
