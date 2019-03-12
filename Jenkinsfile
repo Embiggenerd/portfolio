@@ -10,9 +10,9 @@ pipeline {
     stage('Deployment') {
       parallel {
         stage('Staging') {
-          // when {
-          //   branch 'staging'
-          // }
+          when {
+            branch 'staging'
+          }
           // steps {
           //   withAWS(region:'us-west-2',credentials:'AKIAIFD2LLNVE3GOH4SQ') {
           //     s3Delete(bucket: 'igoratakhanov.com', path:'**/*')
@@ -22,14 +22,13 @@ pipeline {
           // }
           steps {
             echo "deploying to stage.igoratakhanov.com"
-            mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'igoratakhanov@gmail.com')
           }
           
         }
         stage('Production') {
-          // when {
-          //   branch 'production'
-          // }
+          when {
+            branch 'production'
+          }
           // steps {
           //   withAWS(region:'us-west-2',credentials:'AKIAIFD2LLNVE3GOH4SQ') {
           //     s3Delete(bucket: 'stage.igoratakhanov.com', path:'**/*')
@@ -39,7 +38,6 @@ pipeline {
           // }
           steps {
             echo "delpoying to igoratakhanov.com"
-            mail(subject: 'Staging Build', body: 'New Deployment to Production', to: 'igoratakhanov@gmail.com')
           }
          
         }
