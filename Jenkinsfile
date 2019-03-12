@@ -37,9 +37,9 @@ pipeline {
             }
             // mail(subject: 'Production Build', body: 'New Deployment to Production', to: 'igoratakhanov@gmail.com')
           }
-          steps {
-            echo "delpoying to igoratakhanov.com"
-          }
+          // steps {
+          //   echo "delpoying to igoratakhanov.com"
+          // }
          
         }
       }
