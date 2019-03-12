@@ -14,7 +14,7 @@ pipeline {
             branch 'staging'
           }
           steps {
-            withAWS(region:'us-west-2',credentials:'AKIAIFD2LLNVE3GOH4SQ') {
+            withAWS(region:'us-west-2',credentials:'portfolio1-cdcd') {
               s3Delete(bucket: 'stage.igoratakhanov.com', path: '**/*')
               s3Upload(file: './', bucket: 'igor.atakhanov.com', path:"./");
             }
