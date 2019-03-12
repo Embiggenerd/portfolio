@@ -1,11 +1,12 @@
 
 pipeline {
   agent {
+    any
     // docker {
     //   image 'node:10-alpine'
     //   args '-p 20001-20100:3000'
     // }
-    any
+   
   }
   environment {
     // CI = 'true'
@@ -62,8 +63,11 @@ pipeline {
           //   }
           //   mail(subject: 'Production Build', body: 'New Deployment to Production', to: 'igoratakhanov@gmail.com')
           // }
-          echo "delpoying to igoratakhanov.com"
-          mail(subject: 'Staging Build', body: 'New Deployment to Production', to: 'igoratakhanov@gmail.com')
+          steps {
+            echo "delpoying to igoratakhanov.com"
+            mail(subject: 'Staging Build', body: 'New Deployment to Production', to: 'igoratakhanov@gmail.com')
+          }
+         
         }
       }
    }
