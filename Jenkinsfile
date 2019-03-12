@@ -7,11 +7,11 @@ pipeline {
     // }
     any
   }
-  environment {
-    // CI = 'true'
-    // HOME = '.'
-    // npm_config_cache = 'npm-cache'
-  }
+  // environment {
+  //   // CI = 'true'
+  //   // HOME = '.'
+  //   // npm_config_cache = 'npm-cache'
+  // }
   stages {
     // stage('Install Packages') {
     //   steps {
