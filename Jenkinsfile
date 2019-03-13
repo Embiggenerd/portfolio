@@ -18,13 +18,7 @@ pipeline {
               s3Delete(bucket: 'stage.igoratakhanov.com', path: '**/*')
               s3Upload(file: 'client', bucket: 'stage.igoratakhanov.com');
             }
-            // mail(subject: 'Staging Build', body: 'New Deployment to Staging', to: 'igoratakhanov@gmail.com')
           }
-          
-          // steps {
-          //   echo "deploying to stage.igoratakhanov.com"
-          // }
-          
         }
         stage('Production') {
           when {
@@ -33,17 +27,12 @@ pipeline {
           steps {
             withAWS(region:'us-west-2',credentials:'portfolio1-cdcd') {
               s3Delete(bucket: 'stage.igor atakhanov.com', path:'**/*')
-              s3Upload(bucket: 'stage.igoratakhanov.com', workingDir:'build', includePathPattern:'**/*');
+              s3Upload(file: 'client', bucket: 'stage.igoratakhanov.com');
             }
-            // mail(subject: 'Production Build', body: 'New Deployment to Production', to: 'igoratakhanov@gmail.com')
           }
-          // steps {
-          //   echo "delpoying to igoratakhanov.com"
-          // }
-         
-        }
+         }
       }
-   }
+    }
 
   }
 }
