@@ -26,8 +26,8 @@ pipeline {
           }
           steps {
             withAWS(region:'us-west-2',credentials:'portfolio1-cdcd') {
-              s3Delete(bucket: 'stage.igor atakhanov.com', path:'**/*')
-              s3Upload(file: 'client', bucket: 'stage.igoratakhanov.com');
+              s3Delete(bucket: 'igoratakhanov.com', path:'**/*')
+              s3Upload(file: 'client', bucket: 'igoratakhanov.com');
             }
           }
          }
