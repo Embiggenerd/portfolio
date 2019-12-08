@@ -34,15 +34,21 @@
       padding: 0;
     }
 
-    header {
+    /* header {
       padding: 20px;
       text-align: center;
       color: #95ce9c;
-    }
+    } */
 
-    .swiper-container {
+    /* .swiper-container {
       width: 80%;
       height: 90%;
+      margin-left: auto;
+      margin-right: auto;
+    } */
+    .swiper-container {
+      width: 100%;
+      height: 100%;
       margin-left: auto;
       margin-right: auto;
     }
@@ -176,10 +182,10 @@
 </head>
 
 <body>
-  <header>
+  <!-- <header>
     <h1 class="portfolio_header">The Portfolio</h1>
     <h3>Igor Atakhanov At GeeMail Dot Com</h3>
-  </header>
+  </header> -->
   <!-- Swiper -->
   <div class="swiper-container">
     <div class="swiper-wrapper">
@@ -578,7 +584,7 @@
   <script>
     var swiper = new Swiper('.swiper-container', {
       direction: 'vertical',
-      slidesPerView: 1.15,
+      slidesPerView: 1,
       spaceBetween: 30,
       mousewheel: true,
       pagination: {
