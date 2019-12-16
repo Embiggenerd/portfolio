@@ -28,6 +28,8 @@ template.innerHTML = `
         overflow: hidden;
         display: flex;
         justify-content: center;
+        z-index: 3;
+
     }
     
     .sides {
@@ -115,27 +117,17 @@ class Doors extends HTMLElement {
         this.$open = this._shadowRoot.querySelector('.open')
         this.$left= this._shadowRoot.querySelector('.left')
         this.$right = this._shadowRoot.querySelector('.right')
+        this.$intro = this._shadowRoot.querySelector('.intro')
 
         this.tl = gsap.timeline({ paused: true })
         this.tl.to(this.$open, { duration: 2, rotate: 135, delay:.5 });
         this.tl.to(this.$left, { duration: 3, x: "-50vw", delay: .5})
         this.tl.to(this.$right, { duration: 3.92, x: "60vw", delay: -3 })
         this.tl.to(this.$open, { duration: 3.92, x: "60vw", delay: -3.92 })
+        this.tl.to(this.$intro,{display: "none", delay: -1})
 
         this.$open.addEventListener('mouseover', () => {
             this.tl.play();
-        })
-
-    }
-
-    _animateDoors(tl, el) {
-        tl.to(".open", { duration: 2, rotate: 135 });
-        tl.to(".left", { duration: 3, x: "-50vw" })
-        tl.to(".right", { duration: 3.92, x: "60vw", delay: -3 })
-        tl.to(".open", { duration: 3.92, x: "60vw", delay: -3.92 })
-
-        el.addEventListener('mouseover', () => {
-            tl.play();
         })
     }
 }
