@@ -1,6 +1,6 @@
-const template = document.createElement('template');
+const templateDoors = document.createElement('template');
 
-template.innerHTML = `
+templateDoors.innerHTML = `
     <style>
     .sides {
         display: grid;
@@ -113,7 +113,7 @@ class Doors extends HTMLElement {
         super();
 
         this._shadowRoot = this.attachShadow({ mode: 'open' });
-        this._shadowRoot.appendChild(template.content.cloneNode(true));
+        this._shadowRoot.appendChild(templateDoors.content.cloneNode(true));
         this.$open = this._shadowRoot.querySelector('.open')
         this.$left= this._shadowRoot.querySelector('.left')
         this.$right = this._shadowRoot.querySelector('.right')
