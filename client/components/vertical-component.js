@@ -1,10 +1,12 @@
-const template = document.createElement('template');
+const vTemplate = document.createElement('template');
 
-template.innerHTML = `
+vTemplate.innerHTML = `
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css" />
 
     <style>
-    
+    :host {
+        width: 90%
+    }
     .swiper-slide {
         background-color: #f4f1de;
         text-align: center;
@@ -20,7 +22,6 @@ template.innerHTML = `
         -ms-flex-align: center;
         -webkit-align-items: center;
         align-items: center;
-        margin-right: 0;
       }
   
       .content {
@@ -135,30 +136,34 @@ template.innerHTML = `
       }
     </style>
 
-    <div class="swiper-container swiper-container-h">
+    <div class="swiper-container swiper-container-v">
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
-              <vertical-component></vertical-component>
-            </div>
-            <div class="swiper-slide">Horizontal Slide 1</div>
-            <div class="swiper-slide">Horizontal Slide 2</div>
-            <div class="swiper-slide">Horizontal Slide 3</div>
-            <div class="swiper-slide">Horizontal Slide 4</div> 
+          <div class="swiper-slide">
+            <header>
+              <h1 class="portfolio_header">The Portfolio</h1>
+              <h3>Igor Atakhanov At GeeMail Dot Com</h3>
+            </header>
+          </div>
+          <div class="swiper-slide">Vertical Slide 1</div>
+          <div class="swiper-slide">Vertical Slide 2</div>
+          <div class="swiper-slide">Vertical Slide 3</div>
+          <div class="swiper-slide">Vertical Slide 4</div>
+          <div class="swiper-slide">Vertical Slide 5</div>
         </div>
-        <div class="swiper-pagination swiper-pagination-h"></div>
-    </div>
+        <div class="swiper-pagination swiper-pagination-v"></div>
+      </div>
 `;
-const lala = ' <!-- <div><slot name="h-slot"></slot></div> -->'
-class Horizontal extends HTMLElement {
+class Vertical extends HTMLElement {
     constructor() {
         super();
-        
+        console.log('vert mounted')
         this._shadowRoot = this.attachShadow({ mode: 'open' });
-        this._shadowRoot.appendChild(template.content.cloneNode(true));
-        const swiperContainer = this._shadowRoot.querySelector('.swiper-container-h')
-        const pagination = this._shadowRoot.querySelector('.swiper-pagination-h')
+        this._shadowRoot.appendChild(vTemplate.content.cloneNode(true));
+        const swiperContainer = this._shadowRoot.querySelector('.swiper-container-v')
+        const pagination = this._shadowRoot.querySelector('.swiper-pagination-v')
         
         this.swiperH = new Swiper(swiperContainer, {
+            direction: 'vertical',
             spaceBetween: 50,
             pagination: {
               el: pagination,
@@ -167,5 +172,16 @@ class Horizontal extends HTMLElement {
           });
     }
 }
+`
+var swiperV = new Swiper('.swiper-container-v', {
+    //   direction: 'vertical',
+    //   spaceBetween: 50,
+    //   pagination: {
+    //     el: '.swiper-pagination-v',
+    //     clickable: true,
+    //   },
+    // });
 
-window.customElements.define('horizontal-component', Horizontal)
+`
+
+window.customElements.define('vertical-component', Vertical)
