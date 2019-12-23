@@ -146,9 +146,10 @@ template.innerHTML = `
             <div class="swiper-slide">Horizontal Slide 4</div> 
         </div>
         <div class="swiper-pagination swiper-pagination-h"></div>
+        <div class="swiper-button-next"></div>
+        <div class="swiper-button-prev"></div>
     </div>
 `;
-const lala = ' <!-- <div><slot name="h-slot"></slot></div> -->'
 class Horizontal extends HTMLElement {
     constructor() {
         super();
@@ -157,12 +158,18 @@ class Horizontal extends HTMLElement {
         this._shadowRoot.appendChild(template.content.cloneNode(true));
         const swiperContainer = this._shadowRoot.querySelector('.swiper-container-h')
         const pagination = this._shadowRoot.querySelector('.swiper-pagination-h')
-        
+        const nextEl = this._shadowRoot.querySelector('.swiper-button-next')
+        const prevEl = this._shadowRoot.querySelector('.swiper-button-prev')
+
         this.swiperH = new Swiper(swiperContainer, {
             spaceBetween: 50,
             pagination: {
               el: pagination,
               clickable: true,
+            },
+            navigation: {
+              nextEl,
+              prevEl
             },
           });
     }

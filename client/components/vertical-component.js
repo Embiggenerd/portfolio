@@ -151,6 +151,8 @@ vTemplate.innerHTML = `
           <div class="swiper-slide">Vertical Slide 5</div>
         </div>
         <div class="swiper-pagination swiper-pagination-v"></div>
+        <div class="swiper-button-up"></div>
+        <div class="swiper-button-down"></div>
       </div>
 `;
 class Vertical extends HTMLElement {
@@ -161,15 +163,22 @@ class Vertical extends HTMLElement {
         this._shadowRoot.appendChild(vTemplate.content.cloneNode(true));
         const swiperContainer = this._shadowRoot.querySelector('.swiper-container-v')
         const pagination = this._shadowRoot.querySelector('.swiper-pagination-v')
-        
+        const downEl = this._shadowRoot.querySelector('.swiper-button-down')
+        const upEl = this._shadowRoot.querySelector('.swiper-button-up')
+
+
         this.swiperH = new Swiper(swiperContainer, {
             direction: 'vertical',
             spaceBetween: 50,
             pagination: {
-              el: pagination,
-              clickable: true,
+                el: pagination,
+                clickable: true,
             },
-          });
+            navigation: {
+                downEl,
+                upEl
+            },
+        });
     }
 }
 `
