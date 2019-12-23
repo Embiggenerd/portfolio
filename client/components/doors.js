@@ -85,7 +85,6 @@ templateDoors.innerHTML = `
         background: #634a31;
         box-shadow: inset 0 0 10px #2b1d0e;
         background-image: url("https://www.transparenttextures.com/patterns/purty-wood.png");
-        background-image: url("https://www.transparenttextures.com/patterns/retina-wood.png");
     }
     .shadow-div {
         position: absolute;

@@ -1,6 +1,6 @@
-const template = document.createElement('template');
+const homeTemplate = document.createElement('template');
 
-template.innerHTML = `
+homeTemplate.innerHTML = `
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/4.5.0/css/swiper.min.css" />
 
     <style>
@@ -138,42 +138,42 @@ template.innerHTML = `
         max-height: 100%;
         object-fit: contain;
       }
+
+      :host {
+          width: 100%;
+          heoght: 100%;
+      }
+      .home-container {
+        padding: 20px;
+        margin: 10px;
+        width: 90%;
+        height: 80%;
+        background: #d2b48c;
+        color: #fff;
+        font-size: 21px;
+        font-weight: bold;
+        line-height: 1.3em;
+        border: 2px dashed #0A2463;
+        border-radius: 10px;
+        box-shadow: 0 0 0 4px #d2b48c, 2px 1px 6px 4px rgba(10, 10, 0, 0.5);
+        text-shadow: -1px -1px #aa3030;
+        font-weight: normal;
+      }
     </style>
-
-    <div class="swiper-container swiper-container-h">
-        <div class="swiper-wrapper">
-        <!-- <div class="swiper-slide">
-              <vertical-component></vertical-component>
-            </div> -->
-            <home-slide class="swiper-slide"></home-slide>
-           <!-- <div class="swiper-slide"><home-slide></home-slide></div>-->
-            <div class="swiper-slide">Horizontal Slide 2</div>
-            <div class="swiper-slide">Horizontal Slide 3</div>
-            <div class="swiper-slide">Horizontal Slide 4</div> 
-        </div>
-        <div class="swiper-pagination swiper-pagination-h"></div>
-
+        
+            
+    <div class="home-container">
+        <h1>home-slide</h1>
     </div>
+        
 `;
-class Horizontal extends HTMLElement {
+class HomeSlide extends HTMLElement {
     constructor() {
         super();
-        
+        console.log('home-slide mounted')
         this._shadowRoot = this.attachShadow({ mode: 'open' });
-        this._shadowRoot.appendChild(template.content.cloneNode(true));
-        const swiperContainer = this._shadowRoot.querySelector('.swiper-container-h')
-        const pagination = this._shadowRoot.querySelector('.swiper-pagination-h')
-        this.swiperH = new Swiper(swiperContainer, {
-            spaceBetween: 50,
-            mousewheel: true,
-            direction: 'vertical',
-            pagination: {
-              el: pagination,
-              clickable: true,
-            },
-            
-          });
+        this._shadowRoot.appendChild(homeTemplate.content.cloneNode(true));
     }
 }
 
-window.customElements.define('horizontal-component', Horizontal)
+window.customElements.define('home-slide', HomeSlide)
