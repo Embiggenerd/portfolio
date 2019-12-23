@@ -6,7 +6,12 @@ template.innerHTML = `
     <style>
     
     .swiper-slide {
-        background-color: #f4f1de;
+        background-color: #0A2463;
+        background-image:
+          radial-gradient(
+            #CECECE,
+            #0A2463
+          );
         text-align: center;
         display: -webkit-box;
         display: -ms-flexbox;
@@ -137,17 +142,16 @@ template.innerHTML = `
 
     <div class="swiper-container swiper-container-h">
         <div class="swiper-wrapper">
-            <div class="swiper-slide">
+        <!-- <div class="swiper-slide">
               <vertical-component></vertical-component>
-            </div>
+            </div> -->
             <div class="swiper-slide">Horizontal Slide 1</div>
             <div class="swiper-slide">Horizontal Slide 2</div>
             <div class="swiper-slide">Horizontal Slide 3</div>
             <div class="swiper-slide">Horizontal Slide 4</div> 
         </div>
         <div class="swiper-pagination swiper-pagination-h"></div>
-        <div class="swiper-button-next"></div>
-        <div class="swiper-button-prev"></div>
+
     </div>
 `;
 class Horizontal extends HTMLElement {
@@ -163,14 +167,13 @@ class Horizontal extends HTMLElement {
 
         this.swiperH = new Swiper(swiperContainer, {
             spaceBetween: 50,
+            mousewheel: true,
+            direction: 'vertical',
             pagination: {
               el: pagination,
               clickable: true,
             },
-            navigation: {
-              nextEl,
-              prevEl
-            },
+            
           });
     }
 }

@@ -48,13 +48,13 @@ templateDoors.innerHTML = `
     }
     .left {
         border-right: none;
-        box-shadow: inset 0 0 10px -6px #000000;
+        box-shadow: inset -7px 5px 5px -9px black;
     }
     
     .right {
         flex-direction: column-reverse;
         border-left: none;
-        box-shadow: inset 0 0 10px -6px #000000;
+        box-shadow: inset 7px 5px 5px -9px black;
     }
     
     .name {
@@ -82,8 +82,10 @@ templateDoors.innerHTML = `
         font-weight: bold;
         color: #dbd8c7;
         background: #52361b;
+        background: #634a31;
         box-shadow: inset 0 0 10px #2b1d0e;
         background-image: url("https://www.transparenttextures.com/patterns/purty-wood.png");
+        background-image: url("https://www.transparenttextures.com/patterns/retina-wood.png");
     }
     .shadow-div {
         position: absolute;
