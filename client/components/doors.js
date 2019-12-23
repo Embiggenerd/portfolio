@@ -47,12 +47,12 @@ templateDoors.innerHTML = `
         background-image: url("https://www.transparenttextures.com/patterns/dark-leather.png");
     }
     .left {
+        flex-direction: column-reverse;
         border-right: none;
         box-shadow: inset -7px 5px 5px -9px black;
     }
     
     .right {
-        flex-direction: column-reverse;
         border-left: none;
         box-shadow: inset 7px 5px 5px -9px black;
     }
@@ -111,8 +111,7 @@ templateDoors.innerHTML = `
     
         <div class="sides">
             <div class="side left">
-                <!--<h2 class="name">Monkey</h2>
-                <div class="emoji">🐒</div>-->
+                
                 <h3 class="name">FrontEnd</h3>
                 <div class="emoji">🎨</div>
             </div>
