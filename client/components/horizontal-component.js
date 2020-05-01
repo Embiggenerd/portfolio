@@ -142,38 +142,39 @@ template.innerHTML = `
 
     <div class="swiper-container swiper-container-h">
         <div class="swiper-wrapper">
+        <slot></slot>
         <!-- <div class="swiper-slide">
               <vertical-component></vertical-component>
-            </div> -->
+            </div> 
             <home-slide class="swiper-slide"></home-slide>
-           <!-- <div class="swiper-slide"><home-slide></home-slide></div>-->
+          <div class="swiper-slide"><home-slide></home-slide></div>
             <div class="swiper-slide">Horizontal Slide 2</div>
             <div class="swiper-slide">Horizontal Slide 3</div>
-            <div class="swiper-slide">Horizontal Slide 4</div> 
+            <div class="swiper-slide">Horizontal Slide 4</div> -->
         </div>
         <div class="swiper-pagination swiper-pagination-h"></div>
 
     </div>
 `;
 class Horizontal extends HTMLElement {
-    constructor() {
-        super();
-        
-        this._shadowRoot = this.attachShadow({ mode: 'open' });
-        this._shadowRoot.appendChild(template.content.cloneNode(true));
-        const swiperContainer = this._shadowRoot.querySelector('.swiper-container-h')
-        const pagination = this._shadowRoot.querySelector('.swiper-pagination-h')
-        this.swiperH = new Swiper(swiperContainer, {
-            spaceBetween: 50,
-            mousewheel: true,
-            direction: 'vertical',
-            pagination: {
-              el: pagination,
-              clickable: true,
-            },
-            
-          });
-    }
+  constructor() {
+    super();
+
+    this._shadowRoot = this.attachShadow({ mode: 'open' });
+    this._shadowRoot.appendChild(template.content.cloneNode(true));
+    const swiperContainer = this._shadowRoot.querySelector('.swiper-container-h')
+    const pagination = this._shadowRoot.querySelector('.swiper-pagination-h')
+    this.swiperH = new Swiper(swiperContainer, {
+      spaceBetween: 50,
+      mousewheel: true,
+      direction: 'vertical',
+      pagination: {
+        el: pagination,
+        clickable: true,
+      },
+
+    });
+  }
 }
 
 window.customElements.define('horizontal-component', Horizontal)
