@@ -1,0 +1,219 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Muli&display=swap'); */
+@import url("https://fonts.googleapis.com/css2?family=Muli:wght@400;700&display=swap");
+html,
+body,
+div,
+span,
+applet,
+object,
+iframe,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+blockquote,
+pre,
+a,
+abbr,
+acronym,
+address,
+big,
+cite,
+code,
+del,
+dfn,
+em,
+img,
+ins,
+kbd,
+q,
+s,
+samp,
+small,
+strike,
+strong,
+sub,
+sup,
+tt,
+var,
+b,
+u,
+i,
+center,
+dl,
+dt,
+dd,
+ol,
+ul,
+li,
+fieldset,
+form,
+label,
+legend,
+table,
+caption,
+tbody,
+tfoot,
+thead,
+tr,
+th,
+td,
+article,
+aside,
+canvas,
+details,
+embed,
+figure,
+figcaption,
+footer,
+header,
+hgroup,
+menu,
+nav,
+output,
+ruby,
+section,
+summary,
+time,
+mark,
+audio,
+video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font-size: 100%;
+  font: inherit;
+  vertical-align: baseline;
+}
+
+article,
+aside,
+details,
+figcaption,
+figure,
+footer,
+header,
+hgroup,
+menu,
+nav,
+section {
+  display: block;
+}
+body {
+  line-height: 1;
+}
+ol,
+ul {
+  list-style: none;
+}
+blockquote,
+q {
+  quotes: none;
+}
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: "";
+  content: none;
+}
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+body,
+button,
+input,
+select,
+textarea {
+  color: #2a2d35;
+  font-feature-settings: "kern" 1, "liga" 1, "ss01" 1, "ss04" 1;
+  font-synthesis: style;
+  font-weight: 400;
+}
+
+body {
+  font-size: 16px;
+  overflow-x: hidden;
+  position: relative;
+}
+
+body {
+  height: 100%;
+  min-height: 100vh;
+  font-family: Muli;
+  color: rgb(54, 57, 69);
+}
+
+h1 {
+  font-family: Muli;
+
+  font-size: 29px;
+  /* font-weight:400; */
+}
+
+p {
+  color: rgb(91, 107, 127);
+  font-size: 19px;
+  font-weight: 400;
+}
+
+.banner {
+  color: rgb(6, 145, 242);
+  font-size: 44px;
+  font-weight: 700;
+  height: 50px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+ .navbar {
+  overflow: hidden;
+  background-color: white;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.nav-container {
+  margin-top: 50px;
+}
+/* Navbar links */
+.navbar a {
+  float: left;
+  display: block;
+  color: #333;
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+  font-size: 19px;
+
+}
+
+/* Page content */
+.content {
+  padding: 16px;
+}
+
+/* The sticky class is added to the navbar with JS when it reaches its scroll position */
+.sticky {
+  position: fixed;
+  top: 0;
+  width: 100%;
+}
+
+/* Add some top padding to the page content to prevent sudden quick movement (as the navigation bar gets a new position at the top of the page (position:fixed and top:0) */
+.sticky + .content {
+  padding-top: 60px;
+}
+
+.home-icon {
+  width: 30px;
+} 
+
