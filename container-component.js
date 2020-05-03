@@ -2,22 +2,19 @@
   let template = document.createElement('template');
   template.innerHTML = `
     <style>
-      .banner {
-        margin: 0;
+      .container {
         padding: 0;
-        color: rgb(6, 145, 242);
-        font-size: 44px;
-        font-weight: 700;
-        height: 120px;
-        display: flex;
-        justify-content: center;
-        align-items: flex-end; 
+        margin: 0;
+        box-sizing: border-box;
+        height: 100vh;
       }
     </style>
 
-    <h1 class="banner">IGOR ATAKHANOV</h1>`
+    <div class="container">
+      <slot></slot>
+    </div>`
 
-  customElements.define('banner-component', class extends HTMLElement {
+  customElements.define('container-component', class extends HTMLElement {
     constructor() {
       super();
       // Attach a shadow root to the element.

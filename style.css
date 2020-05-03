@@ -137,39 +137,14 @@ textarea {
 }
 
 body {
-  font-size: 16px;
   overflow-x: hidden;
   position: relative;
 }
 
 body {
-  height: 100%;
-  min-height: 100vh;
   font-family: Muli;
   color: rgb(54, 57, 69);
 }
 
-h1 {
-  font-family: Muli;
 
-  font-size: 29px;
-  /* font-weight:400; */
-}
 
-p {
-  color: rgb(91, 107, 127);
-  font-size: 19px;
-  font-weight: 400;
-}
-
-.banner {
-  color: rgb(6, 145, 242);
-  font-size: 44px;
-  font-weight: 700;
-  height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
- 
