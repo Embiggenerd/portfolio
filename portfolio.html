@@ -17,7 +17,7 @@
 <body>
   <div class="swiper-container">
     <div class="swiper-wrapper">
-      <slide-component titleText="FIRST SLIDE B" class="swiper-slide"></slide-component>
+      <!-- <slide-component titleText="FIRST SLIDE B" class="swiper-slide"></slide-component>
       <div class="swiper-slide">Slide 2</div>
       <div class="swiper-slide">Slide 3</div>
       <div class="swiper-slide">Slide 4</div>
@@ -26,7 +26,8 @@
       <div class="swiper-slide">Slide 7</div>
       <div class="swiper-slide">Slide 8</div>
       <div class="swiper-slide">Slide 9</div>
-      <div class="swiper-slide">Slide 10</div>
+      <div class="swiper-slide">Slide 10</div> -->
+      
     </div>
     <!-- Add Pagination -->
     <div class="swiper-pagination"></div>
@@ -35,6 +36,16 @@
   <!-- Swiper JS -->
   <script src="https://unpkg.com/swiper/js/swiper.min.js"></script>
   <script src="components/slide-component.js"></script>
+  <script src="slide-data.js"></script>
+  <script>
+      const swiperWrapper = document.querySelector('.swiper-wrapper')
+      slideData.forEach(d => {
+        const slide = document.createElement('slide-component')
+        const stringified = JSON.stringify(d)
+        slide.setAttribute('data', stringified)
+        swiperWrapper.appendChild(slide)
+      })
+  </script>
   <!-- Initialize Swiper -->
   <script>
     var swiper = new Swiper('.swiper-container', {

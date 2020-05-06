@@ -19,34 +19,40 @@
       let shadowRoot = this.attachShadow({ mode: 'open' });
       shadowRoot.appendChild(tmpl.content.cloneNode(true));
       this.$title = shadowRoot.querySelector('.title')
+      // console.log(this.data)
     }
 
     static get observedAttributes() {
       return ['titleText'];
     }
 
-    attributeChangedCallback(name, oldValue, newValue) {
-      this.$title.innerHTML = this.titleText
 
+    get titleText() {
+      return this.getAttribute('titleText');
     }
 
-    get value() {
-      return this.getAttribute('titleText');
+    get data() {
+      return this.getAttribute('data')
     }
 
     set titleText(newValue) {
       this.setAttribute('titleText', newValue);
     }
 
-    connectedCallback(){
-      if (!this.hasAttribute('titleText')) {
-        // this.setAttribute('titleText', 1);
-        console.log('hasattr')
-      }
-      console.log(
-        "slide1 connected"
-      )
-      this.$title.innerHTML = this.titleText
+    set data(newValue) {
+      this.setAttribute('data', newValue)
+    }
+
+    // setAttribute(attr, data) {
+
+    // }
+
+    connectedCallback() {
+      // this.$title.innerHTML = this.titleText
+      // this.data = this.getAttribute("data")
+
+      this.jsonData = JSON.parse(this.data)
+      console.log('namesies', this.jsonData.name)
     }
   });
 })()
