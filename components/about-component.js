@@ -7,7 +7,8 @@
         padding: 0;
         box-sizing: border-box;
         display: flex;
-        margin: 200px auto;
+        margin-top:150px;
+       /* margin: 200px auto;*/
         justify-content: center;
       }
 
@@ -20,6 +21,7 @@
         color: rgb(91, 107, 127);
         font-size: 19px;
         font-weight: 400;
+        line-height: 24px;
       }
 
       .image {
@@ -29,6 +31,10 @@
         z-index:-1;
         position: relative;
 
+      }
+
+      a {
+        color: rgb(6, 145, 242);
       }
       
       .section {
@@ -41,8 +47,11 @@
       <div class="section" >
         <h2>Hey, I'm Igor</h2>
         <p>I'm a full stack developer and former professional poker player.
-        I <a href="#learn"> learn in public </a> and write about things like software, how to convince 
-        those around you to write better software, and complexity theory.
+        	I <a href="#learn"> learn in public </a>, which means you can see my
+					progression. As I learn a topic, I will check it off, and probably 
+					write an article about it. I write <a href="articles.html">about 
+					things</a> like software, project management, and whatever floats 
+					my boat at the time.
         </p>
       </div>
      

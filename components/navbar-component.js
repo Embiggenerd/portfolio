@@ -47,7 +47,7 @@
       <a href="/">
         <img class="home-icon" src="design/sharkbeak.svg" />
       </a>
-      <a href="#news">News</a>
+      <a href="portfolio.html">Portfolio</a>
       <a href="#contact">Contact</a>
       <a href="#learn">Learn</a>
     </div>`
