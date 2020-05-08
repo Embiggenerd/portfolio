@@ -4,7 +4,7 @@ const slideData = [
     description: "A MEAN app with authentication that has full crud functionality.",
     challenges: [
       "Learn how to build an Angular app.",
-      "Testing coverage above 90.",
+      "Testing coverage above 90%.",
       "Learn different design patterns. For instance, using services to hold state.",
       "Get comfortable with RXJS"
     ],
