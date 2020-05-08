@@ -2,63 +2,96 @@
   let tmpl = document.createElement('template');
   tmpl.innerHTML = `
   <style>
+    :host {
+      height: 100%;
+    }
+
     .swiper-slide {
       display:flex;
+      height: 100%;
       flex-direction: column;
-      justify-content: space-between;
+      justify-content: space-around;
       align-items: center;
 
     }
 
+    .home-icon-wrapper {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-top: 30px;
+    }
+
     .home-icon {
-      width: 30px;
+      width: 70px;
     }
 
     .project-container {
       display: flex;
       justify-content: center;
       align-items: center;
+      min-height: 60%
     }
 
     .summary-container {
-      display: flex;
-      flex-direction: column;
+      display:flex;
+      justify-content:flex-end;
       width: 40%;
     }
 
+    .summary-wrapper {
+      width: 70%;
+      text-align: left;
+    }
+
     .image-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       width: 60%;
     }
 
+    .gif-link {
+      flex-shrink: 0;
+      width: 70%;
+      height: 70%;
+    }
 
+    .gif-preview {
+      width: 100%;
+      height: 100%;
+      border-radius: 10px;
+    }
   
   <style>
   
   </style>
   <div class="swiper-slide">
-    <a href="/"> 
-      <img class="home-icon" src="design/sharkbeak.svg" />
-    </a>
+    <div class="home-icon-wrapper">
+      <a href="/"> 
+        <img class="home-icon" src="design/sharkbeak.svg" />
+      </a>
+    </div>
 
     <h1 class="name"></h1>
 
     <div class="project-container">
       <div class="summary-container">
-        
-        <h2>
-          Desription
-        </h2>
-        <p class="description" ></p>
-        
-        <h2>
-          Challenges
-        </h2>
-        <ul class="challenges"></ul>
+        <div class="summary-wrapper">
+          <h2>
+            Desription
+          </h2>
+          <p class="description" ></p>
+          
+          <h2>
+            Challenges
+          </h2>
+          <ul class="challenges"></ul>
 
-        <h2>Sources</h2>
-        <ul class="sources"></ul>
+          <h2>Sources</h2>
+          <ul class="sources"></ul>
+        </div>
       </div>
-
 
       <div class="image-container">
         <a class="gif-link" >

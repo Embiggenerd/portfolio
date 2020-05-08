@@ -17,8 +17,8 @@
 <body>
   <div class="swiper-container">
     <div class="swiper-wrapper">
-      <!-- <slide-component titleText="FIRST SLIDE B" class="swiper-slide"></slide-component>
-      <div class="swiper-slide">Slide 2</div>
+      <!-- <slide-component titleText="FIRST SLIDE B" class="swiper-slide"></slide-component> -->
+      <!-- <div class="swiper-slide">Slide 2</div>
       <div class="swiper-slide">Slide 3</div>
       <div class="swiper-slide">Slide 4</div>
       <div class="swiper-slide">Slide 5</div>
@@ -26,8 +26,9 @@
       <div class="swiper-slide">Slide 7</div>
       <div class="swiper-slide">Slide 8</div>
       <div class="swiper-slide">Slide 9</div>
-      <div class="swiper-slide">Slide 10</div> -->
+      <div class="swiper-slide">Slide 10</div>  -->
       
+
     </div>
     <!-- Add Pagination -->
     <div class="swiper-pagination"></div>
@@ -41,6 +42,7 @@
       const swiperWrapper = document.querySelector('.swiper-wrapper')
       slideData.forEach(d => {
         const slide = document.createElement('slide-component')
+        slide.classList.add('swiper-slide')
         const stringified = JSON.stringify(d)
         slide.setAttribute('data', stringified)
         swiperWrapper.appendChild(slide)
