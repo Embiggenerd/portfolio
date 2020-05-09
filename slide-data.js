@@ -40,7 +40,7 @@ const slideData = [
     description: 'A weather app that tells you the weather based on location, with \
       authentication, written in microservices architecture. With help \
       from a tutorial, but rewritten using typescript in the backend, \
-      with many added tests and added error handling.', 
+      with many added tests and added error handling.',
     challenges: [
       "Write a backend in typescript with object oriented style and \
       maintain testability.",
@@ -60,7 +60,7 @@ const slideData = [
     name: "Dockerized Go Todos",
     description: 'A dockerized todos app written using only the standard go \
     library and plain SQL queries, with go templates for the front \
-    end.', 
+    end.',
     challenges: [
       "First dockerized application.",
       "Built cache buster, used no frameworks.",
@@ -85,12 +85,13 @@ const slideData = [
     visibility, and therefore the total reading hours of their \
     competition. They are also allowed to buy ribbits through \
     stripe, though their total reading hours do not change. \
-    Visibility of content is based on reading hours.',  
+    Visibility of content is based on reading hours.',
     challenges: [
       "Use react component hooks creatively to implement reading hours.",
       "Integrate stripe payment in a way that makes sense.",
       "First non-trivial app.",
-      "The general difficulty of executing on an original idea."    ],
+      "The general difficulty of executing on an original idea."
+    ],
     sources: [
       '<a target="_blank" href="https://www.udemy.com/node-with-react-fullstack-web-development/">Dave griders mern stack course</a>',
       'Various blogs and stackoverflow questions.',
@@ -101,5 +102,23 @@ const slideData = [
     imgHref: "https://cryptic-chamber-20731.herokuapp.com/",
     title: "Deployed app"
   },
-
+  {
+    name: "React Todos TDD",
+    description: 'A MERN stack todos list application focused on testing.',
+    challenges: [
+      "Write the backend in a way that is testable by abstracting methods into imported services.",
+      "Nearly 100% testing coverage in front and back end, with unit and integration tests.",
+      "Different branches show different testing strategies.",
+      "CSS written with BEM methodology, with variables, and with different CSS files for both flex and float based approach.",
+      "React component style based on small components composed to use props.children to avoid drilling deep to pass props.",
+    ],
+    sources: [
+      '<a target="_blank" href="https://www.youtube.com/channel/UC0BAd8tPlDqFvDYBemHcQPQ">Fredrik Christensons approach to writing applications</a>',
+      '<a target="_blank" href="https://www.youtube.com/user/kentdoddsfamily">Kent C Dodds approach to testingreact</a>',
+      '<a target="_blank" href="https://github.com/Embiggenerd/todos_tdd/tree/react-final">Github repository</a>',
+    ],
+    imgSrc: "gifs/todos-tdd_1.gif",
+    imgHref: "https://react-todos-tdd.herokuapp.com/",
+    title: "Deployed app"
+  },
 ]
