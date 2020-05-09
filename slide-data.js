@@ -31,7 +31,7 @@ const slideData = [
       '<a target="_blank" href="https://github.com/Embiggenerd/ribbit">Ribbit</a>',
       '<a target="_blank" href="https://github.com/Embiggenerd/go-ribbit">Github repository</a>'
     ],
-    imgSrc: "https://igoratakhanov.com/go-ribbit_3.gif",
+    imgSrc: "gifs/go-ribbit_3.gif",
     imgHref: "https://github.com/Embiggenerd/go-ribbit",
     title: "Github Repository"
   },
@@ -52,7 +52,7 @@ const slideData = [
     sources: [
       '<a target="_blank" href="https://mherman.org/blog/developing-and-testing-microservices-with-docker">MHerman tutorial</a>',
     ],
-    imgSrc: "gifs/go-ribbit_3.gif",
+    imgSrc: "gifs/weather-app_1.gif",
     imgHref: "https://github.com/Embiggenerd/weather_app2",
     title: "Github Repository"
   },
@@ -77,5 +77,29 @@ const slideData = [
     imgSrc: "gifs/dockerized-go-todos_1.gif",
     imgHref: "https://github.com/Embiggenerd/dockerizedGoTodos",
     title: "Github Repository"
-  }
+  },
+  {
+    name: "Ribit",
+    description: 'An original social network that calculates total reading hours, \
+    and awards users with "ribbits" they can use to lower the \
+    visibility, and therefore the total reading hours of their \
+    competition. They are also allowed to buy ribbits through \
+    stripe, though their total reading hours do not change. \
+    Visibility of content is based on reading hours.',  
+    challenges: [
+      "Use react component hooks creatively to implement reading hours.",
+      "Integrate stripe payment in a way that makes sense.",
+      "First non-trivial app.",
+      "The general difficulty of executing on an original idea."    ],
+    sources: [
+      '<a target="_blank" href="https://www.udemy.com/node-with-react-fullstack-web-development/">Dave griders mern stack course</a>',
+      'Various blogs and stackoverflow questions.',
+      '<a target="_blank" href="https://github.com/Embiggenerd/ribbit">Github repository</a>',
+      '<a target="_blank" href="https://cryptic-chamber-20731.herokuapp.com/">Ribbit</a>'
+    ],
+    imgSrc: "gifs/ribbit_2.gif",
+    imgHref: "https://cryptic-chamber-20731.herokuapp.com/",
+    title: "Deployed app"
+  },
+
 ]
