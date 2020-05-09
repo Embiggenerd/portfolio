@@ -22,7 +22,7 @@
     }
 
     .home-icon {
-      width: 70px;
+      width: 50px;
     }
 
     .name {
@@ -46,9 +46,7 @@
     .summary-wrapper {
       width: 60%;
       margin-right: 10%;
-
-      min-width: 410px;
-    
+      min-width: 400px;
       text-align: left;
     }
 

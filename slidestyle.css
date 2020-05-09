@@ -52,8 +52,6 @@ body {
 .swiper-button-next,
 .swiper-button-prev {
   position: relative;
-  /* right: 49.1%; */
-  /* left: auto; */
   transform: rotate(90deg);
   color: rgb(6, 145, 242);
   opacity: 0.4;
@@ -71,7 +69,5 @@ body {
 
 .swiper-button-prev.swiper-button-disabled,
 .swiper-button-next.swiper-button-disabled {
-  /* cursor: auto;
-  pointer-events: none; */
   display: none;
 }
