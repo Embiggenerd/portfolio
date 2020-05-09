@@ -46,6 +46,7 @@
         border: 2px solid rgb(6, 145, 242);
         text-align: center;
         margin: 0 10px;
+        overflow: hidden;
       }
     </style>
 

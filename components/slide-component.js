@@ -96,6 +96,36 @@
     }
   
   </style>
+
+  <style>
+  @media only screen and (max-width: 1080px) {
+    .image-wrapper {
+      width: 100%  
+    }
+  }
+
+  @media only screen and (max-width: 730px) {
+    .project-container {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+    .image-wrapper {
+      width: 400px;
+    }
+    .summar-wrapper, .summary-container {
+      width: 100%
+    }
+    p,a,li {
+      font-size: 12px;
+      line-height: 1;
+    }
+
+    h3 {
+      font-size: 20px;
+    }
+  }
+  </style>
   <div class="swiper-slide">
     <div class="home-icon-wrapper">
       <a href="/"> 

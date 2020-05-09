@@ -48,7 +48,7 @@
         <img class="home-icon" src="design/sharkbeak.svg" />
       </a>
       <a href="portfolio.html">Portfolio</a>
-      <a href="#contact">Contact</a>
+      <a href="mailto:igoratakhanov@gmail.com">Contact</a>
       <a href="#learn">Learn</a>
     </div>`
 

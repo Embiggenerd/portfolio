@@ -41,6 +41,14 @@
       }
     </style>
 
+    <style>
+    @media only screen and (max-width: 800px) {
+      .img-section {
+        display:none;   
+      }
+    }
+    </style>
+
     <div class="about">
      
       <div class="section" >
@@ -59,7 +67,7 @@
         </p>
       </div>
      
-      <div class="section" >
+      <div class="section img-section" >
         <img class="image" src="manbunyellow.svg"/>
       </div>
 
