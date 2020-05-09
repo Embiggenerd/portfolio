@@ -170,7 +170,7 @@
     connectedCallback() {
       this.jsonData = JSON.parse(this.data)
       this.$name.innerHTML = this.jsonData.name
-      this.$description.textContent = this.jsonData.description
+      this.$description.innerHTML = this.jsonData.description
 
       // Create list of challenges
       this.jsonData.challenges.forEach(ch => {
@@ -185,6 +185,7 @@
         this.$sources.appendChild(li)
       })
       this.$gifLink.href = this.jsonData.imgHref
+      this.$gifLink.title = this.jsonData.title
       this.$gifPreview.src = this.jsonData.imgSrc
     }
   });
