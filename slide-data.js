@@ -122,7 +122,7 @@ const slideData = [
     title: "Deployed app"
   },
   {
-    name: "React Todos TDD",
+    name: "React Todos JWT",
     description: 'A MERN stack todos list application focused on being different.',
     challenges: [
       "Use JWT and local storage for authentication. (not suitable \
