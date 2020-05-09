@@ -50,8 +50,10 @@
     }
 
     .summary-wrapper {
-      // max-width: 60%;
-      max-width: 305px;
+      width: 60%;
+      margin-right: 10%;
+
+      minwidth: 305px;
       text-align: left;
     }
 
