@@ -121,4 +121,26 @@ const slideData = [
     imgHref: "https://react-todos-tdd.herokuapp.com/",
     title: "Deployed app"
   },
+  {
+    name: "React Todos TDD",
+    description: 'A MERN stack todos list application focused on being different.',
+    challenges: [
+      "Use JWT and local storage for authentication. (not suitable \
+        for real world)",
+      "Only react-router is used for authorization.",
+      "Learn to write a front end using typescript with the strictest settings.",
+      "Use large, highly configurable components, instead of composing smaller ones.",
+      "Extensive use of mongoose methods instead of independent \
+      services to maintain testability.",
+    ],
+    sources: [
+      '<a target="_blank" href="https://www.youtube.com/watch?v=zx6jnaLuB9Q&list=PLSpJkDDmpFZ7GowbJE-mvX09zY9zfYatI">Codeworkrs series on node backend</a>',
+      '<a target="_blank" href="https://blog.cloudboost.io/learn-how-to-create-a-simple-blog-with-react-node-c05fa6889de3">Simple react tutorial</a>',
+      '<a target="_blank" href="https://www.typescriptlang.org/docs/home.html">Typescript documentation</a>',
+      '<a target="_blank" href="https://github.com/Embiggenerd/todos-jwt-typescript">Github repository</a>'
+    ],
+    imgSrc: "gifs/todos-jwt-typescript_1.gif",
+    imgHref: "https://obscure-coast-57866.herokuapp.com/",
+    title: "Deployed app"
+  },
 ]
