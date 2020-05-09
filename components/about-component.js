@@ -48,10 +48,14 @@
         <p>
           I'm a full stack developer and former professional poker player.
         	I <a href="#learn"> learn in public </a>, which means you can see my
-					progression. As I learn a topic, I will check it off, and probably 
-					write an article about it. I write <a href="articles.html">about 
-					things</a> like software, project management, and whatever floats 
-					my boat at the time.
+          progression. As I learn a topic, I will check it off, and probably 
+          <a href="portfolio.html">build a project based on it</a>, or write an article about it. 
+          <a href="https://medium.com/@igor.atakhanov">
+          I write about things</a> like software, project management, and whatever 
+          interests me at the time. 
+          If you think we would work well together, you can 
+          <a href=" mailto:igoratakhanov@gmail.com">drop me a line</a> at igor atakhanov 
+          at geemail dot com.
         </p>
       </div>
      
