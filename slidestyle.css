@@ -1,11 +1,14 @@
-html, body {
+@import url("https://fonts.googleapis.com/css2?family=Muli:wght@400;700&display=swap");
+html,
+body {
   position: relative;
   height: 100%;
 }
 body {
-  font-family: Helvetica Neue, Helvetica, Arial, sans-serif;
+  font-family: Muli;
+  color: rgb(54, 57, 69);
   font-size: 14px;
-  color:#000;
+  color: #000;
   margin: 0;
   padding: 0;
 }
@@ -31,4 +34,39 @@ body {
   -ms-flex-align: center;
   -webkit-align-items: center;
   align-items: center;
+}
+
+.swiper-button-next-container, .swiper-button-prev-container {
+  position:absolute;
+  display:flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 30px;
+}
+
+.swiper-button-next, .swiper-button-prev {
+  position: relative;
+  /* right: 49.1%; */
+  /* left: auto; */
+  transform: rotate(90deg);
+  color: rgb(6, 145, 242);;
+  opacity: 0.40;
+  height: 70px;
+  padding-top: 15px; 
+}
+
+.swiper-button-prev-container {
+  top: 0%;
+}
+
+.swiper-button-next-container {
+  bottom: 1%;
+}
+
+.swiper-button-prev.swiper-button-disabled,
+.swiper-button-next.swiper-button-disabled {
+  /* cursor: auto;
+  pointer-events: none; */
+  display: none;
 }

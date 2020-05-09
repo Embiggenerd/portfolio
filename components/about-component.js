@@ -8,7 +8,6 @@
         box-sizing: border-box;
         display: flex;
         margin-top:150px;
-       /* margin: 200px auto;*/
         justify-content: center;
       }
 
@@ -46,7 +45,8 @@
      
       <div class="section" >
         <h2>Hey, I'm Igor</h2>
-        <p>I'm a full stack developer and former professional poker player.
+        <p>
+          I'm a full stack developer and former professional poker player.
         	I <a href="#learn"> learn in public </a>, which means you can see my
 					progression. As I learn a topic, I will check it off, and probably 
 					write an article about it. I write <a href="articles.html">about 

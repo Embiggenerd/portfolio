@@ -6,7 +6,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
-  <!-- <link rel="stylesheet" href="style.css" /> -->
 
   <link rel="stylesheet" href="https://unpkg.com/swiper/css/swiper.min.css">
   <link rel="stylesheet" href="slidestyle.css">
@@ -16,18 +15,14 @@
 
 <body>
   <div class="swiper-container">
+    <div class="swiper-button-next-container">
+      <div class="swiper-button-next"></div>
+    </div>
+    <div class="swiper-button-prev-container">
+      <div class="swiper-button-prev"></div>
+    </div>
+
     <div class="swiper-wrapper">
-      <!-- <slide-component titleText="FIRST SLIDE B" class="swiper-slide"></slide-component> -->
-      <!-- <div class="swiper-slide">Slide 2</div>
-      <div class="swiper-slide">Slide 3</div>
-      <div class="swiper-slide">Slide 4</div>
-      <div class="swiper-slide">Slide 5</div>
-      <div class="swiper-slide">Slide 6</div>
-      <div class="swiper-slide">Slide 7</div>
-      <div class="swiper-slide">Slide 8</div>
-      <div class="swiper-slide">Slide 9</div>
-      <div class="swiper-slide">Slide 10</div>  -->
-      
 
     </div>
     <!-- Add Pagination -->
@@ -39,22 +34,30 @@
   <script src="components/slide-component.js"></script>
   <script src="slide-data.js"></script>
   <script>
-      const swiperWrapper = document.querySelector('.swiper-wrapper')
-      slideData.forEach(d => {
-        const slide = document.createElement('slide-component')
-        slide.classList.add('swiper-slide')
-        const stringified = JSON.stringify(d)
-        slide.setAttribute('data', stringified)
-        swiperWrapper.appendChild(slide)
-      })
+    const swiperWrapper = document.querySelector('.swiper-wrapper')
+    slideData.forEach(d => {
+      const slide = document.createElement('slide-component')
+      slide.classList.add('swiper-slide')
+      const stringified = JSON.stringify(d)
+      slide.setAttribute('data', stringified)
+      swiperWrapper.appendChild(slide)
+    })
   </script>
   <!-- Initialize Swiper -->
   <script>
     var swiper = new Swiper('.swiper-container', {
       direction: 'vertical',
+      mousewheel: true,
+      keyboard: {
+        enabled: true,
+      },
       pagination: {
         el: '.swiper-pagination',
         clickable: true,
+      },
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
       },
     });
   </script>

@@ -6,6 +6,11 @@
       height: 100%;
     }
 
+    * {
+      font-family: Muli;
+  color: rgb(54, 57, 69);
+    }
+
     .swiper-slide {
       display:flex;
       height: 100%;
@@ -19,42 +24,54 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      padding-top: 30px;
+      padding-top: 40px;
     }
 
     .home-icon {
       width: 70px;
     }
 
+    .name {
+      margin: 0;
+    }
+
     .project-container {
       display: flex;
       justify-content: center;
-      align-items: center;
-      min-height: 60%
+      align-items: start;
+      min-height: 65%
     }
 
     .summary-container {
       display:flex;
       justify-content:flex-end;
-      width: 40%;
+      width: 45%;
+      padding-right: 5%;
     }
 
     .summary-wrapper {
-      width: 70%;
+      // max-width: 60%;
+      max-width: 305px;
       text-align: left;
     }
 
     .image-container {
       display: flex;
-      justify-content: center;
-      align-items: center;
-      width: 60%;
+      justify-content:start;
+      align-items: flex-end;
+      width: 55%;
+      height: 100%;
+      // padding-left: 5%;
+    }
+
+    .image-wrapper {
+      width: 70%;
     }
 
     .gif-link {
       flex-shrink: 0;
-      width: 70%;
-      height: 70%;
+      width: 100%;
+      height: 100%;
     }
 
     .gif-preview {
@@ -62,6 +79,25 @@
       height: 100%;
       border-radius: 10px;
     }
+
+    .slide-down-container {
+      height: 10%;
+      width: 100%
+    }
+
+    p, li {
+      color: rgb(91, 107, 127);
+      font-size: 19px;
+      font-weight: 400;
+      line-height: 24px;
+    }
+
+    a {
+      
+        color: rgb(6, 145, 242);
+      
+    }
+    
   
   <style>
   
@@ -73,32 +109,37 @@
       </a>
     </div>
 
-    <h1 class="name"></h1>
+    <h2 class="name"></h2>
 
     <div class="project-container">
       <div class="summary-container">
         <div class="summary-wrapper">
-          <h2>
+          <h3>
             Desription
-          </h2>
+          </h3>
           <p class="description" ></p>
           
-          <h2>
+          <h3>
             Challenges
-          </h2>
+          </h3>
           <ul class="challenges"></ul>
 
-          <h2>Sources</h2>
+          <h3>Sources</h3>
           <ul class="sources"></ul>
         </div>
       </div>
 
       <div class="image-container">
-        <a class="gif-link" >
-          <img class="gif-preview" /> 
-        </a>
+        <div class="image-wrapper">
+          <a class="gif-link" >
+            <img class="gif-preview" /> 
+          </a>
+        </div>
       </div>
     </div>
+
+    <div class="slide-down-container swiper-button-next">
+    </div
   </div>
 `;
   customElements.define('slide-component', class extends HTMLElement {
