@@ -94,9 +94,6 @@
     a {  
       color: rgb(6, 145, 242);
     }
-    
-  
-  <style>
   
   </style>
   <div class="swiper-slide">
