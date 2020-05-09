@@ -18,20 +18,36 @@ const slideData = [
   },
   {
     name: "Go-Ribbit",
-    description: 'A rewrite of <a href="#" id="slide-to-ribbit">Ribbit</a>, anoriginal \
-    social network concept, with microservices architecture. Uses go for services, node \
-    for gateway, react with redux for frontend, nginx to serve assets in production, and \
-    jenkins for CI/CD.(not yet completed)',
+    description: 'A rewrite of <a href="#" id="slide-to-ribbit">Ribbit</a>. A learning exercize \
+      that mimicks popular architecture patterns where front end developers can also make APIs, \
+      but services are written in more efficient languages.',
     challenges: [
       "First original micro services app.",
       "First automated CI/CD pipeline in Jenkins from scratch with unit, integration, and functional tests.",
-      "Optimization techniques in docker/docker-compose.",
       "First React Native application along side web",
       "Configured NginX as a reverse proxy to serve static files in production."
     ],
     sources: [
       '<a target="_blank" href="https://github.com/Embiggenerd/ribbit">Ribbit</a>',
-      '<a target="_blank" href="https://github.com/Embiggenerd/weather_app2">Weather App</a>',
+      '<a target="_blank" href="https://github.com/Embiggenerd/go-ribbit">Github repository</a>'
+    ],
+    imgSrc: "https://igoratakhanov.com/go-ribbit_3.gif",
+    imgHref: "https://github.com/Embiggenerd/go-ribbit",
+    title: "Github Repository"
+  },
+  {
+    name: "Go-Ribbit",
+    description: 'A rewrite of <a href="#" id="slide-to-ribbit">Ribbit</a>. A learning exercize \
+    that mimicks popular architecture patterns where front end developers can also make APIs, \
+    but services are written in more efficient languages.',
+    challenges: [
+      "First original micro services app.",
+      "First automated CI/CD pipeline in Jenkins from scratch with unit, integration, and functional tests.",
+      "First React Native application along side web",
+      "Configured NginX as a reverse proxy to serve static files in production."
+    ],
+    sources: [
+      '<a target="_blank" href="https://github.com/Embiggenerd/ribbit">Ribbit</a>',
       '<a target="_blank" href="https://github.com/Embiggenerd/go-ribbit">Github repository</a>'
     ],
     imgSrc: "https://igoratakhanov.com/go-ribbit_3.gif",
