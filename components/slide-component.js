@@ -121,7 +121,6 @@
       font-size: 12px;
       line-height: 1;
     }
-
     h3 {
       font-size: 20px;
     }
