@@ -34,6 +34,7 @@
 
       a {
         color: rgb(6, 145, 242);
+        text-decoration: none;
       }
       
       .section {
