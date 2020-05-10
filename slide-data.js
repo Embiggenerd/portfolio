@@ -18,7 +18,7 @@ const slideData = [
   },
   {
     name: "Go-Ribit",
-    description: 'A rewrite of <a href="#" id="slide-to-ribbit">Ribbit</a>. A learning exercize \
+    description: 'A rewrite of Ribbit. A learning exercize \
       that mimicks popular architecture patterns where front end developers can also make APIs, \
       but services are written in more efficient languages.',
     challenges: [

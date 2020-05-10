@@ -101,7 +101,7 @@
   <style>
   @media only screen and (max-width: 1080px) {
     .image-wrapper {
-      width: 100%  
+      width: 100% ;
     }
   }
 
@@ -115,7 +115,7 @@
       width: 400px;
     }
     .summar-wrapper, .summary-container {
-      width: 100%
+      width: 100%;
     }
     p,a,li {
       font-size: 12px;
