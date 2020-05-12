@@ -56,7 +56,7 @@
         <h2>Hey, I'm Igor</h2>
         <p>
           I'm a full stack developer and former professional poker player.
-        	I <a href="#learn"> learn in public </a>, which means you can see my
+        	I <a href="#learn"> learn in public</a>, which means you can see my
           progression. As I learn a topic, I will check it off, and 
           <a href="portfolio.html">build a project</a> based on it, or write an article about it. 
           <a href="https://medium.com/@igor.atakhanov">
