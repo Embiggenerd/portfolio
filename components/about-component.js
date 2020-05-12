@@ -69,7 +69,7 @@
       </div>
      
       <div class="section img-section" >
-        <img class="image" src="manbunyellow.svg"/>
+        <img class="image" src="manbunyelloworange.svg"/>
       </div>
 
     </div>`
@@ -77,7 +77,6 @@
   customElements.define('about-component', class extends HTMLElement {
     constructor() {
       super();
-      // Attach a shadow root to the element.
       let shadowRoot = this.attachShadow({ mode: 'open' });
       shadowRoot.appendChild(template.content.cloneNode(true));
     }
