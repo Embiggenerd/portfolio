@@ -12,6 +12,7 @@
 </head>
 
 <body>
+  <!-- Swiper container control swiper wrapper, to which we append child slides dynamically -->
   <div class="swiper-container">
     <div class="swiper-button-next-container">
       <div class="swiper-button-next"></div>
@@ -32,6 +33,9 @@
   <script src="components/slide-component.js"></script>
   <script src="slide-data.js"></script>
   <script>
+    /*
+    Loop over data, attach slide components to slide wrapper dynamically
+    */
     const swiperWrapper = document.querySelector('.swiper-wrapper')
     slideData.forEach(d => {
       const slide = document.createElement('slide-component')
