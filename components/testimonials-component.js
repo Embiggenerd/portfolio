@@ -39,7 +39,7 @@
       }
       
       .section {
-        height: 150px;;
+        height: 160px;;
         background:white;
         width: 300px;
         border-radius: 10px;
@@ -47,13 +47,39 @@
         text-align: center;
         margin: 0 10px;
         overflow: hidden;
+        padding: 0 1em;
+      }
+
+      .truncated {
+        overflow: hidden;
+        position: relative; 
+        line-height: 1.2em;
+        max-height: 6em; 
+        text-align: justify;  
+        margin-right: -1em;
+        padding-right: 1em;
+      }
+      .truncated:before {
+        content: '...';
+        position: absolute;
+        right: 0;
+        bottom: 0;
+      }
+      .truncated:after {
+        content: '';
+        position: absolute;
+        right: 0;
+        width: 1em;
+        height: 1em;
+        margin-top: 0.2em;
+        background: white;
       }
     </style>
 
     <div class="testimonials">
       
       <div class="section" >
-        <p>
+        <p class="truncated">
           Igor is motivated, dedicated and a hard worker. He has a great work ethic and 
           works well with colleagues on team projects. He is a team player and rises to 
           the challenge on projects...
@@ -62,10 +88,9 @@
           - Eralp, former manager
         </h4>
       </div>
-     
 
       <div class="section" >
-        <p>
+        <p class="truncated">
           Through my time working with Igor, I have seen a lot of growth. He was always 
           helping other students in slack help channels. A student who is willing pay it 
           forward and give back to his team...
@@ -76,7 +101,7 @@
       </div>
       
       <div class="section">
-        <p>
+        <p class="truncated">
           Igor is an amazing coder. He takes specifications and can uncover what areas need 
           the most work on. He is passionate about creating great products. He takes feedback 
           seriously and internalizes it...
