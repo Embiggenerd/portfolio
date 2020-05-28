@@ -12,6 +12,7 @@
       
     </style>
     <canvas></canvas>
+    <button> Run it </button>
     `
   customElements.define('game-of-life', class extends HTMLElement {
     constructor() {
@@ -19,53 +20,113 @@
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.appendChild(template.content.cloneNode(true));
       this.$canvas = this.shadowRoot.querySelector('canvas')
+      this.$runIt = this.shadowRoot.querySelector('button')
       this.ctx = this.$canvas.getContext('2d')
       this.animate = this.animate.bind(this)
-      this.x = 100
-      this.y = 100
-      this.iw = 800
-      this.ih = 800
-      this.dx = 4
-      this.dy = 4
-
-      this.radius = 30
+      this.running = false
+      this.blocksX = 100
+      this.blocksY = 50
+      this.blockWidth = 8
+      this.blockHeight = 8
+      this.canvasWidth = this.blocksX * this.blockWidth
+      this.canvasHeight = this.blocksY * this.blockHeight
+      this.state = []
+      this.updateState = []
     }
+
     connectedCallback() {
-      this.$canvas.width = this.iw
-      this.$canvas.height = this.ih
+      this.initCanvas()
+      this.initGrid()
       this.drawGrid()
-      // this.drawRect()
-      // this.drawLine()
-      // this.animate()
+      this.initOnClick()
+      this.initRunIt()
+    }
+
+    initOnClick() {
+      this.$canvas.addEventListener("click", (event) => {
+        console.log(event.pageX, event.pageY)
+        const positionX = Math.floor(event.pageX / this.blockWidth)
+        const positionY = Math.floor(event.pageY / this.blockHeight)
+
+        this.state[positionX][positionY] === 1 ? this.state[positionX][positionY] = 0 : this.state[positionX][positionY] = 1
+
+        this.drawGrid()
+      }, false)
+    }
+
+    initCanvas() {
+      this.$canvas.width = this.blocksX * this.blockWidth
+      this.$canvas.height = this.blocksY * this.blockHeight
+    }
+
+    initGrid() {
+      this.updateState = [...Array(this.blocksX).keys()].map(() => [])
+
+      this.state = [...Array(this.blocksX).keys()].map(() => [])
+
+      for (let i = 0; i < this.blocksX; i++) {
+        for (let j = 0; j < this.blocksY; j++) {
+          this.state[i][j] = 0
+        }
+      }
     }
 
     drawGrid() {
-      const arr = [...Array(100).keys()].map(() => [])
 
-      for (let i = 0; i < 100; i++) {
-        for (let j = 0; j < 100; j++) {
-          arr[i][j] = 0
+      this.clear()
+      for (let i = 0; i < this.blocksX; i++) {
+        for (let j = 0; j < this.blocksY; j++) {
+          if (this.state[i][j] === 1) {
+            this.ctx.fillStyle = "blue"
+            this.ctx.fillRect(i * this.blockWidth, j * this.blockHeight, this.blockWidth, this.blockHeight)
+            this.ctx.stroke()
+          } else {
+            this.ctx.fillStyle = "white"
+            this.ctx.fillRect(i * this.blockWidth, j * this.blockHeight, this.blockWidth, this.blockHeight)
+            this.ctx.stroke()
+          }
         }
       }
-
-      for (let i = 0; i < 100; i++) {
-        for (let j = 0; j < 100; j++) {
-          this.ctx.fillStyle = "blue"
-          this.ctx.fillRect(i*8, j*8, 7, 7)
-          // this.ctx.stroke()
-        }
-      }
-      
-      console.log(arr)
     }
 
-    drawRect() {
-      const x = 100
-      const y = 100
-      const width = 100
-      const height = 100
-      this.c.fillRect(x, y, 1, 1)
-      this.c.stroke()
+    updateGrid() {
+      for (let j = 1; j < this.blocksX - 1; j++) {
+        for (let k = 1; k < this.blocksY - 1; k++) {
+          let total = 0
+          total += this.state[j - 1][k + 1]; // top right
+          total += this.state[j][k + 1]; // middle right
+          total += this.state[j + 1][k + 1]; // bottom right
+
+          total += this.state[j + 1][k]; // bottom center
+
+          total += this.state[j + 1][k - 1]; // bottom left
+          total += this.state[j][k - 1]; // middle left
+          total += this.state[j - 1][k - 1]; // top left
+
+          total += this.state[j - 1][k]; // top center
+
+          // When we apply rules to state, we make changes to second array, which we will switch over
+          switch (total) {
+            case 2:
+              this.updateState[j][k] = this.state[j][k];
+
+              break;
+            case 3:
+              this.updateState[j][k] = 1;
+
+              break;
+            default:
+              this.updateState[j][k] = 0;
+          }
+
+
+        }
+      }
+
+      // Switch states
+      const temp = this.state
+      this.state = this.updateState
+      this.updateState = temp
     }
 
     drawLine() {
@@ -82,23 +143,25 @@
       this.c.stroke()
     }
 
-    animate() {
-      requestAnimationFrame(this.animate)
-      this.clear()
-      this.drawCircle()
-      if ((this.x > this.iw - this.radius) || (this.x < 0 + this.radius)) {
-        this.dx = -this.dx
-      }
-      if ((this.y > this.ih - this.radius) || (this.y < 0 + this.radius)) {
-        this.dy = -this.dy
-      }
-      this.x += this.dx
-      this.y += this.dy
-      console.log('hihi')
+    runIt() {
+      const intervalID = setInterval(() => {
+        if(!this.running){
+          clearInterval(intervalID)
+        }
+        this.updateGrid()
+        this.drawGrid()
+      }, 500)
     }
 
     clear() {
-      this.c.clearRect(0, 0, this.iw, this.ih)
+      this.ctx.clearRect(0, 0, this.iw, this.ih)
+    }
+
+    initRunIt() {
+      this.$runIt.addEventListener('click', () => {
+        this.running = !this.running
+        this.runIt()
+      })
     }
 
   });
