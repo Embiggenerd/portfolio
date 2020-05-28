@@ -12,7 +12,9 @@
       
     </style>
     <canvas></canvas>
-    <button> Run it </button>
+    <button class="run-it"> Run it </button>
+    <button class="start-over"> start over </button>
+
     `
   customElements.define('game-of-life', class extends HTMLElement {
     constructor() {
@@ -20,10 +22,11 @@
       this.attachShadow({ mode: 'open' });
       this.shadowRoot.appendChild(template.content.cloneNode(true));
       this.$canvas = this.shadowRoot.querySelector('canvas')
-      this.$runIt = this.shadowRoot.querySelector('button')
+      this.$runIt = this.shadowRoot.querySelector('.run-it')
+      this.$startOver = this.shadowRoot.querySelector('.start-over')
       this.ctx = this.$canvas.getContext('2d')
-      this.animate = this.animate.bind(this)
       this.running = false
+      this.totalAlive = 0
       this.blocksX = 100
       this.blocksY = 50
       this.blockWidth = 8
@@ -40,6 +43,7 @@
       this.drawGrid()
       this.initOnClick()
       this.initRunIt()
+      this.initStartOver()
     }
 
     initOnClick() {
@@ -50,6 +54,14 @@
 
         this.state[positionX][positionY] === 1 ? this.state[positionX][positionY] = 0 : this.state[positionX][positionY] = 1
 
+        // this.totalAlive = this.state.reduce(function (array1, array2) {
+        //   return array1.map(function (value, index) {
+        //     return value + array2[index];
+        //   });
+        // }).reduce((a, b) => a + b, 0)
+
+        this.updateAliveTotal(this.state)
+        console.log('onClickAlive', this.totalAlive)
         this.drawGrid()
       }, false)
     }
@@ -64,6 +76,15 @@
 
       this.state = [...Array(this.blocksX).keys()].map(() => [])
 
+      this.killAll()
+      // for (let i = 0; i < this.blocksX; i++) {
+      //   for (let j = 0; j < this.blocksY; j++) {
+      //     this.state[i][j] = 0
+      //   }
+      // }
+    }
+
+    killAll(){
       for (let i = 0; i < this.blocksX; i++) {
         for (let j = 0; j < this.blocksY; j++) {
           this.state[i][j] = 0
@@ -72,6 +93,7 @@
     }
 
     drawGrid() {
+      this.updateAliveTotal(this.state)
 
       this.clear()
       for (let i = 0; i < this.blocksX; i++) {
@@ -104,52 +126,34 @@
           total += this.state[j - 1][k - 1]; // top left
 
           total += this.state[j - 1][k]; // top center
-
           // When we apply rules to state, we make changes to second array, which we will switch over
           switch (total) {
             case 2:
               this.updateState[j][k] = this.state[j][k];
-
               break;
             case 3:
               this.updateState[j][k] = 1;
-
               break;
             default:
               this.updateState[j][k] = 0;
           }
-
-
         }
       }
-
       // Switch states
       const temp = this.state
       this.state = this.updateState
       this.updateState = temp
     }
 
-    drawLine() {
-      this.c.beginPath()
-      this.c.moveTo(50, 300)
-      this.c.lineTo(60, 200)
-      this.c.stroke()
-    }
-
-    drawCircle() {
-      this.c.beginPath()
-      this.c.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false)
-      this.c.strokeStyle = "blue"
-      this.c.stroke()
-    }
 
     runIt() {
       const intervalID = setInterval(() => {
-        if(!this.running){
+        if (!this.running) {
           clearInterval(intervalID)
         }
         this.updateGrid()
         this.drawGrid()
+        console.log('totalLive', this.totalAlive)
       }, 500)
     }
 
@@ -162,6 +166,25 @@
         this.running = !this.running
         this.runIt()
       })
+    }
+
+    initStartOver() {
+      this.$startOver.addEventListener('click', () => {
+        this.startOver()
+      })
+    }
+
+    startOver() {
+      this.running = false
+      this.killAll()
+    }
+
+    updateAliveTotal(arr) {
+      this.totalAlive = arr.reduce(function (array1, array2) {
+        return array1.map(function (value, index) {
+          return value + array2[index];
+        });
+      }).reduce((a, b) => a + b, 0)
     }
 
   });
