@@ -2,21 +2,36 @@
   let template = document.createElement('template');
   template.innerHTML = `
     <style>
-      // :host {
-      //   height: 100%;
-      //   width: 100%;
-      // }
       canvas{
+       
         border: black solid 1px;
+      }
+
+      .canvas-wrapper {
+        margin: 0 auto;
+        width: 800px;
+      }
+
+      .buttons-container {
+        margin: 0 auto;
+        width: 800px;
+        display:flex;
+        justify-content: center;
       }
       
     </style>
-    <canvas></canvas>
-    <button class="run-it"> Run it </button>
-    <button class="start-over"> start over </button>
-    <button class="random"> Random </button>
-    <button class="forward"> Forward</button>
-
+    
+    <div class="canvas-wrapper">
+      <canvas></canvas>
+    </div>
+    <div class="buttons-container">
+      <button class="run-it"> Run it </button>
+      <button class="start-over"> start over </button>
+      <button class="random"> Random </button>
+      <button class="forward"> Forward</button>
+      <button class="speed">Faster</button>
+    </div>
+    
     `
   customElements.define('game-of-life', class extends HTMLElement {
     constructor() {
@@ -28,9 +43,13 @@
       this.$startOver = this.shadowRoot.querySelector('.start-over')
       this.$random = this.shadowRoot.querySelector('.random')
       this.$forward = this.shadowRoot.querySelector('.forward')
+      this.$speed = this.shadowRoot.querySelector('.speed')
+      this.$canvasWrapper = this.shadowRoot.querySelector('.canvas-wrapper')
       this.ctx = this.$canvas.getContext('2d')
+      this.marginLeft = 0
+      this.marginTop = 0
       this.running = false
-      this.totalAlive = 0
+      this.speed = 500
       this.blocksX = 100
       this.blocksY = 50
       this.blockWidth = 8
@@ -50,18 +69,18 @@
       this.initStartOver()
       this.initRandom()
       this.initForward()
+      this.initSpeed()
+      this.initTrackMargins()
     }
 
     initOnClick() {
       this.$canvas.addEventListener("click", (event) => {
         console.log(event.pageX, event.pageY)
-        const positionX = Math.floor(event.pageX / this.blockWidth)
-        const positionY = Math.floor(event.pageY / this.blockHeight)
+        const positionX = Math.floor((event.pageX - this.marginLeft) / this.blockWidth)
+        const positionY = Math.floor((event.pageY - this.marginTop) / this.blockHeight)
 
         this.state[positionX][positionY] === 1 ? this.state[positionX][positionY] = 0 : this.state[positionX][positionY] = 1
 
-        this.updateAliveTotal(this.state)
-        console.log('onClickAlive', this.totalAlive)
         this.drawGrid()
       }, false)
     }
@@ -73,15 +92,28 @@
 
     initGrid() {
       this.updateState = [...Array(this.blocksX).keys()].map(() => [])
-
       this.state = [...Array(this.blocksX).keys()].map(() => [])
-
       this.killAll()
     }
 
     initRunIt() {
       this.$runIt.addEventListener('click', () => {
+        this.running ? this.$runIt.textContent = "Run it" : this.$runIt.textContent = "Stop"
         this.running = !this.running
+        this.runIt()
+      })
+    }
+
+    initSpeed() {
+      this.$speed.addEventListener('click', () => {
+        if (this.speed == 500) {
+          this.speed = 100
+          this.$speed.textContent = "Slower"
+
+        } else {
+          this.speed = 500
+          this.$speed.textContent = "Faster"
+        }
         this.runIt()
       })
     }
@@ -92,32 +124,42 @@
       })
     }
 
-    initRandom(){
+    initRandom() {
       this.$random.addEventListener('click', () => {
         this.randomGrid()
       })
     }
 
-    initForward(){
+    initTrackMargins() {
+      this.marginLeft = this.$canvasWrapper.offsetLeft
+      this.marginTop = this.$canvasWrapper.offsetTop
+
+      window.addEventListener('resize', (event) => {
+        this.marginTop = this.$canvasWrapper.offsetTop
+        this.marginLeft = this.$canvasWrapper.offsetLeft
+      })
+
+
+    }
+
+    initForward() {
       this.$forward.addEventListener('click', () => {
         this.moveForward()
       })
     }
 
-
-    randomGrid(){
+    randomGrid() {
       this.running = false
 
       for (let i = 0; i < this.blocksX; i++) {
         for (let j = 0; j < this.blocksY; j++) {
-          this.state[i][j] = Math.floor(Math.random() *2)
+          this.state[i][j] = Math.floor(Math.random() * 2)
         }
       }
-
       this.drawGrid()
     }
 
-    killAll(){
+    killAll() {
       for (let i = 0; i < this.blocksX; i++) {
         for (let j = 0; j < this.blocksY; j++) {
           this.state[i][j] = 0
@@ -125,13 +167,12 @@
       }
     }
 
-    moveForward(){
+    moveForward() {
       this.updateGrid()
       this.drawGrid()
     }
-    drawGrid() {
-      this.updateAliveTotal(this.state)
 
+    drawGrid() {
       this.clear()
       for (let i = 0; i < this.blocksX; i++) {
         for (let j = 0; j < this.blocksY; j++) {
@@ -184,14 +225,16 @@
 
 
     runIt() {
-      const intervalID = setInterval(() => {
+      const timeoutId = setTimeout(() => {
         if (!this.running) {
-          clearInterval(intervalID)
+          clearTimeout(timeoutId)
+          return
         }
+        console.log('speeed', this.speed)
         this.updateGrid()
         this.drawGrid()
-        console.log('totalLive', this.totalAlive)
-      }, 500)
+        this.runIt()
+      }, this.speed)
     }
 
     clear() {
@@ -199,18 +242,10 @@
     }
 
     startOver() {
+      this.running ? this.$runIt.textContent = "Run it" : this.$runIt.textContent = "Stop"
       this.running = false
       this.killAll()
       this.drawGrid()
     }
-
-    updateAliveTotal(arr) {
-      this.totalAlive = arr.reduce(function (array1, array2) {
-        return array1.map(function (value, index) {
-          return value + array2[index];
-        });
-      }).reduce((a, b) => a + b, 0)
-    }
-
   });
 })();
