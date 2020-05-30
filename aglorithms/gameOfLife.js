@@ -75,7 +75,6 @@
 
     initOnClick() {
       this.$canvas.addEventListener("click", (event) => {
-        console.log(event.pageX, event.pageY)
         const positionX = Math.floor((event.pageX - this.marginLeft) / this.blockWidth)
         const positionY = Math.floor((event.pageY - this.marginTop) / this.blockHeight)
 
@@ -138,8 +137,6 @@
         this.marginTop = this.$canvasWrapper.offsetTop
         this.marginLeft = this.$canvasWrapper.offsetLeft
       })
-
-
     }
 
     initForward() {

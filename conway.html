@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,13 +9,808 @@
       margin: 0;
       padding: 0;
     }
+
+    .article-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    p {
+      max-width: 600px;
+    }
+
+    .canvas-demo {
+      border: black solid 1px;
+    }
   </style>
   <title>Game Of Life</title>
 </head>
+
 <body>
-  <game-of-life></game-of-life>
+  <div class="article-container">
+    <game-of-life></game-of-life>
+
+    <h1>Conway's Game of life</h1>
+    <p>
+      Conway's game of life loosely models life in that we need each other, yet we compete against each other for
+      resources
+      In this game, if a square is surrounded by more than 3 'live' neighbours, it dies due to compeition. Less than 2,
+      and it
+      dies due to lack of help from others. If it is dead, and is surrounded by 3, it comes to life because it has the
+      necesary
+      help. Exacly 2, and it will can stay alive.
+    </p>
+
+    <p>In essence, we have a funciton, an input, and an output. The input is the state of the live and dead cells, which
+      can be
+      described as a two dimentional array. When the function evaluates which cells live or die from the rules, and the
+      state,
+      we ouput a two dimensional array with a different arrangement of 'live' and 'dead' cells. To communicate the
+      change over
+      time, we animate these changes and call them generations.
+    </p>
+
+    <h2>Animation</h2>
+    <p>
+      First we have to decide how to animate this algorithm. The first choice is regular old HTML. We can imagine that
+      each cell
+      is going to have different properties, which change over time, and so React comes to mind with its ability to make
+      custom
+      components. However, React is pretty heavy for something like this. We have both the complexity of the algorithm,
+      and React
+      on top of it. Using the dom means we have to calculate the structure of dom elements every generation, this is
+      called a
+      reflow. If we make styling changes, which we will, we also have to repaint. These are both expensive tasks that
+      may cost
+      us time, considering we also have expensive algorithm calculations.
+    </p>
+
+    <p>
+      To avoid using DOM elements, we could go with WebGL. This is based on OpenGL, something you may remember from
+      video games,
+      because it is used for 3d rendering. We are only trying to demonstrate the game, and adding dimensions adds
+      complexity.
+      The 2d version of WebGL is HMTL5 canvas. With canvas, there are no nodes or objects, just pixels, their color
+      styling, and
+      their position relative to the top left of the window.
+    </p>
+
+    <h2>
+      Canvas Basics
+    </h2>
+
+    <canvas class="canvas-basic canvas-demo" width="400" height="200"></canvas>
+    <script>
+      const canvasBasic = document.querySelector('.canvas-basic');
+      const ctxBasic = canvasBasic.getContext('2d');
+
+      ctxBasic.fillStyle = 'rgb(200, 0, 0)';
+      ctxBasic.fillRect(175, 75, 50, 50);
+    </script>
+    <h3>Basic Canvas Example</h3>
+    <p>
+      As you can see, we have a rectangle, which is the canvas, and another rectangle inside of it. How did we make this
+      happen?
+    </p>
+    <xmp>
+
+      <canvas class="canvas-basic" width="400" height="200"></canvas>
+      <script>
+        const canvasBasic = document.querySelector('.canvas-basic');
+        const ctxBasic = canvasBasic.getContext('2d');
+
+        ctxBasic.fillStyle = 'rgb(200, 0, 0)';
+        ctxBasic.fillRect(175, 75, 50, 50);
+      </script>
+
+    </xmp>
+
+    <p>
+      A canvas is literally a canvas tag, which we styled using width and height. ctxBasic exposes an API which lets us
+      make shapes easily instead of drawing them pixel by pixel. Fill style sets a background color on the square, and
+      fillRect takes positional and size values. It's in the middle of the canvas because it's 175 pixels away from the
+      left edge of the canves, and it's 75 pixels away from the top. Its dimensions are 50 by 50 pixels.
+    </p>
+
+    <h2>A Grid of Rects</h2>
+
+    <p>
+      Now that we've made one rectangle, we can move on to make a grid of rectangles. First, we have to decide how many
+      rectanles and how large they should be. Given that we have a fixed width and height, how many rects we need
+      depends
+      on their size. Since our grid is 400 x 200, let's make each rectangle 10x10 so they fit evenly.
+    </p>
+
+    <canvas class="canvas-grid canvas-demo" width="400" height="200"></canvas>
+    <script>
+      (function () {
+
+        const canvasGrid = document.querySelector('.canvas-grid');
+        const ctxGrid = canvasGrid.getContext('2d');
+
+        const width = 400
+        const height = 200
+        const rectWidthHeight = 10
+
+        const state = [...Array(width / rectWidthHeight).keys()].map(() => [])
+
+        const drawGrid = () => {
+          for (let i = 0; i < width / rectWidthHeight; i++) {
+            for (let j = 0; j < height / rectWidthHeight; j++) {
+              ctxGrid.fillStyle = "blue"
+              ctxGrid.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+            }
+          }
+        }
+        drawGrid()
+      })()
+    </script>
+    <h3>Rects Forming A Grid</h3>
+
+    <xmp>
+      <canvas class="canvas-grid canvas-demo" width="400" height="200"></canvas>
+      <script>
+        (function () {
+
+          const canvasGrid = document.querySelector('.canvas-grid');
+          const ctxGrid = canvasGrid.getContext('2d');
+
+          const width = 400
+          const height = 200
+          const rectWidthHeight = 10
+
+          const state = [...Array(width / rectWidthHeight).keys()].map(() => [])
+
+          const drawGrid = () => {
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                ctxGrid.fillStyle = "blue"
+                ctxGrid.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+              }
+            }
+          }
+          drawGrid()
+        })()
+      </script>
+    </xmp>
+
+    <p>
+      We used a nested for loop to iterate over a two dimensional array. An array which has a length of
+      how many blocks we have on the X axis, and each element is itself an array as long as the amount of blocks on the
+      y axis. Since we need to give an absolute position to fillRect, we multiply the index by the dimensional property
+      of each rect, and use that to position each cell correctly.
+    </p>
+
+    <h2>Making Grid Interactive</h2>
+
+    <p>
+      Since we know we need to click on squares, and toggle over an alive state, we need to take care of two things. One
+      is,
+      we need to keep track of that alive state. Two, we need to figure out how to interact with the canvas to flip our
+      cell
+      state and then reflect the change in the grid.
+    </p>
+
+    <p>Aliveness could be expressed via a true or false boolean value at each position in state, and to express a
+      change, we
+      could iterate over the two dimensional state, and redraw the canvas, with blue colored rects for a live (true),
+      and white
+      for dead (false).
+    </p>
+
+    <canvas class="canvas-state canvas-demo" width="400" height="200"></canvas>
+    <h3>A Zeroed Out Initial State</h3>
+    <script>
+        (function () {
+
+          const canvasState = document.querySelector('.canvas-state');
+          const ctxState = canvasState.getContext('2d');
+
+          const width = 400
+          const height = 200
+          const rectWidthHeight = 10
+
+          const state = [...Array(width / rectWidthHeight).keys()].map(() => [])
+
+          const initState = () => {
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                state[i][j] = false
+              }
+            }
+          }
+
+          initState()
+
+          const drawGrid = () => {
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                if (state[i][j]) {
+                  ctxState.fillStyle = "blue"
+                  ctxState.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                } else {
+                  ctxState.fillStyle = "white"
+                  ctxState.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                }
+
+              }
+            }
+          }
+          drawGrid()
+        })()
+    </script>
+    <xmp>
+      <canvas class="canvas-state canvas-demo" width="400" height="200"></canvas>
+      <h3>A Zeroed Out Initial State</h3>
+      <script>
+        (function () {
+
+          const canvasState = document.querySelector('.canvas-state');
+          const ctxState = canvasState.getContext('2d');
+
+          const width = 400
+          const height = 200
+          const rectWidthHeight = 10
+
+          const state = [...Array(width / rectWidthHeight).keys()].map(() => [])
+
+          const initState = () => {
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                state[i][j] = false
+              }
+            }
+          }
+
+          initState()
+
+          const drawGrid = () => {
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                if (state[i][j]) {
+                  ctxState.fillStyle = "blue"
+                  ctxState.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                } else {
+                  ctxState.fillStyle = "white"
+                  ctxState.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                }
+              }
+            }
+          }
+          drawGrid()
+        })()
+      </script>
+    </xmp>
+
+    <p>
+      initState() initializes our two dimensional array state with all false values, and drawGrd() takes this and draws
+      white rectangles. What we need to do next is a little more difficult. Since our rects are not dom nodes that we
+      can listen
+      for a click event on, we have to change our state based on user input, then erase old state, and redraw the new
+      state.
+      What we can do is put a click event on the canvas, ask where the cursor was in aboslute terms in the window, then
+      change
+      an appropriate position in a new state. We could then erase the old board so old changes don't interfere with new
+      user
+      input, and run drawGrod on a new state.
+    </p>
+
+    <xmp>
+      <canvas class="canvas-state-click canvas-demo" width="400" height="200"></canvas>
+      <h3>A Clickable Grid</h3>
+      <script>
+        (function () {
+
+          const canvasStateClick = document.querySelector('.canvas-state-click');
+          const ctxStateClick = canvasStateClick.getContext('2d');
+
+          const width = 400
+          const height = 200
+          const rectWidthHeight = 10
+
+          const state = [...Array(width / rectWidthHeight).keys()].map(() => [])
+
+          const initState = () => {
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                state[i][j] = false
+              }
+            }
+          }
+
+          initState()
+
+          const drawGrid = () => {
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                if (state[i][j]) {
+                  ctxStateClick.fillStyle = "blue"
+                  ctxStateClick.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                } else {
+                  ctxStateClick.fillStyle = "white"
+                  ctxStateClick.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                }
+              }
+            }
+          }
+          drawGrid()
+
+          const initOnClick = () => {
+
+          }
+        })()
+      </script>
+    </xmp>
+
+    <canvas class="canvas-state-click canvas-demo" width="400" height="200"></canvas>
+    <h3>A Clickable Grid</h3>
+    <script>
+        (function () {
+
+          const canvasStateClick = document.querySelector('.canvas-state-click');
+          const ctxStateClick = canvasStateClick.getContext('2d');
+
+          const width = 400
+          const height = 200
+          const rectWidthHeight = 10
+
+          let marginLeft = null
+          let marginTop = null
+
+          const state = [...Array(width / rectWidthHeight).keys()].map(() => [])
+
+          const initState = () => {
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                state[i][j] = false
+              }
+            }
+          }
+          initState()
+
+          const drawGrid = () => {
+            console.log('drawgrd state-click')
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                if (state[i][j]) {
+                  ctxStateClick.fillStyle = "blue"
+                  ctxStateClick.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                } else {
+                  ctxStateClick.fillStyle = "white"
+                  ctxStateClick.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                }
+              }
+            }
+          }
+          drawGrid()
+
+          const initTrackMargins = () => {
+            marginLeft = canvasStateClick.offsetLeft
+            marginTop = canvasStateClick.offsetTop
+
+            window.addEventListener('resize', (event) => {
+              marginTop = canvasStateClick.offsetTop
+              marginLeft = canvasStateClick.offsetLeft
+            })
+          }
+          initTrackMargins()
+
+          const initOnClick = () => {
+            canvasStateClick.addEventListener('click', (event) => {
+              const positionX = Math.floor((event.pageX - marginLeft) / rectWidthHeight)
+              const positionY = Math.floor((event.pageY - marginTop) / rectWidthHeight)
+
+              console.log(positionX, positionY, marginLeft, marginTop, event.pageX, event.pageY)
+              state[positionX][positionY] = !state[positionX][positionY]
+              console.log(state[positionX][positionY])
+
+              ctxStateClick.clearRect(0, 0, width, height, width, height)
+              drawGrid()
+            })
+          }
+          initOnClick()
+        })()
+    </script>
+
+    <xmp>
+      <canvas class="canvas-state-click canvas-demo" width="400" height="200"></canvas>
+      <h3>A Clickable Grid</h3>
+      <script>
+        (function () {
+
+          const canvasStateClick = document.querySelector('.canvas-state-click');
+          const ctxStateClick = canvasStateClick.getContext('2d');
+
+          const width = 400
+          const height = 200
+          const rectWidthHeight = 10
+
+          let marginLeft = null
+          let marginTop = null
+
+          const state = [...Array(width / rectWidthHeight).keys()].map(() => [])
+
+          const initState = () => {
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                state[i][j] = false
+              }
+            }
+          }
+          initState()
+
+          const drawGrid = () => {
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                if (state[i][j]) {
+                  ctxStateClick.fillStyle = "blue"
+                  ctxStateClick.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                } else {
+                  ctxStateClick.fillStyle = "white"
+                  ctxStateClick.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                }
+              }
+            }
+          }
+          drawGrid()
+
+          const initTrackMargins = () => {
+            marginLeft = canvasStateClick.offsetLeft
+            marginTop = canvasStateClick.offsetTop
+
+            window.addEventListener('resize', (event) => {
+              marginTop = canvasStateClick.offsetTop
+              marginLeft = canvasStateClick.offsetLeft
+            })
+          }
+          initTrackMargins()
+
+          const initOnClick = () => {
+            canvasStateClick.addEventListener('click', (event) => {
+              const positionX = Math.floor((event.pageX - marginLeft) / rectWidthHeight)
+              const positionY = Math.floor((event.pageY - marginTop) / rectWidthHeight)
+
+              console.log(positionX, positionY, marginLeft, marginTop, event.pageX, event.pageY)
+              console.log('marginTop', marginTop)
+              state[positionX][positionY] = !state[positionX][positionY]
+
+              ctxStateClick.clearRect(0, 0, width, height, width, height)
+              drawGrid()
+            })
+          }
+          initOnClick()
+        })()
+      </script>
+    </xmp>
+
+    <p>
+      We've added a lot of new stuff. First, we are keeping track of our left and right margins. We do this both in the
+      beginning
+      and every time the window is resized. This is because this article is centered, which means when we change the
+      size, the
+      left margin changes. We need to keep track of it to subract from pageX of our event click. We are getting aboslute
+      values,
+      but we need to turn them into relative values. We also divide this by our cell dimensions in order to get the
+      appropriate
+      index value in our state array. We do the same for the top margin because of scroll position.
+    </p>
+
+    <p>
+      In our on click, we use these positions to toggle the right cell in our state. We then use clearRect to clear our
+      last canvas
+      state, and run drawGrid() once again to reflect our changes to the user. Finally, we need to think about how to
+      change our state
+      according to the game of life rules, and reflect each change to our user, continuously.
+    </p>
+
+    <h2>Implementing Game Of Life</h2>
+    <p>
+      The rules for the game are simple. If a cell is surrounded by more than 3, or less thatn 2 live cells, it dies. If
+      it is dead,
+      and it has exactly 3 neighbours, it comes alive. At two neighbours, there is no change. These rules are simple,
+      but implemeting
+      them is hard. We have to think of what are our limitations.
+    </p>
+    <p>
+      We essentiall have two states. One is our state two dimentional array, the other is the state of the
+      grid. When we run
+      our state through the rules, and change it, there will be a difference betweem the two states. We then run
+      drawGrid() and make
+      them equal. What seems to be the problem? Let's say we are changing the state according to the rules. Killing
+      cells, bringing others
+      back to life. As we walk through the array, we are mutating it. Which affects how we evaluate later cells. We must
+      make our changes
+      in a different state.
+    </p>
+    <p>
+      If we change a different state, then drawGrid() based on that state, what about the next generation? There's an old
+      state, and a fresh
+      state. Let's say we run 'state' through the GOL rules, and apply changes to updateState. The next time we run,
+      when we apply rules
+      to state to change updateState, state is a generation behind updateState. We need to apply rules to the last
+      generation, not the
+      generation before last. So, after we drawGrid() on updateState, we set updateState to state and state to updateState, so now state
+      is the last generation, and updateState is the one before that.
+    </p>
+
+    <canvas class="canvas-gol canvas-demo" width="400" height="200"></canvas>
+    <button class="start-stop">Start / Stop</button>
+    <h3>Game Of Life</h3>
+    <script>
+        (function () {
+
+          const canvasGOL = document.querySelector('.canvas-gol');
+          const ctxGOL = canvasGOL.getContext('2d');
+
+          const width = 400
+          const height = 200
+          const rectWidthHeight = 10
+
+          let marginLeft = null
+          let marginTop = null
+          let running = false
+
+          let state = [...Array(width / rectWidthHeight).keys()].map(() => [])
+          let updateState = [...Array(width / rectWidthHeight).keys()].map(() => [])
+
+
+          const initState = () => {
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                state[i][j] = false
+              }
+            }
+          }
+          initState()
+
+          const drawGrid = () => {
+            for (let i = 0; i < width / rectWidthHeight; i++) {
+              for (let j = 0; j < height / rectWidthHeight; j++) {
+                if (state[i][j]) {
+                  ctxGOL.fillStyle = "blue"
+                  ctxGOL.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                } else {
+                  ctxGOL.fillStyle = "white"
+                  ctxGOL.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                }
+              }
+            }
+          }
+          drawGrid()
+
+          const initTrackMargins = () => {
+            marginLeft = canvasGOL.offsetLeft
+            marginTop = canvasGOL.offsetTop
+
+            window.addEventListener('resize', (event) => {
+              marginTop = canvasGOL.offsetTop
+              marginLeft = canvasGOL.offsetLeft
+            })
+          }
+          initTrackMargins()
+
+          const initOnClick = () => {
+            canvasGOL.addEventListener('click', (event) => {
+              const positionX = Math.floor((event.pageX - marginLeft) / rectWidthHeight)
+              const positionY = Math.floor((event.pageY - marginTop) / rectWidthHeight)
+
+              console.log(positionX, positionY, marginLeft, marginTop, event.pageX, event.pageY)
+              state[positionX][positionY] = !state[positionX][positionY]
+
+              ctxGOL.clearRect(0, 0, width, height, width, height)
+              drawGrid()
+            })
+          }
+          initOnClick()
+
+          const update = () => {
+            for (let j = 1; j < width / rectWidthHeight - 1; j++) {
+              for (let k = 1; k < height / rectWidthHeight - 1; k++) {
+                let total = 0
+                total += state[j - 1][k + 1]; // top right
+                total += state[j][k + 1]; // middle right
+                total += state[j + 1][k + 1]; // bottom right
+
+                total += state[j + 1][k]; // bottom center
+
+                total += state[j + 1][k - 1]; // bottom left
+                total += state[j][k - 1]; // middle left
+                total += state[j - 1][k - 1]; // top left
+
+                total += state[j - 1][k]; // top center
+                // When we apply rules to state, we make changes to second array, which we will switch over
+                switch (total) {
+                  case 2:
+                    updateState[j][k] = state[j][k];
+                    break;
+                  case 3:
+                    updateState[j][k] = 1;
+                    break;
+                  default:
+                    updateState[j][k] = 0;
+                }
+              }
+            }
+            // Switch states
+            const temp = state
+            state = updateState
+            updateState = temp
+          }
+          
+          const initStartStop = () => {
+            const btn = document.querySelector('.start-stop')
+            btn.addEventListener('click', () => {
+              // toggle running state
+              running = !running
+              const loopInterval = setInterval(()=>{
+                // if we are running, stop loop
+                if(!running){
+                  console.log('not ran', running)
+                  clearInterval(loopInterval)
+                  return
+                }
+                console.log('ran')
+                // update state
+                update()
+                // clear old canvas
+                ctxGOL.clearRect(0, 0, width, height, width, height)
+                // draw update state
+                drawGrid()
+              }, 500)
+              
+            })
+          }
+          initStartStop()
+        })()
+    </script>
+
+    <xmp>
+      <canvas class="canvas-gol canvas-demo" width="400" height="200"></canvas>
+      <button class="start-stop">Start / Stop</button>
+      <h3>Game Of Life</h3>
+      <script>
+          (function () {
+
+            const canvasGOL = document.querySelector('.canvas-gol');
+            const ctxGOL = canvasGOL.getContext('2d');
+
+            const width = 400
+            const height = 200
+            const rectWidthHeight = 10
+
+            let marginLeft = null
+            let marginTop = null
+            let running = false
+
+            let state = [...Array(width / rectWidthHeight).keys()].map(() => [])
+            let updateState = [...Array(width / rectWidthHeight).keys()].map(() => [])
+
+
+            const initState = () => {
+              for (let i = 0; i < width / rectWidthHeight; i++) {
+                for (let j = 0; j < height / rectWidthHeight; j++) {
+                  state[i][j] = false
+                }
+              }
+            }
+            initState()
+
+            const drawGrid = () => {
+              for (let i = 0; i < width / rectWidthHeight; i++) {
+                for (let j = 0; j < height / rectWidthHeight; j++) {
+                  if (state[i][j]) {
+                    ctxGOL.fillStyle = "blue"
+                    ctxGOL.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                  } else {
+                    ctxGOL.fillStyle = "white"
+                    ctxGOL.fillRect(i * rectWidthHeight, j * rectWidthHeight, width, height)
+                  }
+                }
+              }
+            }
+            drawGrid()
+
+            const initTrackMargins = () => {
+              marginLeft = canvasGOL.offsetLeft
+              marginTop = canvasGOL.offsetTop
+
+              window.addEventListener('resize', (event) => {
+                marginTop = canvasGOL.offsetTop
+                marginLeft = canvasGOL.offsetLeft
+              })
+            }
+            initTrackMargins()
+
+            const initOnClick = () => {
+              canvasGOL.addEventListener('click', (event) => {
+                const positionX = Math.floor((event.pageX - marginLeft) / rectWidthHeight)
+                const positionY = Math.floor((event.pageY - marginTop) / rectWidthHeight)
+
+                console.log(positionX, positionY, marginLeft, marginTop, event.pageX, event.pageY)
+                state[positionX][positionY] = !state[positionX][positionY]
+
+                ctxGOL.clearRect(0, 0, width, height, width, height)
+                drawGrid()
+              })
+            }
+            initOnClick()
+
+            const update = () => {
+              for (let j = 1; j < width / rectWidthHeight - 1; j++) {
+                for (let k = 1; k < height / rectWidthHeight - 1; k++) {
+                  let total = 0
+                  total += state[j - 1][k + 1]; // top right
+                  total += state[j][k + 1]; // middle right
+                  total += state[j + 1][k + 1]; // bottom right
+
+                  total += state[j + 1][k]; // bottom center
+
+                  total += state[j + 1][k - 1]; // bottom left
+                  total += state[j][k - 1]; // middle left
+                  total += state[j - 1][k - 1]; // top left
+
+                  total += state[j - 1][k]; // top center
+                  // When we apply rules to state, we make changes to second array, which we will switch over
+                  switch (total) {
+                    case 2:
+                      updateState[j][k] = state[j][k];
+                      break;
+                    case 3:
+                      updateState[j][k] = 1;
+                      break;
+                    default:
+                      updateState[j][k] = 0;
+                  }
+                }
+              }
+              // Switch states
+              const temp = state
+              state = updateState
+              updateState = temp
+            }
+            
+            const initStartStop = () => {
+              const btn = document.querySelector('.start-stop')
+              btn.addEventListener('click', () => {
+                // toggle running state
+                running = !running
+                const loopInterval = setInterval(()=>{
+                  // if we are running, stop loop
+                  if(!running){
+                    console.log('not ran', running)
+                    clearInterval(loopInterval)
+                    return
+                  }
+                  console.log('ran')
+                  // update state
+                  update()
+                  // clear old canvas
+                  ctxGOL.clearRect(0, 0, width, height, width, height)
+                  // draw update state
+                  drawGrid()
+                }, 500)
+                
+              })
+            }
+            initStartStop()
+          })()
+      </script>
+
+    </xmp>
+
+    <p>
+      We run the updateGrid() every 500 milliseconds in our setInterval, but if we were already running, we 
+      clearInterval and cancel the loop. There are many ways of looping, including a recursive function that uses 
+      setTimeout, or a simple loop that promisifies our gridUpdate function, and uses requestAnimationCallback.
+    </p>
+
+
+  </div>
   <script src="./aglorithms/gameOfLife.js">
 
   </script>
 </body>
+
 </html>
