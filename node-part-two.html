@@ -30,20 +30,31 @@
 
 <body>
   <div class="article-container">
-    <script src="./aglorithms/gameOfLife.js"></script>
-    
-    <game-of-life></game-of-life>
 
-    <h1>Conway's Game of life</h1>
+    <h1>How node actually works, part 2: the event loop</h1>
     <p>
-      Conway's game of life loosely models life in that we need each other, yet we compete against each other for
-      resources
-      In this game, if a square is surrounded by more than 3 'live' neighbours, it dies due to compeition. Less than 2,
-      and it
-      dies due to lack of help from others. If it is dead, and is surrounded by 3, it comes to life because it has the
-      necesary
-      help. Exacly 2, and it will can stay alive.
+      How much could one more inch hurt? We're talking about having confidence in 
+      Javascript interviews, and what do you say when you're asked "what is node", 
+      or "what does asynchronous mean in node." How node talks to the operating system 
+      is explained in part 1 . Now that we know we are receiving a multiplexed stream 
+      of events which are file descriptors ready to be read from or listened to, we 
+      are ready to talk about what we do with those events.
     </p>
+
+    <pre>
+      1. const a = () => {
+      2.   console.log('hi')
+      3.   return
+      4. }
+      5. const b = () => {
+      6.   a()
+      7.   console.log('planet') 
+      8.   return
+      9. }
+     10. a()
+     11. b()
+     12. console.log('all done')
+  </pre>
 
     <p>In essence, we have a funciton, an input, and an output. The input is the state of the live and dead cells, which
       can be
@@ -96,7 +107,8 @@
       As you can see, we have a rectangle, which is the canvas, and another rectangle inside of it. How did we make this
       happen?
     </p>
-    <xmp>
+    
+    <!-- <xmp>
 
       <canvas class="canvas-basic" width="400" height="200"></canvas>
       <script>
@@ -107,7 +119,7 @@
         ctxBasic.fillRect(175, 75, 50, 50);
       </script>
 
-    </xmp>
+    </xmp> -->
 
     <p>
       A canvas is literally a canvas tag, which we styled using width and height. ctxBasic exposes an API which lets us
@@ -401,7 +413,6 @@
 
           const initOnClick = () => {
             canvasStateClick.addEventListener('click', (event) => {
-              console.log('clickale clicked')
               const positionX = Math.floor((event.pageX - marginLeft) / rectWidthHeight)
               const positionY = Math.floor((event.pageY - marginTop) / rectWidthHeight)
 
@@ -809,8 +820,11 @@
       setTimeout, or a simple loop that promisifies our gridUpdate function, and uses requestAnimationCallback.
     </p>
 
+
   </div>
-  
+  <script src="./aglorithms/gameOfLife.js">
+
+  </script>
 </body>
 
 </html>

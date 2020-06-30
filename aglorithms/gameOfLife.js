@@ -2,6 +2,7 @@
   let template = document.createElement('template');
   template.innerHTML = `
     <style>
+
       canvas{
        
         border: black solid 1px;
@@ -36,15 +37,15 @@
   customElements.define('game-of-life', class extends HTMLElement {
     constructor() {
       super();
-      this.attachShadow({ mode: 'open' });
-      this.shadowRoot.appendChild(template.content.cloneNode(true));
-      this.$canvas = this.shadowRoot.querySelector('canvas')
-      this.$runIt = this.shadowRoot.querySelector('.run-it')
-      this.$startOver = this.shadowRoot.querySelector('.start-over')
-      this.$random = this.shadowRoot.querySelector('.random')
-      this.$forward = this.shadowRoot.querySelector('.forward')
-      this.$speed = this.shadowRoot.querySelector('.speed')
-      this.$canvasWrapper = this.shadowRoot.querySelector('.canvas-wrapper')
+      this.$shadow = this.attachShadow({ mode: 'closed' });
+      this.$shadow.appendChild(template.content.cloneNode(true));
+      this.$canvas = this.$shadow.querySelector('canvas')
+      this.$runIt = this.$shadow.querySelector('.run-it')
+      this.$startOver = this.$shadow.querySelector('.start-over')
+      this.$random = this.$shadow.querySelector('.random')
+      this.$forward = this.$shadow.querySelector('.forward')
+      this.$speed = this.$shadow.querySelector('.speed')
+      this.$canvasWrapper = this.$shadow.querySelector('.canvas-wrapper')
       this.ctx = this.$canvas.getContext('2d')
       this.marginLeft = 0
       this.marginTop = 0
@@ -74,7 +75,7 @@
     }
 
     initOnClick() {
-      this.$canvas.addEventListener("click", (event) => {
+      this.$canvasWrapper.addEventListener("click", (event) => {
         const positionX = Math.floor((event.pageX - this.marginLeft) / this.blockWidth)
         const positionY = Math.floor((event.pageY - this.marginTop) / this.blockHeight)
 
