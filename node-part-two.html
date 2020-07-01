@@ -170,11 +170,34 @@
       interrupt the current thread, and insert our data. However, as we discussed in the 
       <a href="https://medium.com/@igor.atakhanov/acid-mvcc-and-how-postgresql-handles-concurrent-queries-27fb48692db8">
         previous article
-      </a>, we avoid threads because of the memory requirements of each thread and the time it takes to context switch. Also,
+      </a>, we avoid threads because of the memory requirements of each thread and the latency overhread of context switching. Also,
       how would we orchestrate the interruption? Our node server is constantly executing handler functions, most of which is
-      synchronous code, so when do we insert our network data? We need a schedular, and that schedular is called the event loop.
+      synchronous code, so when do we insert our network data? We need a scheduler, and that scheduler is called the event loop.
     </p>
 
+    <h2>
+      Event loop concept.
+    </h2>
+
+    <p>
+      Understanding the event loop conceptually, and the reason for it, should happen before understanding it in detail. Why
+      we would use a thread for something like a network call, is to get that network call out of our javascript thread of 
+      execution, and not block the rest of the script. To get away from threads, we must depend on something else. Previously 
+      we talked about how the operating system uses signal interrupt to let us know when a network call comes back, and it this
+      takes the form of an event in our event stream. If when we make the network call, we register it somewhere, then ignore 
+      it until the data comes back, we can basically just do our synchronous stuff the register is told that the response came
+      in, then we can do something with that data. Sound familiar? It's pretty similar to our select system call - we cam poll
+      the registered asych events, and when one of them gets back with data, we can read the data, and do something with it.
+    </p>
+
+    <p>
+      With select, we would loop through our registered file descriptors, and send back just the ones ready for a read or write
+      operation, and this could be a thousand different files. However, with things like network events, we can place all network
+      i/o events into one bucket - the network io bucket, and we can check that bucket, as well as other types of buckets. For 
+      instance, using setTimeout(callback, timeout) registers a function in the setTimeout bucket, and at the beginnign of every loop, we can 
+      check the current time, and if it is greater than the timeout, we can invoke the callback. Then we can check the other bucket,
+      until we loop back around. That is the idea behind the event loop. 
+    </p>
     
     
   </div>
