@@ -106,19 +106,41 @@
       </li>
     </ul>
 
-    <canvas class="canvas-basic canvas-demo" width="400" height="200"></canvas>
-    <script>
-      const canvasBasic = document.querySelector('.canvas-basic');
-      const ctxBasic = canvasBasic.getContext('2d');
-
-      ctxBasic.fillStyle = 'rgb(200, 0, 0)';
-      ctxBasic.fillRect(175, 75, 50, 50);
-    </script>
-    <h3>Basic Canvas Example</h3>
     <p>
-      As you can see, we have a rectangle, which is the canvas, and another rectangle inside of it. How did we make this
-      happen?
+      Here's what our memory looks like after we run call on line 10:
     </p>
+
+    <img src="article-images/memoryDiagram_1.png"/>
+
+    <p>
+      We have the SP point to line 11 in the stack, and our PC points to line 2. We execute line two, which prints 'hi' to 
+      the user, and set PC to the return on line 3. People don't ordinarily put explicit returns at the end of void 
+      functions, but here we are trying to be really transparent.
+    </p>
+
+    <p>
+      The <b>return</b> instruction
+    </p>
+
+    <ul>
+      <li>
+        Pops the return address off the stack at the SP.
+      </li>
+      <li>
+        Stores the return address in the PC.
+      </li>
+      <li>
+        Increments the SP.
+      </li>
+    </ul>
+
+    <p>
+      Our stack currently only has line 11 on it, so we pop it, and point the PC to it. At this point, or SP is pointing 
+      to an empty memory[240], and or PC is at memory[239]. That instruction happens to be line 12, which is an stdout, 
+      and our PC will point to line 6, which is another call. Here's how those two steps look.
+    </p>
+
+    <img src="article-images/memoryDiagram_2.png"/>
     
     <!-- <xmp>
 
