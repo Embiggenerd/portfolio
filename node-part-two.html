@@ -66,7 +66,9 @@
     <p>
       Let's divide our system memory into two parts:
     </p>
+
     <img src="article-images/memoryDiagram.png"/>
+    
     <p>
       Before you get confused, here's what everything means: our memory is a zero indexed structure. We load up our 
       instructions starting at index 0. These instructions are similar to our javascript code, but not exactly. Call 
@@ -74,19 +76,35 @@
       that any human readable language gets translated into. This structure grows up, as you would expect.
     </p>
 
+
     <p>
-      To avoid using DOM elements, we could go with WebGL. This is based on OpenGL, something you may remember from
-      video games,
-      because it is used for 3d rendering. We are only trying to demonstrate the game, and adding dimensions adds
-      complexity.
-      The 2d version of WebGL is HMTL5 canvas. With canvas, there are no nodes or objects, just pixels, their color
-      styling, and
-      their position relative to the top left of the window.
+      Starting at index 240, we have a stack. This stack grows down, which is confusing, and means that when we push 
+      onto the stack, we have to decrement the index which is the 'top' of the stack, which we call the stack pointer, 
+      or SP. When we pop, we will increment it. This memory only goes to index 255, which makes it an 8 bit CPU 
+      emulator. Above index 240, we have locations where we can store things we don't have to worry about today.
     </p>
 
-    <h2>
-      Canvas Basics
-    </h2>
+    <p>
+      Most importantly, the index of the currently executing instruction is stored in the program counter, or PC. A part 
+      of our flow of execution is incrementing the PC to execute the next instruction, of course unless our instruction 
+      specifically sets the PC to something else, which we will discuss next.
+    </p>
+
+    <p>
+      The <b>call</b> instruction does two things.
+    </p>
+
+    <ul>
+      <li>Decrements the SP.</li>
+      <li>
+        It pushes the return address onto the stack. This is a reference to the instruction we should execute after the 
+        current function returns.
+      </li>
+      <li>
+        It sets PC to the current instruction's definition. This is really a reference to the first instruction in the 
+        definition.
+      </li>
+    </ul>
 
     <canvas class="canvas-basic canvas-demo" width="400" height="200"></canvas>
     <script>
