@@ -141,7 +141,22 @@
     </p>
 
     <img src="article-images/memoryDiagram_2.png"/>
+
+    <img src="article-images/memoryDiagram_3.png"/>
+
+    <p>
+      A nested function causes our stack to grow to size 2, and now we are starting to see the point of the stack. The 
+      user will see a second 'hi', then 'planet', then 'all done', as we reach return statements in our script.
+    </p>
     
+    <p>
+      What is the point of explaining how an 8 bit CPU emulation could handle a JS script? When we say a function is 
+      blocked, we mean to say that a return statement, which pops the next function off the stack, won't get to store 
+      it in the program counter in order to execute it. That's because the stack operations and the script's functions 
+      are all in the same thread of execution. In order for asynchronous code to work, we have to curate the order 
+      instructions are executed
+    </p>
+
     <!-- <xmp>
 
       <canvas class="canvas-basic" width="400" height="200"></canvas>
