@@ -66,19 +66,12 @@
     <p>
       Let's divide our system memory into two parts:
     </p>
-    <h2>Animation</h2>
+    <img src="article-images/memoryDiagram.png"/>
     <p>
-      First we have to decide how to animate this algorithm. The first choice is regular old HTML. We can imagine that
-      each cell
-      is going to have different properties, which change over time, and so React comes to mind with its ability to make
-      custom
-      components. However, React is pretty heavy for something like this. We have both the complexity of the algorithm,
-      and React
-      on top of it. Using the dom means we have to calculate the structure of dom elements every generation, this is
-      called a
-      reflow. If we make styling changes, which we will, we also have to repaint. These are both expensive tasks that
-      may cost
-      us time, considering we also have expensive algorithm calculations.
+      Before you get confused, here's what everything means: our memory is a zero indexed structure. We load up our 
+      instructions starting at index 0. These instructions are similar to our javascript code, but not exactly. Call 
+      and return get their own instructions, and beside those, we only call stdout. These are the 'real' instructions 
+      that any human readable language gets translated into. This structure grows up, as you would expect.
     </p>
 
     <p>
