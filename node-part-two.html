@@ -25,7 +25,7 @@
       border: black solid 1px;
     }
   </style>
-  <title>Game Of Life</title>
+  <title>How node actually works, part 2</title>
 </head>
 
 <body>
@@ -56,15 +56,16 @@
      12. console.log('all done')
   </pre>
 
-    <p>In essence, we have a funciton, an input, and an output. The input is the state of the live and dead cells, which
-      can be
-      described as a two dimentional array. When the function evaluates which cells live or die from the rules, and the
-      state,
-      we ouput a two dimensional array with a different arrangement of 'live' and 'dead' cells. To communicate the
-      change over
-      time, we animate these changes and call them generations.
+    <p>
+      Our CPU has to worry about more than just the console logs, it has to worry about the order of instructions 
+      that it carries out. The first line it cares about is 10, and then it will want to look up the definition of 
+      a, which really starts at line two. When it returns, we then skip to line 11. How does our CPU keep track of 
+      that? How does it know to go back to 11?
     </p>
 
+    <p>
+      Let's divide our system memory into two parts:
+    </p>
     <h2>Animation</h2>
     <p>
       First we have to decide how to animate this algorithm. The first choice is regular old HTML. We can imagine that
