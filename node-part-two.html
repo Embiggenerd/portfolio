@@ -231,6 +231,38 @@
     </p>
 
     <img src="article-images/eventLoopDiagram.png"/>
+
+    <p>
+      So far, we have sort of figured out how to place async code onto our sync call stack to execute it. We have a loop
+      checking for async events to get done, then we place the callback associated with those events onto our sync callstack
+      only when it is empty. This would explain this sort of code:
+    </p>
+
+    <pre>
+      console.log('Script Start')
+      setTimeout(()=>{
+        console.log('First SetTimeout')
+        setTimeout(()=>console.log('Second SetTimeout'), 0)
+      }, 0)
+      setTimeout(()=>console.log('Third SetTimeout'))
+      console.log('Script End')
+
+      // Output:
+      // Script Start
+      // Script End
+      // First SetTimeout
+      // Third SetTimeout
+      // Second SetTimeout
+    </pre>
+
+    <p>
+      Notice, our Script End message is printed, then we start with the setTimeouts. This is because until we pop the last
+      sync instruction off the call stack, it is not empty, and the callback queue is not even checked. The first
+    </p>
+
+    <p>
+      So, we have these large tasks, but what about things like thenables? Remember writing
+    </p>
     
   </div>
 </body>
