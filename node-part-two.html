@@ -198,7 +198,39 @@
       check the current time, and if it is greater than the timeout, we can invoke the callback. Then we can check the other bucket,
       until we loop back around. That is the idea behind the event loop. 
     </p>
+
+    <p>
+      Steps in our loop
+    </p>
     
+    <ol>
+      <li>Check what time it is</li>
+      <li>Check if timers set in setTimeout should invoke the callback</li>
+      <li>Check if timer in setInterval should invoke the calback</li>
+      <li>Check callbacks we may have postponed from last time</li>
+      <li>Check for I/O events and their callbacks</li>
+      <li>Check if there are any setImmediate callbacks to run</li>
+      <li>Check for any close callbacks, such as connection.on('close'...</li>
+    </ol>
+
+    <p>
+      As you can see, there's a specific order, and some of it may leave you scratching your head. Why is setImmediate not the
+      first step? Because I/O and timer callbacks often use setImmediate to make sure they delay certain code from happening, 
+      and we want to get to that code as soon as possible.
+    </p>
+
+    <p>
+      Another question is, how does this talk to our little emulator? How do we get these callbacks to run, if we have synchronous
+      code blocking on our call stack? Well, sometimes the call stack is empty, and that's when we check if there are any async
+      callbacks to execute. You may assume we place these instructions on their own queue, and you're right, and we can call this
+      queue the callback queue for now. 
+    </p>
+
+    <p>
+      This is what our model looks like now.
+    </p>
+
+    <img src="article-images/eventLoopDiagram.png"/>
     
   </div>
 </body>
