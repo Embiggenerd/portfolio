@@ -260,12 +260,15 @@
       sync instruction off the call stack, it is not empty, and the callback queue is not even checked. The first setTimeout
       make sense, but is with the order of the next two? Shouldn't we execute them in order? The reason is that the event 
       loop does not know about the second setTimeout callback until the first is invoked, and by that time, the third has
-      already been appended onto the queue. 
+      already been appended onto the queue. Every time we take a callback off the queue and execute its code, we call this 
+      a <b>tick</b>. The first tick can be considered the sync code, the next is first setTimeout, and then the third and second.
     </p>
+
+    <h2>Promises</h2>
 
     <p>
       So, we have these large tasks, but what about things like thenables? Remember writing a get request, and taking the
-      response of an axios call, doing something with it in a .then method, and it all happened in the order you wanted it 
+      response of an axios call that was a promise, doing something with it in a .then method, and it all happened in the order you wanted it 
       to? Let's take a look at this code:
     </p>
 
@@ -278,7 +281,7 @@
       Promise.resolve()
         .then(()=>console.log('First Then'))
         .then(()=>console.log('Second Then'))
-        
+
       // Output:
       // First Then
       // Second Then
@@ -287,8 +290,97 @@
     </pre>
 
     <p>
-      We would expect 
+      We would expect the output to be much different. Our first tick should be the first time out, and our second the first then. 
+      However, this is clearly not happening. Let's add yet another queue, and now finally we are following the ecmascript 6 spec, 
+      and dinstinguishing between macrotasks (tasks in ec6) and microtasks (jobs in ec6). We are changing our callback queue to 
+      macrotask queue, and we are adding a microtask queue in the middle. The rules are, if we have anything in the microtask 
+      queue, put all of it on the callstack, and only then go back to the next tick. Meaning, we have a step at the end of each
+      tick that checks the microtask queue. This is weird, because both a macrotask and a microtask can themselves add to the 
+      microtask queue, potentially blocking our event loop indefinitely.
     </p>
+
+    <img src="article-images/eventLoopDiagram_2.png"/>
+
+    <p>
+      The new rules are: if callbacks passed to the then method on promises get pushed onto the micro task queue. So, if you do 
+      axios.get(...).then(res => console.log(res.data)), the network call itself is a macrotask that gets checked in the 
+      network I/O phase of the event loop, and this is a macrotask. When this macrotask is resolved, it places the callback passed
+      to .then onto the microtask queue, and so will invoke the console.log in the same tick as the network call. A shortcut to
+      appending microtasks this way is simply to use Promise.resolve().then(callback), however this resolves synchronously, and therefore
+      appends the callback onto the microtask queue of the synchronous tick.
+    </p>
+
+    <h2>process.nextTick</h2>
+
+    <p>
+      Another way to place callbacks onto the microtask queue of the current tick is to use process.nextTick(). That's right, today
+      we learn that the people who designed these systems simply have no respect, and that's why they named the method that uses
+      this tick as next tick, and the one that places on next tick as setImmediate. To add insult to injury, process.nextTick(callback)
+      takes priority over anything else, and so will place its callback above Promise.resolve().then(callback), but will not supercede
+      an earlier invokcation of another process.nextTick()
+    </p>
+
+    <pre>
+      process.nextTick(()=>console.log('First NextTick'))
+      console.log('First Sync')
+      setTimeout(()=>{
+        Promise.resolve().then(()=>console.log('First Promise'))
+        console.log('First Timeout')
+
+        setTimeout(()=>{
+          Promise.resolve().then(()=>console.log('Second Promise'))
+          console.log('Second Timeout')
+        }, 0)
+
+      }, 0)
+
+      Promise.resolve().then(()=>console.log('Third Promise'))
+      process.nextTick(()=>console.log('Second NextTick'))
+      console.log('Second Sync')
+
+      // Output
+      // First Sync
+      // Second Sync
+      // First NextTick
+      // Second NextTick
+      // Third Promise
+      // First Timeout
+      // First Promise
+      // Second Timeout
+      // Second Promise
+    </pre>
+
+    <p>
+      In the first tick, our sync tick, we print from First Sync to Third Promise. Remember, thenables place onto same tick
+      as long as they resolve synchronously, and so does nextTick, but nextTicks take priority over promises in the order. In the
+      second tick, we have First Timeout and First Promise, because setTimeout is a macrotask that gets its own tick, and also 
+      uses a promise to place a callback on the microtask queue which must be invoked before the next tick. This macrotask also 
+      calls another macrotask, the second setTimeout, which also uses a promise.
+    </p>
+
+    <h2>libuv</h2>
+
+    <p>
+      You might be thinking, what part of Nodejs is this? How is it built? This part is called libuv, and it's written in c++.
+      It can't be written in Javascript because JS doesn't have the tools to talk to the operating system that c++ does, and is
+      also slower. 
+    </p>
+
+    <p>
+      You may also be thinking, what's the point? Why promise.nextTick? Have you ever seen code like this?
+    </p>
+
+    <pre>
+      app.connect()
+
+      app.on('connect', ()=>console.log('app connected'))
+    </pre>
+
+    <p>
+      How can we configure what to do on connect after the connect? If the connect method uses process.nextTick. 
+    </p>
+
+    
     
   </div>
 </body>
