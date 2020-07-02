@@ -257,11 +257,37 @@
 
     <p>
       Notice, our Script End message is printed, then we start with the setTimeouts. This is because until we pop the last
-      sync instruction off the call stack, it is not empty, and the callback queue is not even checked. The first
+      sync instruction off the call stack, it is not empty, and the callback queue is not even checked. The first setTimeout
+      make sense, but is with the order of the next two? Shouldn't we execute them in order? The reason is that the event 
+      loop does not know about the second setTimeout callback until the first is invoked, and by that time, the third has
+      already been appended onto the queue. 
     </p>
 
     <p>
-      So, we have these large tasks, but what about things like thenables? Remember writing
+      So, we have these large tasks, but what about things like thenables? Remember writing a get request, and taking the
+      response of an axios call, doing something with it in a .then method, and it all happened in the order you wanted it 
+      to? Let's take a look at this code:
+    </p>
+
+    <pre>
+      setTimeout(()=>{
+        console.log('First SetTimeout')
+        setTimeout(()=>console.log('Second SetTimeout'), 0)
+      }, 0)
+      
+      Promise.resolve()
+        .then(()=>console.log('First Then'))
+        .then(()=>console.log('Second Then'))
+        
+      // Output:
+      // First Then
+      // Second Then
+      // First SetTimeout
+      // Second SetTimeout
+    </pre>
+
+    <p>
+      We would expect 
     </p>
     
   </div>
