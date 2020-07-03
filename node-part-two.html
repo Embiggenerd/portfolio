@@ -492,6 +492,22 @@
       and some optimization. Iginition uses the backend to do its job, and the reason it exists at all is that that latency
       of optimizing code on the first run through would mean that the user would see a small hickup before his page loads quickly.
     </p>
+
+    <h3>Bindings</h3>
+
+    <p>
+      You will notice that mentioned that lots of nodejs is written in not Javascript. How is it that we can reference node in
+      our scripts, then? JS has no way to talk to an operating systems files, for example, and yet node let's us do it. Since 
+      c++ does have access to these system calls, nodejs comes with a layer of c++ bindings that allow the JS code exposed in node
+      to reference c++ language features. These are just another feature of node, which is described is an environment that 
+      combines libuv, V8, c++ bindings, and more to allow us to build servers out of Javascript.
+    </p>
+
+    <p>
+      At this point, most people think they are done. However, there is one feature we only briefly mentioned, but one that is
+      very important, and that's promises. Tune in next time, when we deconstruct promises and async/await, and wonder if there
+      really is such a thing as too big.
+    </p>
     
   </div>
 </body>
