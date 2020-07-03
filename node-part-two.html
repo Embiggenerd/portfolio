@@ -473,7 +473,25 @@
       again later, V8 will use turbofan to optimize on the bytecode further using information stored in feedbackVector.
     </p>
 
-    
+    <h3>Turbofan</h3>
+
+    <p>
+      Turbofan is an 'optimizing compiler', and its job is to optimize your bytecode, specifically functions that you
+      use over and over. These functions are called 'hot' code, and they are identified by something called a runtime
+      profiler. The reason this thing is a big deal is that before we had something called crankshaft that did this job,
+      however it had trouble with new ecma script updates, and was structured such that updating the language features
+      that it optimized was difficult, because it didn't work on the byte code, but a stage between JS and bytecode 
+      called the parse tree. If you think your job is tedious, there are engineers at Google who sit around and optimize 
+      one JS language feature at a time.
+    </p>
+
+    <p>
+      If you are confused as to what the order of things are, you're not alone. Turbofan is not just a set of optimizations,
+      but actually has all the tools to do the job of executing and optimizing JS. It has a 'frontend' part that turns JS into
+      byte code, an 'optimization' layer that works on that byte code, and a 'backend' layer that does some bytecode generation,
+      and some optimization. Iginition uses the backend to do its job, and the reason it exists at all is that that latency
+      of optimizing code on the first run through would mean that the user would see a small hickup before his page loads quickly.
+    </p>
     
   </div>
 </body>
