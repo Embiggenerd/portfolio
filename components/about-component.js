@@ -58,7 +58,7 @@
           I'm a full stack developer and former professional poker player.
         	I <a href="#learn"> learn in public</a>, which means you can see my
           progress. As I learn a topic, I will check it off, and 
-          <a href="portfolio.html">build a project</a> based on it, or <a href="https://medium.com/@igor.atakhanov">
+          <a href="portfolio.html">build a project</a> based on it, or <a href="articles.html">
           write an article</a> about it. 
           If you think we would work well together, you can 
           <a href=" mailto:igoratakhanov@gmail.com">drop me a line</a> at igor atakhanov 

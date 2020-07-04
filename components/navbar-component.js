@@ -50,6 +50,7 @@
       <a href="portfolio.html">Portfolio</a>
       <a href="mailto:igoratakhanov@gmail.com">Contact</a>
       <a href="#learn">Learn</a>
+      <a href="articles.html">Articles</a>
     </div>`
 
   customElements.define('navbar-component', class extends HTMLElement {

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <meta http-equiv="Accept-Encoding" content="gzip" />
+  <link rel="icon" href="sharkbeak-sq4.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="article-style.css">
+  <style>
+    p {
+      margin-top: -5px;
+      color: rgb(91, 107, 127)
+    }
+
+    .article-wrapper {
+      flex-wrap: wrap;
+      max-width: 1200px;
+      flex-direction: row;
+      /* justify-content: space-evenly; */
+    }
+
+    .article-box {
+      width: 350px;
+      height: 220px;
+      border: 2px solid transparent;
+      padding: 20px;
+      /* margin: 10px; */
+    }
+
+    .article-box:hover {
+      border: solid 2px rgb(6, 145, 242);
+    }
+
+    h3 {
+      color: black;
+    }
+  </style>
+  <title>Igor's Articles</title>
+</head>
+
+<body>
+  <div class="article-container">
+
+    <navbar-component></navbar-component>
+    <script src="components/navbar-component.js"></script>
+
+    <div class="article-wrapper">
+
+      <!-- <h1>Articles</h1> -->
+
+      <a href="https://medium.com/@igor.atakhanov/how-node-actually-works-part-1-the-operating-system-497fd0de8167">
+        <div class="article-box">
+          <h3>
+            How Node Actually Works Part 1: The Operating System
+          </h3>
+          <p>
+            A detailed guide to how Nodejs talks to your operating system, and how and why your OS creates
+            an event stream for any server to loop over
+          </p>
+        </div>
+      </a>
+
+      <a href="conway.html">
+        <div class="article-box">
+          <h3>
+            Conway's Game Of Life
+          </h3>
+          <p>
+            A step by step tutorial, including code and examples, of how to go from blank canvas to a fully functional
+            implementation of the Game Of Life in javascript
+          </p>
+        </div>
+      </a>
+
+      <a href="https://medium.com/@igor.atakhanov/acid-mvcc-and-how-postgresql-handles-concurrent-queries-27fb48692db8">
+        <div class="article-box">
+          <h3>
+            ACID, MVCC, and how PostgreSQL handles concurrent queries
+          </h3>
+          <p>
+            We talk about everyone's favorite topic: SQL vs NoSQL, what ACID means to us all, and how PostgreSQL and
+            MongoDB handle concurrent queries.
+          </p>
+        </div>
+      </a>
+
+      <a href="node-part-two.html">
+        <div class="article-box">
+          <h3>
+            How Node Actually Works Part 2: The Event Loop
+          </h3>
+          <p>
+            After getting an understanding of the event stream, we move onto the joys of the event loop, and how Nodejs
+            both interprets and compiles Javascript for fun and profit.
+          </p>
+        </div>
+      </a>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>
