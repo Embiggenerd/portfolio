@@ -25,7 +25,7 @@
     <navbar-component></navbar-component>
 
     <div class="article-wrapper">
-      
+
       <script src="./aglorithms/gameOfLife.js"></script>
 
       <game-of-life></game-of-life>
@@ -33,16 +33,16 @@
       <h1>Conway's Game of life</h1>
       <p>
         Conway's game of life loosely models life in that we need each other, yet we compete against each other for
-        resources
+        resources.
         In this game, if a square is surrounded by more than 3 'live' neighbours, it dies due to compeition. Less than
         2,
         and it
         dies due to lack of help from others. If it is dead, and is surrounded by 3, it comes to life because it has the
         necesary
-        help. Exacly 2, and it will can stay alive.
+        help. Exacly 2, and it can stay alive.
       </p>
 
-      <p>In essence, we have a funciton, an input, and an output. The input is the state of the live and dead cells,
+      <p>In essence, we have a function, an input, and an output. The input is the state of the live and dead cells,
         which
         can be
         described as a two dimentional array. When the function evaluates which cells live or die from the rules, and
@@ -54,6 +54,7 @@
       </p>
 
       <h2>Animation</h2>
+
       <p>
         First we have to decide how to animate this algorithm. The first choice is regular old HTML. We can imagine that
         each cell
@@ -63,7 +64,7 @@
         components. However, React is pretty heavy for something like this. We have both the complexity of the
         algorithm,
         and React
-        on top of it. Using the dom means we have to calculate the structure of dom elements every generation, this is
+        on top of it. Using the DOM means we have to calculate the structure of the elements every generation, this is
         called a
         reflow. If we make styling changes, which we will, we also have to repaint. These are both expensive tasks that
         may cost
@@ -125,7 +126,7 @@
       <p>
         Now that we've made one rectangle, we can move on to make a grid of rectangles. First, we have to decide how
         many
-        rectanles and how large they should be. Given that we have a fixed width and height, how many rects we need
+        rectangles and how large they should be. Given that we have a fixed width and height, how many rects we need
         depends
         on their size. Since our grid is 400 x 200, let's make each rectangle 10x10 so they fit evenly.
       </p>
@@ -296,19 +297,19 @@
       </xmp>
 
       <p>
-        initState() initializes our two dimensional array state with all false values, and drawGrd() takes this and
+        initState() initializes our two dimensional array state with all false values, and drawGrid() takes this and
         draws
-        white rectangles. What we need to do next is a little more difficult. Since our rects are not dom nodes that we
+        white rectangles. What we need to do next is a little more difficult. Since our rects are not DOM nodes that we
         can listen
         for a click event on, we have to change our state based on user input, then erase old state, and redraw the new
         state.
-        What we can do is put a click event on the canvas, ask where the cursor was in aboslute terms in the window,
+        What we can do is put a click event on the canvas, ask where the cursor was in absolute terms in the window,
         then
         change
         an appropriate position in a new state. We could then erase the old board so old changes don't interfere with
         new
         user
-        input, and run drawGrod on a new state.
+        input, and run drawGrid() on a new state.
       </p>
 
       <xmp>
@@ -506,7 +507,7 @@
         beginning
         and every time the window is resized. This is because this article is centered, which means when we change the
         size, the
-        left margin changes. We need to keep track of it to subract from pageX of our event click. We are getting
+        left margin changes. We need to keep track of it to subtract from pageX of our event click. We are getting
         aboslute
         values,
         but we need to turn them into relative values. We also divide this by our cell dimensions in order to get the
@@ -515,7 +516,7 @@
       </p>
 
       <p>
-        In our on click, we use these positions to toggle the right cell in our state. We then use clearRect to clear
+        In our on click, we use these positions to toggle the right cell in our state. We then use clearRect() to clear
         our
         last canvas
         state, and run drawGrid() once again to reflect our changes to the user. Finally, we need to think about how to
@@ -525,7 +526,7 @@
 
       <h2>Implementing Game Of Life</h2>
       <p>
-        The rules for the game are simple. If a cell is surrounded by more than 3, or less thatn 2 live cells, it dies.
+        The rules for the game are simple. If a cell is surrounded by more than 3, or less than 2 live cells, it dies.
         If
         it is dead,
         and it has exactly 3 neighbours, it comes alive. At two neighbours, there is no change. These rules are simple,
@@ -533,7 +534,7 @@
         them is hard. We have to think of what are our limitations.
       </p>
       <p>
-        We essentiall have two states. One is our state two dimentional array, the other is the state of the
+        We essentiall have two states. One is our two dimentional array, the other is the state of the
         grid. When we run
         our state through the rules, and change it, there will be a difference betweem the two states. We then run
         drawGrid() and make
@@ -824,8 +825,9 @@
 
       <p>
         We run the updateGrid() every 500 milliseconds in our setInterval, but if we were already running, we
-        clearInterval and cancel the loop. There are many ways of looping, including a recursive function that uses
-        setTimeout, or a simple loop that promisifies our gridUpdate function, and uses requestAnimationCallback.
+        clearInterval() and cancel the loop. There are many ways of looping, including a recursive function that uses
+        setTimeout, or a simple loop that promisifies our gridUpdate function, and uses requestAnimationCallback. Which
+        ever way you dice it, read up on all the alternatives, there's plenty of examples
       </p>
 
     </div>
