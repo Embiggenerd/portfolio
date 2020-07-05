@@ -245,8 +245,80 @@
         to _resolve in our promise. It is being called on a string. Let's go back to D, and see our definition of _resolve takes a 
         handler off our resolution handler queue, and calls it on the value at E, which is our string at I and J. Trippy, right? If 
         you don't get it yet, that means you're normal, keep going over it. When you get it, move onto the next section where we 
-        figure out how to handle many resolution handlers. 
+        figure out how to chain resolution handlers. 
       </p>
+
+      <h3>
+        Resolution handlers can be chained
+      </h3>
+
+      <p>
+        One of the most important aspects of promises is being able to chain promises together. If returning a promise from a function 
+        allows us to call .then, then returning a promise from .then will allow us to chain .thens. 
+      </p>
+
+      <pre>
+  class MyPromise{
+    constructor(executor) {
+      this._resolutionHandlerQueue = []              
+      executor(this._resolve.bind(this))             
+    }
+
+    _resolve(value {                                 
+      while(this._resolutionQueue.length > 0) {      
+        const resolution = this._resolutionQueue.shift()
+        const returnValue = resolution.handler(value)       // D
+        
+        if (returnValue instanceof MyPromise) {             // E
+          returnValue.then(function(v) {                    // F
+            resolution.promise._resolve(v)                  // G
+          })
+        }
+      }
+    })
+
+    then(resolutionHandler) {
+      const newPromise = new MyPromise(function(){})        // A
+      this._resolutionQueue.push({                          
+        handler: resolutionHandler,                    
+        promise: newPromise                                 // B
+      })  
+      return newPromise                                     // C
+    }
+  }
+      </pre>
+
+      <p>
+        The first thing we have to worry about is how to handle the returned promise at C, or more succinctly, where do we resolve 
+        that returned promise. Where ever we have that logic, we have to be able to reference that returned promise, and so we store 
+        that reference at B after creating at A. Notice, our resolution handler queue now stores objects with the resolution handler 
+        passed to .then, and our returned promise. At D, we change our returnValue accordingly, then ask if that return value is 
+        itself a promise. That's because we are tesing for the case when oure resolution handler returns a promise:
+      </p>
+
+      <pre>
+  let foo = "bar"
+  const promise = new MyPromise(function(resolve) {
+    setTimeout(function(){
+      resolve()
+    }, 1000)
+  })
+
+  promise.then(function(){
+
+    return new MyPromise(function(resolve){               // H
+      setTimeout(function(){
+        resolve(foo)
+      }, 1000)
+    })
+
+  }).then(function(string){
+    console.log(string === "bar")
+  })
+
+  // Output after 2 seconds
+  // true
+      </pre>
 
     </div>
   </div>
