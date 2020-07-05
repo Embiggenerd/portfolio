@@ -7,6 +7,12 @@
   <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="article-style.css">
+  <style>
+    h3 {
+      font-size: 24px;
+      margin: 12px 0;
+    }
+  </style>
   <title>How node actually works, part 3</title>
 </head>
 
@@ -144,11 +150,105 @@
       <p>
         Above is the whole reason we made promises, and you can see, it's quite convenient. The callbacks passed to .then and .catch are 
         are synchronous code, yet delayed until the data comes back over the network, or there is an error. Unlike callbacks, we get a nice 
-        way to compose our handlers, and don't have to worry about hard to read code.
+        way to compose our handlers, and don't have to worry about hard to read code. Easy, huh? Well, by now, we know easy to use means 
+        hard to implement. If we didn't code a promise from scratch, this would be a different kind of blog series, wouldn't it. 
+      </p>
+
+      <h2>
+        Implementing a promise
+      </h2>
+
+      <h3>
+        Executor
+      </h3>
+      <pre>
+  class MyPromise{
+    constructor(executor) {
+      executor()
+    }
+  }
+      </pre>
+
+      <p>
+        The function that we passed to the constructor is called the executor, and it must be invoked immediately.  
+      </p>
+
+      <pre>
+  let foo = ''
+  new MyPromise(()=>{
+    foo = "bar"
+  })
+  console.log(foo)
+  
+  // Output
+  // bar
+      </pre>
+
+      <h3>
+        Resolution handler
+      </h3>
+
+      <p>
+        At some point' our promise must be 'resolved'. This means that we did not get an error, whatever async thing got done, such as an 
+        I/O event or a setTimeout event, and now we want the callback we passe to .then to get called on the result. This callback is 
+        called resolution handler, because it is invoked on resolution, and it 'handles' the result.
+      </p>
+
+      <pre>
+  class MyPromise{
+    constructor(executor) {
+      this._resolutionHandlerQueue = []              // A
+      executor(this._resolve.bind(this))             // B
+    }
+
+    _resolve(value {                                 // C
+      while(this._resolutionQueue.length > 0) {      // D
+        const handler = this._resolutionQueue.shift()
+        handler(value)                               // E
+      }
+    })
+
+    then(resolutionHandler) {
+      this._resolutionQueue.push(resolutionHandler)  // F
+    }
+  }
+      </pre>
+
+      <p>
+        So, things are getting hairy, but relax, we will go slowly. The reason we have a resolution handler queue at A is that the 
+        resolution handler is given to us synchronously, and we need to hold onto it for when we resolve. It's a queue because we 
+        know we may need to call then many times, which means there will be many resolution handlers. Line B should be very confusing.
+        We are calling executor on _resolve, which is bound to our promise since. Why is it bound, and when it it called? Remeber back
+        when we used HTTP.get? Look carefully where resolve is called on line D. That's right, that function is called in the definition
+        of the executor, like this.
+      </p>
+
+      <pre>
+  let foo = "bar"
+
+  const promise = new MyPromise(function(resolve) { // G
+    setTimeout(function(){
+      resolve(foo)                                  // H
+    }, 1000)
+  })
+
+  promise.then(function(string) {                   // I
+    console.log(string === "bar")                   // J
+  })
+
+  // Output
+  // true
+      </pre>
+
+      <p>
+        We define our executor starting on G, and it contains a setTimout that invokes resolve on foo. This resolve is a reference
+        to _resolve in our promise. It is being called on a string. Let's go back to D, and see our definition of _resolve takes a 
+        handler off our resolution handler queue, and calls it on the value at E, which is our string at I and J. Trippy, right? If 
+        you don't get it yet, that means you're normal, keep going over it. When you get it, move onto the next section where we 
+        figure out how to handle many resolution handlers. 
       </p>
 
     </div>
-
   </div>
 
   <script src="components/navbar-component.js"></script>
