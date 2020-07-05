@@ -30,12 +30,45 @@
       </p>
 
       <h2>
-        Why
+        Why Promises Exist
       </h2>
 
-      
+      <p>
+        First, there was synchronous code. Everything was fine, until we had to make a network call, and then everything went south, because 
+        networks are slow and unpredictable. You don't know if you're gonna get an error, and you don't know how long the call will take.
+        After we figured out single threaded I/O, we still had the problem of how to compose our code. Let's say that we make a get request,
+        and store the result in a variable called 'response.' Remember, we used a macrotask to do this. All of the synchronous code around it
+        will be long executed before we call comes back. How do we process the response, such as put in a state, or write to a database? 
+        Callbacks.
+      </p>
 
-      
+      <pre>
+        HTTP.get("url", function(response){
+          doSomething(response, function(secondResponse){
+            doSomethingAgain(secondResponse, function(){
+              doSomethingAThirdTime(thirdResponse, function(){
+                // You get the point
+              })
+            })
+          })
+        })
+      </pre>
+
+      <p>
+        What's happening is our response from each function is being passed as a the argument to th enext function. Remember that a macrotask
+        can place another task in the macrotask queue, or it can place a task in the microtask queue, which itself can use either queue. The 
+        that we get to delay 'synchronous' code that deals with asynchronous code so that it doesn't execute on the stack before our async 
+        function comes back with a result, is to place that synchronous code onto the microtask queue using proces.nextTick(). That's what 
+        each callback is - it's a callback that's delayed until the data comes through, and as you can tell, there is no limit to how many
+        callbacks are used in a row, which is bad, because it looks like shit. This is what bootcamp graduates call 'callback hell' in the 
+        same way that millenials talk about Led Zeppelin.
+      </p>
+
+      <h2>
+        Promises
+      </h2>
+
+    
 
     </div>
 
