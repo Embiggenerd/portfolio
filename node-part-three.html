@@ -43,14 +43,26 @@
       </p>
 
       <pre>
-        HTTP.get("url", function(response){
-          doSomething(response, function(secondResponse){
-            doSomethingAgain(secondResponse, function(){
-              doSomethingAThirdTime(thirdResponse, function(){
-                // You get the point
-              })
+        HTTP.get("url", function(error, response){
+          if (error) {
+            console.log(error)
+          } else {
+            doSomething(function(error, secondResponse){
+              if (error) {
+                console.log(error)
+              } else {
+                doSomethingAgain(function(error, thirdResponse){
+                  if (error) {
+                    console.log(error)
+                  } else {
+                    doSomethingAThirdTime(function(error, forthResponse){
+                      // You get the point
+                    })
+                  }
+                })
+              }
             })
-          })
+          }
         })
       </pre>
 
@@ -61,14 +73,79 @@
         function comes back with a result, is to place that synchronous code onto the microtask queue using proces.nextTick(). That's what 
         each callback is - it's a callback that's delayed until the data comes through, and as you can tell, there is no limit to how many
         callbacks are used in a row, which is bad, because it looks like shit. This is what bootcamp graduates call 'callback hell' in the 
-        same way that millenials talk about Led Zeppelin.
+        same way that millenials talk about Jimi Hendrix.
       </p>
 
       <h2>
         Promises
       </h2>
 
-    
+      <pre>
+        HTTP.get('url')
+          .then(response => {
+            return doSomething(response)
+          })
+          .then(secondResponse => {
+            return doSomethingAgain(secondResponse)
+          })
+          .then(thirdResponse => {
+            return doSomethingAThirdTime(thirdResponse)
+          })
+          .cach(error => {
+            console.log(error)
+          })
+      </pre>
+
+      <p>
+        Better, isn't it? Internally, our HTTP.get returns a promise that resolves to the value that comes back on the network. A promise has 
+        a method called 'then', which is passed the result of the network call as an argument, and invokes it callback on that value. It uses
+        something like process.nextTick, similarly to our callback hell example, but looks much cleaner. Notice, earlier, each new callback 
+        had control over what it did with error and response. Our promise, on the other hand, has control over what's going on the whole time,
+        and so can decide to handle the error in a .catch. The .then is also chainable, and will pass on its return value as the argument to
+        the next then. 
+      </p>
+
+      <p>
+        We said that our HTTP.get method 'returns a promise'. What does this mean? Let's say ordinarily, it uses XMLHttpRequest, which uses
+        callback pattern. How would we get it to use promises? 
+      </p>
+
+      <pre>
+        HTTP = {}
+        HTTP.get = function(url){
+          return new Promise(                              // A
+            function(resolve, reject) {                    // B
+              const req = new XMLHttpRequest('GET', url,   
+                (error, response) => {                     // C
+                  if (error) {
+                    reject(error)
+                  } else {
+                    resolve(response)                      // D
+                  }
+                })
+            })
+        } 
+      </pre>
+
+      <p>
+        On line A we are turning a promise, not any kind of 'value'. It will contain the value, but remember to use al the foodies of a 
+        promise, we gotta return one. B is very important, because it shows that we are passing a function to promise's constructor. This 
+        function takes two arguments, the first one is resolve, the second is reject. At C, we see that XMLHttpRequest's callback pattern
+        also takes two arugemtns, error and response. However, as wee see in the if/else block, resolve and reject are functions, where as 
+        error and response are not.
+      </p>
+
+      <pre>
+        HTTP.get('some_url')
+          .then(res => handleRes(res))
+          .cach(err => handleError(err))
+      </pre>
+
+      <p>
+        Above is the whole reason we made promises, and you can see, it's quite convenient. The callbacks passed to .then and .catch are 
+        are synchronous code, yet delayed until the data comes back over the network, or there is an error. Unlike callbacks, we get a nice 
+        way to compose our handlers, and don't have to worry about hard to read code.
+      </p>
 
     </div>
 
