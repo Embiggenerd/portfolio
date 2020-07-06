@@ -112,7 +112,7 @@
       </p>
 
       <p>
-        We said that our HTTP.get method 'returns a promise'. What does this mean? Let's say ordinarily, it uses XMLHttpRequest, which uses
+        We said that our HTTP.get method 'returns a promise'. What does this mean? Let's pretend ordinarily, it uses IgorsHttp, which uses
         callback pattern. How would we get it to use promises? 
       </p>
 
@@ -121,7 +121,7 @@
         HTTP.get = function(url){
           return new Promise(                              // A
             function(resolve, reject) {                    // B
-              const req = new XMLHttpRequest('GET', url,   
+              const req = new IgorsHttp('GET', url,   
                 (error, response) => {                     // C
                   if (error) {
                     reject(error)
@@ -136,7 +136,7 @@
       <p>
         On line A we are turning a promise, not any kind of 'value'. It will contain the value, but remember to use al the foodies of a 
         promise, we gotta return one. B is very important, because it shows that we are passing a function to promise's constructor. This 
-        function takes two arguments, the first one is resolve, the second is reject. At C, we see that XMLHttpRequest's callback pattern
+        function takes two arguments, the first one is resolve, the second is reject. At C, we see that IgorHttp's callback pattern
         also takes two arugemtns, error and response. However, as wee see in the if/else block, resolve and reject are functions, where as 
         error and response are not.
       </p>
@@ -201,15 +201,15 @@
       executor(this._resolve.bind(this))             // B
     }
 
-    _resolve(value {                                 // C
-      while(this._resolutionQueue.length > 0) {      // D
-        const handler = this._resolutionQueue.shift()
+    _resolve(value) {                                 // C
+      while(this._resolutionHandlerQueue.length > 0) {      // D
+        const handler = this._resolutionHandlerQueue.shift()
         handler(value)                               // E
       }
     })
 
     then(resolutionHandler) {
-      this._resolutionQueue.push(resolutionHandler)  // F
+      this._resolutionHandlerQueue.push(resolutionHandler)  // F
     }
   }
       </pre>
@@ -264,9 +264,9 @@
       executor(this._resolve.bind(this))             
     }
 
-    _resolve(value {                                 
-      while(this._resolutionQueue.length > 0) {      
-        const resolution = this._resolutionQueue.shift()
+    _resolve(value) {                                 
+      while(this._resolutionHandlerQueue.length > 0) {      
+        const resolution = this._resolutionHandlerQueue.shift()
         const returnValue = resolution.handler(value)       // D
         
         if (returnValue instanceof MyPromise) {             // E
@@ -279,7 +279,7 @@
 
     then(resolutionHandler) {
       const newPromise = new MyPromise(function(){})        // A
-      this._resolutionQueue.push({                          
+      this._resolutionHandlerQueue.push({                          
         handler: resolutionHandler,                    
         promise: newPromise                                 // B
       })  
@@ -291,14 +291,14 @@
       <p>
         The first thing we have to worry about is how to handle the returned promise at C, or more succinctly, where do we resolve 
         that returned promise. Where ever we have that logic, we have to be able to reference that returned promise, and so we store 
-        that reference at B after creating at A. Notice, our resolution handler queue now stores objects with the resolution handler 
+        that reference at B after creating at it A. Notice, our resolution handler queue now stores objects with the resolution handler 
         passed to .then, and our returned promise. At D, we change our returnValue accordingly, then ask if that return value is 
-        itself a promise. That's because we are tesing for the case when oure resolution handler returns a promise:
+        itself a promise. That's because we are tesing for the case when our resolution handler returns a promise:
       </p>
 
       <pre>
   let foo = "bar"
-  const promise = new MyPromise(function(resolve) {
+  const promise = new MyPromise(function(resolve) {       // I
     setTimeout(function(){
       resolve()
     }, 1000)
@@ -308,19 +308,411 @@
 
     return new MyPromise(function(resolve){               // H
       setTimeout(function(){
-        resolve(foo)
+        resolve(foo)                                      // J
       }, 1000)
     })
 
   }).then(function(string){
-    console.log(string === "bar")
+    console.log(string === "bar")                         // K
   })
 
   // Output after 2 seconds
   // true
       </pre>
 
+      <p>
+        As you can see, at H, we have three promises. We have the promise that contains everything at I, the promise our .then returns
+        at C, and the promise that resolution that we passed to .then, at H. Let's go back and reread the logic of resolving our returned
+        promise. At E we ask if the returned value is a promise, and this references H. At F, we are passing that promise a resolution 
+        handler which calls the _resolve method on a reference to the promise at C. However, what is V? We see that we get a reference 
+        on V on F, then pass it to the _resolve method of the promise at C. Remember what our executor function is called on? V refers to 
+        what we pass to resolve on J, which is our varable foo. We get a hold of foo on line J, pass it to from the promise that contains 
+        it to the promise that our .then returns, and that's why we can reference it as 'string' on K. I know, give it a couple hours.
+      </p>
+
+      <p>
+        So far, if our resolution handler returns a promise, our chaining works. But this rarely happens in real life. We usually return 
+        a regular value from each then. 
+      </p>
+
+      <pre>
+  class MyPromise{
+    constructor(executor) {
+      this._resolutionHandlerQueue = []              
+      executor(this._resolve.bind(this))             
+    }
+
+    _resolve(value) {                                 
+      while(this._resolutionHandlerQueue.length > 0) {      
+        const resolution = this._resolutionHandlerQueue.shift()
+        const returnValue = resolution.handler(value)       
+        
+        if (returnValue && returnValue instanceof MyPromise) {    // A        
+          returnValue.then(function(v) {                    
+            resolution.promise._resolve(v)                 
+          })
+        } else {
+          resolution.promise._resolve(returnValue)        // B
+        }
+      }
+    })
+
+    then(resolutionHandler) {
+      const newPromise = new MyPromise(function(){})        
+      this._resolutionHandlerQueue.push({                          
+        handler: resolutionHandler,                    
+        promise: newPromise                                 
+      })  
+      return newPromise                                     
+    }
+  }
+      </pre>
+
+      <p>
+        We check if there is a return value at all, and at B, we do the obvious. We take the promise our then returns, and 
+        we call its _resolve method on the return value of the last then, which makes our thens infinitely chainable.
+      </p>
+
+      <h3>
+        Implement state
+      </h3>
+
+      <pre>
+  const foo = "bar"
+  const promise = new MyPromise(function(resolve) {   // A
+    setTimeout(function(){
+      resolve(foo)
+    }, 1000)
+  })
+
+  promise.then(functoin(){                            // B
+    setTimeout(function(){
+      promise.then(function(value){                   // C
+        console.log(value === "bar")
+      })
+    }, 2000)
+  })
+
+  // Output 
+  // true
+
+      </pre>
+
+      <p>
+        At A we define a new promise, and it will resolve in a second. We give it a resolution handler at B which has a setTimeout 
+        which, after two seconds, passes it a second resolution handler. At this point the original promise will be resolved. How 
+        do we handle this situation? For us to know whether a promise has been resolve or not, we need a state.
+      </p>
+    
+
+      <pre>
+  class MyPromise{
+    constructor(executor) {
+      this.state = "pending"                                       // E
+      this._resolutionHandlerQueue = []
+      this._value             
+      executor(this._resolve.bind(this))             
+    }
+
+    _invokeResolutionHandlers() {                                  // I
+      while(this._resolutionHandlerQueue.length > 0) {      
+        const resolution = this._resolutionHandlerQueue.shift()
+        const returnValue = resolution.handler(this._value)       
+        
+        if (returnValue && returnValue instanceof MyPromise) {            
+          returnValue.then(function(v) {                    
+            resolution.promise._resolve(v)                 
+          })
+        } else {
+          resolution.promise._resolve(returnValue)        
+        }
+      }
+    }
+
+    _resolve(value) {
+      this._value = value                                          // F
+      this.state = "resolved"                                      // G
+      this._invokeResolutionHandlers()                             // H
+    })
+
+    then(resolutionHandler) {
+      const newPromise = new MyPromise(function(){})        
+      this._resolutionHandlerQueue.push({                          
+        handler: resolutionHandler,                    
+        promise: newPromise                                 
+      })
+
+      if (this.state === 'resolved') {
+        this._invokeResolutionHandlers()                           // D
+      }
+      return newPromise                                     
+    }
+  }
+      </pre>
+
+      <p>
+        First, big shock, we have a state. Second, we've taken some logic out of our _resolve method and placed in
+        _invokeResolutionHandlers. We also are referencing our 'value' in _value, and also flipping a default 'pending' state to 'resolved'. 
+        Let's go through the flow of our promise so far. If our state is already resolved at D, we invoke what resolution handlers we have 
+        remaining in the queue. Else, we set _value to whatever value we passed to resolve, which is usually foo. We change state from 
+        'pending' to 'resolved', at G. At H we invoke our resolution handlers, which was populated by passing them to .then. 
+      </p>
+
+      <p>
+        What if someone calls resolve twice? Right now there is no way to stop someone from simply calling resolve again in the executor.
+      </p>
+
+      <pre>
+  class MyPromise{
+    constructor(executor) {
+      this.state = "pending"                                       
+      this._resolutionHandlerQueue = []
+      this._value             
+      executor(this._resolve.bind(this))             
+    }
+
+    _invokeResolutionHandlers() {                                  
+      while(this._resolutionHandlerQueue.length > 0) {      
+        const resolution = this._resolutionHandlerQueue.shift()
+        const returnValue = resolution.handler(this._value)       
+        
+        if (returnValue && returnValue instanceof MyPromise) {            
+          returnValue.then(function(v) {                    
+            resolution.promise._resolve(v)                 
+          })
+        } else {
+          resolution.promise._resolve(returnValue)        
+        }
+      }
+    }
+
+    _resolve(value) {
+      if (this.state === "pending") {                            // A
+        this._value = value                                          
+        this.state = "resolved"                                      
+        this._invokeResolutionHandlers()                             
+      })
+    }
+
+    then(resolutionHandler) {
+      const newPromise = new MyPromise(function(){})        
+      this._resolutionHandlerQueue.push({                          
+        handler: resolutionHandler,                    
+        promise: newPromise                                 
+      })
+
+      if (this.state === 'resolved') {
+        this._invokeResolutionHandlers()                           
+      }
+      return newPromise                                     
+    }
+  }
+      </pre>
+
+      <p>
+        At A, we simply only resolve if current state is 'pending'. If a resolve was called previously, it would be at 'resolved'. But 
+        remember with IgorsHttp, we called reject on error, and that was handled by a rejection handler we passed to .catch? 
+      </p>
+
+      <h3>
+        Rejection handling
+      </h3>
+
+
+      <pre>
+  class MyPromise{
+    constructor(executor) {
+      this.state = "pending"                                       
+      this._resolutionHandlerQueue = []
+      this._rejectionHandlerQueue = []
+      this._value
+      this._rejectionReason          
+      executor(this._resolve.bind(this), this._reject.bind(this))   // H  
+    }
+
+    _invokeRejectionHandlers() {                                    // G  
+      while(this._rejectionQueue.length > 0) {      
+        const rejection = this._rejectionQueue.shift()
+        const returnValue = rejection.handler(this._rejectionReason)       
+        
+        if (returnValue && returnValue instanceof MyPromise) {            
+          returnValue.then(function(v) {                    
+            rejection.promise._resolve(v)                 
+          })
+        } else {
+          rejection.promise._resolve(returnValue)        
+        }
+      }
+    }
+
+    _invokeResolutionHandlers() {                                  
+      while(this._resolutionHandlerQueue.length > 0) {      
+        const resolution = this._resolutionHandlerQueue.shift()
+        const returnValue = resolution.handler(this._value)       
+        
+        if (returnValue && returnValue instanceof MyPromise) {            
+          returnValue.then(function(v) {                    
+            resolution.promise._resolve(v)                 
+          })
+        } else {
+          resolution.promise._resolve(returnValue)        
+        }
+      }
+    }
+
+    _reject(reason) {                                               // B
+      if (this.state === "pending") {                    
+        this._rejectionReason = reason                              // C
+        this.state = "rejected"                                     // D
+        this._invokeRejectionHandlers()                             // E
+
+        while (this._resolutionHandlerQueue.length > 0) {           // F
+          const resolution = this._resolutionHandlerQueue.shift()   
+          resolution.promise._reject(this._rejectionReason)
+        }
+      }
+
+    }
+
+    _resolve(value) {
+      if (this.state === "pending") {                                
+        this._value = value                                          
+        this.state = "resolved"                                      
+        this._invokeResolutionHandlers()                             
+      })
+    }
+
+    then(resolutionHandler) {
+      const newPromise = new MyPromise(function(){})        
+      this._resolutionHandlerQueue.push({                          
+        handler: resolutionHandler,                    
+        promise: newPromise                                 
+      })
+
+      if (this.state === 'resolved') {
+        this._invokeResolutionHandlers()                           
+      }
+      return newPromise                                     
+    }
+    
+    catch(rejectionHandler) {                                        // A
+      const newPromise = new MyPromise(function(){})        
+      this._rejectionHandlerQueue.push({                          
+        handler: rejectionHandler,                    
+        promise: newPromise                                 
+      })
+
+      if (this.state === 'rejected') {
+        this._invokeRejectionHandlers()                           
+      }
+      return newPromise       
+    }
+  }
+      </pre>
+
+      <p>
+        We've added quite a bit of code. At A, we see we have a catch method that's almost identical to then, but this time we populate 
+        a _rejectionHandlerQueue, and also change state to 'rejected'. Our rejection handler calls reject, which is defined on B. We 
+        get a handle on the reason by assigningit o _rejectionReason on C, then flip the state, and invoke our rejection handlers on D, 
+        and this function is very similar to our its counterpart. At F, we reject every handler passed to us by 'then', so that once we 
+        reject, we don't invoke those handlers, since those are 'success' handlers, and we 'failed'. At G is our definition for the 
+        method needed to invoke all the rejection handlers. At H, you can see that the second argument of the executor references 
+        our _reject method, which is how the user is able to do reject(error). 
+      </p>
+
+      <pre>
+  class MyPromise{
+    constructor(executor) {
+      this.state = "pending"                                       
+      this._resolutionHandlerQueue = []
+      this._rejectionHandlerQueue = []
+      this._value
+      this._rejectionReason          
+      executor(this._resolve.bind(this), this._reject.bind(this))   // H  
+    }
+
+    _invokeRejectionHandlers() {                                    // G  
+      while(this._rejectionQueue.length > 0) {      
+        const rejection = this._rejectionQueue.shift()
+        const returnValue = rejection.handler(this._rejectionReason)       
+        
+        if (returnValue && returnValue instanceof MyPromise) {            
+          returnValue.then(function(v) {                    
+            rejection.promise._resolve(v)                 
+          })
+        } else {
+          rejection.promise._resolve(returnValue)        
+        }
+      }
+    }
+
+    _invokeResolutionHandlers() {                                  
+      while(this._resolutionHandlerQueue.length > 0) {      
+        const resolution = this._resolutionHandlerQueue.shift()
+        const returnValue = resolution.handler(this._value)       
+        
+        if (returnValue && returnValue instanceof MyPromise) {            
+          returnValue.then(function(v) {                    
+            resolution.promise._resolve(v)                 
+          })
+        } else {
+          resolution.promise._resolve(returnValue)        
+        }
+      }
+    }
+
+    _reject(reason) {                                               
+      if (this.state === "pending") {                    
+        this._rejectionReason = reason                              
+        this.state = "rejected"                                     
+        this._invokeRejectionHandlers()                             
+
+        while (this._resolutionHandlerQueue.length > 0) {           
+          const resolution = this._resolutionHandlerQueue.shift()   
+          resolution.promise._reject(this._rejectionReason)
+        }
+      }
+
+    }
+
+    _resolve(value) {
+      if (this.state === "pending") {                                
+        this._value = value                                          
+        this.state = "resolved"                                      
+        this._invokeResolutionHandlers()                             
+      })
+    }
+
+    then(resolutionHandler) {
+      const newPromise = new MyPromise(function(){})        
+      this._resolutionHandlerQueue.push({                          
+        handler: resolutionHandler,                    
+        promise: newPromise                                 
+      })
+
+      if (this.state === 'resolved') {
+        this._invokeResolutionHandlers()                           
+      }
+      return newPromise                                     
+    }
+    
+    catch(rejectionHandler) {                                        
+      const newPromise = new MyPromise(function(){})        
+      this._rejectionHandlerQueue.push({                          
+        handler: rejectionHandler,                    
+        promise: newPromise                                 
+      })
+
+      if (this.state === 'rejected') {
+        this._invokeRejectionHandlers()                           
+      }
+      return newPromise       
+    }
+  }
+      </pre>
+
     </div>
+
   </div>
 
   <script src="components/navbar-component.js"></script>
