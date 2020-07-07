@@ -39,13 +39,13 @@
       }
       
       .home-icon {
-        width: 30px;
+        width: 28px;
       }
     </style>
 
     <div class="navbar">
-      <a href="/">
-        <img class="home-icon" src="design/sharkbeak.svg" />
+      <a class="home-anchor" href="/">
+        <img class="home-icon" src="manbunorange.svg" />
       </a>
       <a href="portfolio.html">Portfolio</a>
       <a href="mailto:igoratakhanov@gmail.com">Contact</a>
@@ -56,10 +56,21 @@
   customElements.define('navbar-component', class extends HTMLElement {
     constructor() {
       super();
-      // Attach a shadow root to the element.
       let shadowRoot = this.attachShadow({ mode: 'open' });
       shadowRoot.appendChild(template.content.cloneNode(true));
       this.$nav = shadowRoot.querySelector('.navbar')
+      this.homeAnchor = shadowRoot.querySelector('.home-anchor')
+      if(!this.showHome)(
+        this.homeAnchor.style.display="none"
+      )
+    }
+
+    get showHome() {
+      return this.getAttribute('showHome')
+    }
+
+    set showHome(newValue) {
+      this.setAttribute('showHome', newValue)
     }
 
     connectedCallback() {
