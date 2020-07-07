@@ -53,7 +53,7 @@
     .image-container {
       display: flex;
       justify-content:start;
-      align-items: flex-end;
+      align-items: center;
       width: 55%;
       height: 100%;
     }
@@ -129,7 +129,7 @@
   <div class="swiper-slide">
     <div class="home-icon-wrapper">
       <a href="/"> 
-        <img class="home-icon" src="design/sharkbeak.svg" />
+        <img class="home-icon" src="manbunorange.svg" />
       </a>
     </div>
 
@@ -155,7 +155,7 @@
 
       <div class="image-container">
         <div class="image-wrapper">
-          <a class="gif-link" >
+          <a target="_blank" class="gif-link" >
             <img class="gif-preview" /> 
           </a>
         </div>
