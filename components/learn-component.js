@@ -5,6 +5,7 @@
       
       .learn {
         padding: 0;
+        padding-top: 20px;
         box-sizing: border-box;
         display: flex;
         justify-content: center;

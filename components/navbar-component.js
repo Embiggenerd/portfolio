@@ -60,8 +60,8 @@
       shadowRoot.appendChild(template.content.cloneNode(true));
       this.$nav = shadowRoot.querySelector('.navbar')
       this.homeAnchor = shadowRoot.querySelector('.home-anchor')
-      if(!this.showHome)(
-        this.homeAnchor.style.display="none"
+      if (!this.showHome) (
+        this.homeAnchor.style.display = "none"
       )
     }
 
@@ -83,7 +83,7 @@
 
     _onScroll() {
       window.onscroll = () => {
-        if (window.pageYOffset >= this.offsetTop) {
+        if (window.pageYOffset > this.offsetTop) {
           this.$nav.classList.add("sticky")
         } else {
           this.$nav.classList.remove("sticky")
