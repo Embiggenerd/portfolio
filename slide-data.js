@@ -3,10 +3,10 @@ const slideData = [
     name: "Angular Todos",
     description: "A MEAN app with authentication that has full crud functionality.",
     challenges: [
-      "Learn how to build an Angular app.",
-      "Testing coverage above 90%.",
-      "Learn different design patterns. For instance, using services to hold state.",
-      "Get comfortable with RXJS"
+      "Learned how to build an Angular app.",
+      "Brought testing coverage above 90%.",
+      "Learned different design patterns. For instance, using services to hold state.",
+      "Became familiar with RXJS"
     ],
     sources: [
       '<a target="_blank" href="https://angular.io/docs">Angular official docs</a>',
@@ -42,12 +42,12 @@ const slideData = [
       from a tutorial, but rewritten using typescript in the backend, \
       with many added tests and added error handling.',
     challenges: [
-      "Write a backend in typescript with object oriented style and \
-      maintain testability.",
+      "Wrote a backend in typescript with object oriented style and \
+      maintained testability.",
       "Orchestration with docker-compose especially suited for \
       compiling typescript.",
       "Travis CI and microservices testing.",
-      "Deal with the challenges of microservices error handling."
+      "Delt with the challenges of microservices error handling."
     ],
     sources: [
       '<a target="_blank" href="https://mherman.org/blog/developing-and-testing-microservices-with-docker">MHerman tutorial</a>',
@@ -66,7 +66,7 @@ const slideData = [
       "Built cache buster, used no frameworks.",
       "The go language, and learning to read source and documentation \
       in general.",
-      "Learn raw SQL and postgres.",
+      "Learned raw SQL and postgres.",
       "Sessions and a cache buster for CSS files completely from scratch."
     ],
     sources: [
@@ -87,8 +87,8 @@ const slideData = [
     stripe, though their total reading hours do not change. \
     Visibility of content is based on reading hours.',
     challenges: [
-      "Use react component hooks creatively to implement reading hours.",
-      "Integrate stripe payment in a way that makes sense.",
+      "Used react component hooks creatively to implement reading hours.",
+      "Integrated stripe payment in a way that makes sense.",
       "First non-trivial app.",
       "The general difficulty of executing on an original idea."
     ],
@@ -106,7 +106,7 @@ const slideData = [
     name: "React Todos TDD",
     description: 'A MERN stack todos list application focused on testing.',
     challenges: [
-      "Write the backend in a way that is testable by abstracting methods into imported services.",
+      "Wrote the backend in a way that is testable by abstracting methods into imported services.",
       "Nearly 100% testing coverage in front and back end, with unit and integration tests.",
       "Different branches show different testing strategies.",
       "CSS written with BEM methodology, with variables, and with different CSS files for both flex and float based approach.",
@@ -125,12 +125,12 @@ const slideData = [
     name: "React Todos JWT",
     description: 'A MERN stack todos list application focused on being different.',
     challenges: [
-      "Use JWT and local storage for authentication. (not suitable \
+      "Used JWT and local storage for authentication. (not suitable \
         for real world)",
       "Only react-router is used for authorization.",
-      "Learn to write a front end using typescript with the strictest settings.",
-      "Use large, highly configurable components, instead of composing smaller ones.",
-      "Extensive use of mongoose methods instead of independent \
+      "Learned to write a front end using typescript with the strictest settings.",
+      "Used large, highly configurable components, instead of composing smaller ones.",
+      "Used of mongoose methods instead of independent \
       services to maintain testability.",
     ],
     sources: [
