@@ -10,21 +10,34 @@
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="article-style.css">
   <style>
+    body {
+      height: 100vh;
+    }
+
     p {
       margin-top: -5px;
       color: rgb(91, 107, 127)
     }
 
-    .article-container {
+    .contact-container {
+      height: 100%;
       padding-bottom: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+      align-items: center;
+      height: 100%;
+      color: red;
     }
 
-    .article-wrapper {
-      flex-wrap: wrap;
-      max-width: 1200px;
-      flex-direction: row;
+    .contact-wrapper {
+      display: flex;
+      justify-content: space-evenly;
+      max-width: 500px;
       margin-bottom: 0;
-      /* justify-content: space-evenly; */
+      flex-direction: column;
+      height: 60%;
+
     }
 
     .article-box {
@@ -32,7 +45,6 @@
       height: 220px;
       border: 2px solid transparent;
       padding: 20px;
-      /* margin: 10px; */
     }
 
     .article-box:hover {
@@ -42,68 +54,59 @@
     h3 {
       color: black;
     }
+
+    li {
+      list-style-type: circle;
+      line-height: 50px;
+    }
+
+    p {
+      color: black;
+    }
   </style>
-  <title>Igor's Articles</title>
+  <title>Contact Igor</title>
 </head>
 
 <body>
-  <div class="article-container">
+  <navbar-component showHome="true" showArticles="true"></navbar-component>
+  <script src="components/navbar-component.js"></script>
 
-    <navbar-component showHome="true" showArticles="true" ></navbar-component>
-    <script src="components/navbar-component.js"></script>
+  <div class="contact-container">
+    <div class="contact-wrapper">
 
-    <div class="article-wrapper">
+      <p>
+        Feel free to get in touch. I like to chat about tech and new opportinities, especially if you disagree with
+        me.
 
-      <a href="https://medium.com/@igor.atakhanov/how-node-actually-works-part-1-the-operating-system-497fd0de8167">
-        <div class="article-box">
-          <h3>
-            How Node Actually Works Part 1: The Operating System
-          </h3>
-          <p>
-            A detailed guide to how Nodejs talks to your operating system, and how and why your OS creates
-            an event stream for any server to loop over
-          </p>
-        </div>
-      </a>
+      </p>
 
-      <a href="conway.html">
-        <div class="article-box">
-          <h3>
-            Conway's Game Of Life
-          </h3>
-          <p>
-            A step by step tutorial, including code and examples, of how to go from blank canvas to a fully functional
-            implementation of the Game Of Life in javascript
-          </p>
-        </div>
-      </a>
+      <p>
+        I don't have passionate opinions about things that don't matter, such as coffee.
+      </p>
 
-      <a href="https://medium.com/@igor.atakhanov/acid-mvcc-and-how-postgresql-handles-concurrent-queries-27fb48692db8">
-        <div class="article-box">
-          <h3>
-            ACID, MVCC, and how PostgreSQL handles concurrent queries
-          </h3>
-          <p>
-            We talk about everyone's favorite topic: SQL vs NoSQL, what ACID means to us all, and how PostgreSQL and
-            MongoDB handle concurrent queries.
-          </p>
-        </div>
-      </a>
+      <ul>
+        <li>
+          Email: <a href="mailto:igoratakhanov@gmail.com">Igor.Atakhanov@gmail.com</a>
+        </li>
 
-      <a href="node-part-two.html">
-        <div class="article-box">
-          <h3>
-            How Node Actually Works Part 2: The Event Loop
-          </h3>
-          <p>
-            After getting an understanding of the event stream, we move onto the joys of the event loop, and how Nodejs
-            both interprets and compiles Javascript for fun and profit.
-          </p>
-        </div>
-      </a>
+        <li>
+          Github <a href="https://github.com/embiggenerd">github.com/Embiggenerd</a>
+        </li>
+
+        <li>
+          Linkedin <a href="https://linkedin.com/in/igor-atakhanov">linkedin.com/in/igor-atakhanov</a>
+        </li>
+
+        <li>
+          Youtube: <a href="https://www.youtube.com/channel/UCBgiIHFAmCIK3lN8KJcKu2w">Sharkbeak</a>
+        </li>
+
+        <li>
+          Twitter: <a href="https://twitter.com/embiggenerd">twitter.com/embiggenerd</a>
+        </li>
+      </ul>
 
     </div>
-
   </div>
 
 </body>
