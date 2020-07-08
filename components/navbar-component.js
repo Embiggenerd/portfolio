@@ -48,7 +48,7 @@
         <img class="home-icon" src="manbunorange.svg" />
       </a>
       <a href="portfolio.html">Portfolio</a>
-      <a href="mailto:igoratakhanov@gmail.com">Contact</a>
+      <a class="articles-contact href="contact.html">Contact</a>
       <a href="#learn">Learn</a>
       <a class="articles-anchor" href="articles.html">Articles</a>
     </div>`
@@ -61,16 +61,25 @@
       this.$nav = shadowRoot.querySelector('.navbar')
       this.homeAnchor = shadowRoot.querySelector('.home-anchor')
       this.articlesAnchor = shadowRoot.querySelector('.articles-anchor')
+      this.contactAnchor = shadowRoot.querySelector('.articles-contact')
+
       if (!this.showHome) (
         this.homeAnchor.style.display = "none"
       )
       if (!this.showArticles) {
         this.articlesAnchor.style.display = "none"
       }
+      if (!this.showContact) {
+        this.contactAnchor.style.display = "none"
+      }
     }
 
     get showHome() {
       return this.getAttribute('showHome')
+    }
+
+    get showContact() {
+      return this.getAttribute('showContact')
     }
     
     get showArticles() {
@@ -79,6 +88,10 @@
 
     set showHome(newValue) {
       this.setAttribute('showHome', newValue)
+    }
+
+    set showContact(newValue) {
+      this.setAttribute('showContact', newValue)
     }
 
     set showArticles(newValue) {
