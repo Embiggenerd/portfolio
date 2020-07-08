@@ -61,8 +61,7 @@
           <a href="portfolio.html">build a project</a> based on it, or <a href="articles.html">
           write an article</a> about it. 
           If you think we would work well together, you can 
-          <a href="contact.html">drop me a line</a> at igor atakhanov 
-          at geemail dot com.
+          <a href="contact.html">drop me a line</a> at Igor.Atakhanov@gmail.com.
         </p>
       </div>
      
