@@ -50,7 +50,7 @@
       <a href="portfolio.html">Portfolio</a>
       <a href="mailto:igoratakhanov@gmail.com">Contact</a>
       <a href="#learn">Learn</a>
-      <a href="articles.html">Articles</a>
+      <a class="articles-anchor" href="articles.html">Articles</a>
     </div>`
 
   customElements.define('navbar-component', class extends HTMLElement {
@@ -60,17 +60,29 @@
       shadowRoot.appendChild(template.content.cloneNode(true));
       this.$nav = shadowRoot.querySelector('.navbar')
       this.homeAnchor = shadowRoot.querySelector('.home-anchor')
+      this.articlesAnchor = shadowRoot.querySelector('.articles-anchor')
       if (!this.showHome) (
         this.homeAnchor.style.display = "none"
       )
+      if (!this.showArticles) {
+        this.articlesAnchor.style.display = "none"
+      }
     }
 
     get showHome() {
       return this.getAttribute('showHome')
     }
+    
+    get showArticles() {
+      return this.getAttribute('showArticles')
+    }
 
     set showHome(newValue) {
       this.setAttribute('showHome', newValue)
+    }
+
+    set showArticles(newValue) {
+      this.setAttribute('showArticles', newValue)
     }
 
     connectedCallback() {
