@@ -48,8 +48,8 @@
         <img class="home-icon" src="manbunorange.svg" />
       </a>
       <a href="portfolio.html">Portfolio</a>
-      <a class="articles-contact href="contact.html">Contact</a>
-      <a href="#learn">Learn</a>
+      <a class="articles-contact" href="contact.html">Contact</a>
+      <a href="index.html#learn">Learn</a>
       <a class="articles-anchor" href="articles.html">Articles</a>
     </div>`
 
