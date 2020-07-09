@@ -7,8 +7,9 @@
         padding: 0;
         box-sizing: border-box;
         display: flex;
-        margin-top:50px;
         justify-content: center;
+        margin-bottom: 100px;
+        margin-top:50px;
       }
 
       h2 {
