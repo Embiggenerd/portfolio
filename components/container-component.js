@@ -4,7 +4,6 @@
     <style>
       .container {
         padding: 0;
-        padding-top: 10px;
         margin: 0;
         box-sizing: border-box;
         height: 100vh;

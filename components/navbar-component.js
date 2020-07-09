@@ -6,10 +6,12 @@
         overflow: hidden;
         background-color: white;
         width: 100%;
-        position:absolute;
+        height: 80px;
+        // position:absolute;
       }
       
       .navbar {
+        position: absolute;
         background-color: white;
         width: 100%;
         height: 80px;
@@ -31,7 +33,7 @@
       
       /* The sticky class is added to the navbar with JS when it reaches its scroll position */
       .sticky {
-        margin-bottom: 80px;
+        // margin-bottom: 80px;
         position: fixed;
         top: 0;
         width: 100%;
@@ -108,7 +110,7 @@
 
     _onScroll() {
       window.onscroll = () => {
-        if (window.pageYOffset > this.offsetTop) {
+        if (window.pageYOffset >= this.offsetTop) {
           this.$nav.classList.add("sticky")
         } else {
           this.$nav.classList.remove("sticky")

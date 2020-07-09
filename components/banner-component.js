@@ -8,7 +8,7 @@
         color: rgb(6, 145, 242);
         font-size: 44px;
         font-weight: 700;
-        height: 120px;
+        height: 90px;
         display: flex;
         justify-content: center;
         align-items: flex-end; 
