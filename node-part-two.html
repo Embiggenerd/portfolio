@@ -23,10 +23,27 @@
       <p>
         How much could one more inch hurt? We're talking about having confidence in
         Javascript interviews, and what do you say when you're asked "what is node",
-        or "what does asynchronous mean in node." How node talks to the operating system
-        is explained in part 1 . Now that we know we are receiving a multiplexed stream
-        of events which are file descriptors ready to be read from or listened to, we
-        are ready to talk about what we do with those events.
+        or "how does node handle asynchronous code". How node talks to the operating system
+        is explained in 
+        <a href="https://medium.com/@igor.atakhanov/how-node-actually-works-part-1-the-operating-system-497fd0de8167">
+        part one.
+        </a> Now that we know we are receiving a multiplexed stream
+        of file descriptors which are ready to be read from or written to, we
+        are ready to talk about what we do with those fds.
+      </p>
+
+      <p>
+        Before asynchronous code, there was synchronous code.
+      </p>
+
+      <h2>
+        Synchronous Code
+      </h2>
+
+      <p>
+        So far all you really know about how Javascript scripts are executed is roughly the order in which 
+        things happen. Let's take a look at an example script, and what our steps our computer takes to do 
+        the work we want it to do.
       </p>
 
       <pre>
@@ -59,25 +76,27 @@
 
       <p>
         Before you get confused, here's what everything means: our memory is a zero indexed structure. We load up our
-        instructions starting at index 0. These instructions are similar to our javascript code, but not exactly. Call
+        instructions starting at index 0. These instructions are similar to our javascript code, but not exactly. They 
+        the machine code we talked about earlier that our JS gets translated into. Call
         and return get their own instructions, and beside those, we only call stdout. These are the 'real' instructions
-        that any human readable language gets translated into. This structure grows up, as you would expect.
+        that any human readable language gets translated into. It's called machine code, and each instruction string 
+        is associated with a binary CPU instruction, which is different for every instruction set. This structure grows 
+        up, and it is a first in, first out queue.
       </p>
 
 
       <p>
         Starting at index 240, we have a stack. This stack grows down, which is confusing, and means that when we push
         onto the stack, we have to decrement the index which is the 'top' of the stack, which we call the stack pointer,
-        or SP. When we pop, we will increment it. This memory only goes to index 255, which makes it an 8 bit CPU
-        emulator. Above index 240, we have locations where we can store things we don't have to worry about today.
+        or SP. When we pop, we will increment it. Our total memory, which is split between the queue and the stack 
+        only goes to index 255, which makes it an 8 bit CPU emulator. Above index 240, we have locations where we can 
+        store things we don't have to worry about today.
       </p>
 
       <p>
         Most importantly, the index of the currently executing instruction is stored in the program counter, or PC. A
-        part
-        of our flow of execution is incrementing the PC to execute the next instruction, of course unless our
-        instruction
-        specifically sets the PC to something else, which we will discuss next.
+        part of our flow of execution is decrementing the PC to execute the next instruction, of course unless our
+        instruction specifically sets the PC to something else, which we will discuss next.
       </p>
 
       <p>
@@ -88,8 +107,7 @@
         <li>Decrements the SP.</li>
         <li>
           It pushes the return address onto the stack. This is a reference to the instruction we should execute after
-          the
-          current function returns.
+          the current function returns.
         </li>
         <li>
           It sets PC to the current instruction's definition. This is really a reference to the first instruction in the
@@ -127,7 +145,7 @@
       </ul>
 
       <p>
-        Our stack currently only has line 11 on it, so we pop it, and point the PC to it. At this point, or SP is
+        Our stack currently only has line 11 on it, so we pop it, and point the PC to it. At this point, our SP is
         pointing
         to an empty memory[240], and or PC is at memory[239]. That instruction happens to be line 12, which is an
         stdout,
@@ -145,37 +163,33 @@
 
       <p>
         What is the point of explaining how an 8 bit CPU emulation could handle a JS script? When we say a function is
-        blocked, we mean to say that a return statement, which pops the next function off the stack, won't get to store
-        it in the program counter in order to execute it. That's because the stack operations and the script's functions
-        are all in the same thread of execution. In order for asynchronous code to work, we have to curate the order
-        instructions are executed. The structure that sends messages to the emulator we will call a message queue,
-        because
-        each instruction is a message, and we append to the bottom and read off the top.
+        blocked, we mean to say that a return statement of the last function hasn't been executed, and our PC does not 
+        point to our blocked function in order to execute it. We are blocked because the stack operations and the script's 
+        functions
+        are all in the same thread of execution. We can't risk placing network calls into this queue in the order in which
+        they appear in the code, because who knows how long that will block. In order for asynchronous code to work, we 
+        have to curate the order that
+        instructions are executed in. The queue in our memory we will call a message queue, and the problem is how to 
+        execute asynchronous instructions so that they don't get in the way of synchronous code.
       </p>
 
       <p>
-        Let's think about why blocking code is a problem for us. If we need to make a network call, and we are waiting
-        for
-        some server to respond to us, this could take a long time. Imagine writing an application where regular
-        application
-        logic has to wait perhaps a secon for an API call to return before we move onto executing the rest of the code
-        in our
-        app. It would make things unusable.
+        Let's say thet we want to make a call to a google maps API in our code to get some location data for a store.
       </p>
 
       <p>
         The classic solution is to use a thread to wait on the response, and when the call comes in on the other thread,
         we
-        interrupt the current thread, and insert our data. However, as we discussed in the
+        interrupt the current thread, and insert our data into the message queue. However, as we discussed in the
         <a
           href="https://medium.com/@igor.atakhanov/acid-mvcc-and-how-postgresql-handles-concurrent-queries-27fb48692db8">
           previous article
-        </a>, we avoid threads because of the memory requirements of each thread and the latency overhread of context
-        switching. Also,
-        how would we orchestrate the interruption? Our node server is constantly executing handler functions, most of
-        which is
-        synchronous code, so when do we insert our network data? We need a scheduler, and that scheduler is called the
-        event loop.
+        </a>
+        , we avoid threads because of the memory requirements and the latency overhead of context switching. The nice thing 
+        about threads is that you don't need a schedular. When a thread comes back with some data, we interrupt our main thread,
+        and place that data into our message queue. Without threads, we need a scheduler and a way to execute synchronous code 
+        associate with asynchronous code. For instance, making a get request to google maps API is asynch, logging to stdout is 
+        synch. Our sheduler is the event loop.
       </p>
 
       <h2>
@@ -183,25 +197,16 @@
       </h2>
 
       <p>
-        Understanding the event loop conceptually, and the reason for it, should happen before understanding it in
-        detail. Why
-        we would use a thread for something like a network call, is to get that network call out of our javascript
-        thread of
-        execution, and not block the rest of the script. To get away from threads, we must depend on something else.
-        Previously
-        we talked about how the operating system uses signal interrupt to let us know when a network call comes back,
-        and it this
-        takes the form of an event in our event stream. If when we make the network call, we register it somewhere, then
-        ignore
-        it until the data comes back, we can basically just do our synchronous stuff the register is told that the
-        response came
-        in, then we can do something with that data. Sound familiar? It's pretty similar to our select system call - we
-        cam poll
-        the registered asych events, and when one of them gets back with data, we can read the data, and do something
-        with it.
+        If we were using threads, and we had a separate thread for each async instruction, scheduling is not a problem,
+        because when the instruction comes back with some output, we could interrupt our main thread and place the data 
+        on the message queue. However, without threads, we have the problem of scheduling. Let's remember one thing - we 
+        are working on an event stream which will tell us when some network call comes back. When that call comes back, 
+        we can execute some code we passed as a callback on whatever the network data is. That callback is executed by 
+        placing on a message queue. But this thing that places it on the queue - how does it know the network call 
+        completed? Remember select()?
       </p>
 
-      <p>
+      <p>        
         With select, we would loop through our registered file descriptors, and send back just the ones ready for a read
         or write
         operation, and this could be a thousand different files. However, with things like network events, we can place
@@ -283,7 +288,7 @@
         last
         sync instruction off the call stack, it is not empty, and the callback queue is not even checked. The first
         setTimeout
-        make sense, but is with the order of the next two? Shouldn't we execute them in order? The reason is that the
+        make sense, but what is with the order of the next two? Shouldn't we execute them in order? The reason is that the
         event
         loop does not know about the second setTimeout callback until the first is invoked, and by that time, the third
         has
@@ -325,7 +330,7 @@
         first then.
         However, this is clearly not happening. Let's add yet another queue, and now finally we are following the
         ecmascript 6 spec,
-        and dinstinguishing between macrotasks (tasks in ec6) and microtasks (jobs in ec6). We are changing our callback
+        and distinguishing between macrotasks (tasks in es6) and microtasks (jobs in es6). We are changing our callback
         queue to
         macrotask queue, and we are adding a microtask queue in the middle. The rules are, if we have anything in the
         microtask
@@ -339,17 +344,14 @@
       <img src="article-images/eventLoopDiagram_2.png" />
 
       <p>
-        The new rules are: if callbacks passed to the then method on promises get pushed onto the micro task queue. So,
+        The new rules are: callbacks passed to the then method on promises get pushed onto the micro task queue. So,
         if you do
         axios.get(...).then(res => console.log(res.data)), the network call itself is a macrotask that gets checked in
-        the
-        network I/O phase of the event loop, and this is a macrotask. When this macrotask is resolved, it places the
-        callback passed
+        the network I/O phase of the event loop. When this macrotask is resolved, it places the callback passed
         to .then onto the microtask queue, and so will invoke the console.log in the same tick as the network call. A
         shortcut to
         appending microtasks this way is simply to use Promise.resolve().then(callback), however this resolves
-        synchronously, and therefore
-        appends the callback onto the microtask queue of the synchronous tick.
+        synchronously, and therefore appends the callback onto the microtask queue of the synchronous tick.
       </p>
 
       <h2>process.nextTick</h2>
@@ -363,7 +365,7 @@
         process.nextTick(callback)
         takes priority over anything else, and so will place its callback above Promise.resolve().then(callback), but
         will not supercede
-        an earlier invokcation of another process.nextTick()
+        an earlier invocation of another process.nextTick().
       </p>
 
       <pre>
@@ -411,7 +413,7 @@
       <h2>libuv</h2>
 
       <p>
-        You might be thinking, what part of Nodejs is this? How is it built? This part is called libuv, and it's written
+        You might be thinking, what part of Nodejs is this? How is the event loop built? This part is called libuv, and it's written
         in c++.
         It can't be written in Javascript because JS doesn't have the tools to talk to the operating system that c++
         does, and is
@@ -467,8 +469,7 @@
         allows you to run a program line by line. However, we know that JS applications are large and we are no longer
         dealing with
         'scripts'. Node is also a server, and so must be reasonably efficient, or else will be too expensive to run at
-        scale. How do
-        go about optimizing an interpretted language?
+        scale. How do you go about optimizing an interpretted language?
       </p>
 
       <p>
@@ -492,9 +493,9 @@
         ignition, and
         that lower level code is called byte code. Right now we have high level, human readable code, and we have very
         low level machine
-        code that is made of cpu instructions. Those instructions change from machine to machine, since there are many
+        code that is made of CPU instructions. Those instructions change from machine to machine, since there are many
         different instruction
-        sets and their implementations on various machines. Byte code looks a lot like assembly langauge, except it
+        sets and their implementations on various machines. Byte code looks a lot like assembly language, except it
         doesn't map directly
         to a single machine's instructions, but to any machine's instructions. How it does that is abstracted away from
         us, but regardless
