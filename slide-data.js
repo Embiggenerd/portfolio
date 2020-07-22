@@ -1,5 +1,24 @@
 const slideData = [
   {
+    name: "Env-Allot",
+    description: "A MERN (with typsecript) stack app for budgeting. You can create, drag and drop items into envelopes. Delete by \
+    dragging to a trash can. Edit text like a word processor to change the names of prices of everything.",
+    challenges: [
+      "Drag and Drop from scratch",
+      "Formless updates resembling a word processor",
+      "Typescript on front and back",
+      "Domain driven, modular design for backend",
+      "Extensive use of Material UI"
+    ],
+    sources: [
+      "Documentation, various blogs",
+      '<a target="_blank" href="https://github.com/envallot">Github Repo</a>'
+    ],
+    imgSrc: "gifs/envallot_1.gif",
+    imgHref: "https://master.d3jy9j46ta2dag.amplifyapp.com/",
+    title: "Deployed site"
+  },
+  {
     name: "Angular Todos",
     description: "A MEAN app with authentication that has full crud functionality.",
     challenges: [
