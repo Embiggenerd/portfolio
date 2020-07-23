@@ -50,7 +50,7 @@
         networks are slow and unreliable. You don't know if you're gonna get an error, and you don't know how long the call will take.
         After we figured out single threaded I/O, we still had the problem of how to compose our code. Let's say that we make a get request,
         and store the result in a variable called 'response'. Remember, we used a macrotask to do this. All of the synchronous code around it
-        will be long executed before our call comes back. How do we process the response, such as put in a state, or write to a database? 
+        will be long executed before our call comes back. How do we process the response, such as store it in a state, or process the data further? 
         Callbacks.
       </p>
 
@@ -83,7 +83,7 @@
         can place another task on the macrotask queue, or it can place a task in the microtask queue, which itself can use either queue. The
         way we get to delay 'synchronous' code that deals with asynchronous code so that it doesn't execute on the stack before our async 
         function comes back with a result, is to place that synchronous code onto the microtask queue using proces.nextTick(). That's what 
-        each callback is - it's a callback that's delayed until the data comes through, and as you can tell, there is no limit to how many
+        each callback is - it's a function that's delayed until the data comes through, and as you can tell, there is no limit to how many
         callbacks are used in a row, which is bad, because it looks like shit. This is what bootcamp graduates call 'callback hell' in the 
         same way that millenials talk about Jimi Hendrix.
       </p>
@@ -113,13 +113,13 @@
         a method called 'then', which is passed a callback by the user. As an argument, the callback receives the value that the promise 
         resolved to. It uses
         something like process.nextTick, similarly to our callback hell example, but looks much cleaner. Notice, earlier, each new callback 
-        had control over what it did with error and response. Our promise, on the other hand, has control over what's going on the whole time,
+        had control over what it did with error and response. Our promise, on the other hand, has control over all the thens,
         and so can decide to handle the error in a .catch. The .then is also chainable, and will pass on its return value as the argument to
         the next then. 
       </p>
 
       <p>
-        We said that our HTTP.get method 'returns a promise'. What does this mean? Let's pretend ordinarily, it uses IgorsHttp, which uses
+        We said that our HTTP.get method 'returns a promise'. What does this mean? Let's pretend ordinarily, it uses IgorsHTTP, which uses
         callback pattern. How would we get it to use promises? 
       </p>
 
@@ -128,7 +128,7 @@
         HTTP.get = function(url){
           return new Promise(                              // A
             function(resolve, reject) {                    // B
-              const req = new IgorsHttp('GET', url,   
+              const req = new IgorsHTTP('GET', url,   
                 (error, response) => {                     // C
                   if (error) {
                     reject(error)
@@ -141,9 +141,9 @@
       </pre>
 
       <p>
-        On line A we are turning a promise, not any kind of 'value'. It will contain the value, but remember to use all the goodies of a 
+        On line A we are returning a promise, not a number or string. It will contain the value, but remember: to use all the goodies of a 
         promise, we gotta return one. B is very important, because it shows that we are passing a function to promise's constructor. This 
-        function takes two arguments, the first one is resolve, the second is reject. At C, we see that IgorHttp's callback pattern
+        function takes two arguments, the first one is resolve, the second is reject. At C, we see that IgorsHTTP's callback pattern
         also takes two arguments, error and response. However, as we see in the if/else block, resolve and reject are functions, where as 
         error and response are not.
       </p>
@@ -156,7 +156,7 @@
 
       <p>
         Above is the whole reason we made promises, and you can see, it's quite convenient. The callbacks passed to .then and .catch are 
-        are synchronous code, yet delayed until the data comes back over the network, or there is an error. Unlike callbacks, we get a nice 
+        synchronous code, yet delayed until the data comes back over the network, or there is an error. Unlike callbacks, we get a nice 
         way to compose our handlers, and don't have to worry about hard to read code. Easy, huh? Well, by now, we know easy to use means 
         hard to implement. If we didn't code a promise from scratch, this would be a different kind of blog series, wouldn't it. 
       </p>
@@ -196,7 +196,7 @@
       </h3>
 
       <p>
-        At some point our promise must be 'resolved'. This means that we did not get an error, whatever async thing got done, such as an 
+        At some point our promise must be 'resolved'. This means that we did not get an error, whatever async thing we wanted got done, such as an 
         I/O event or a setTimeout event, and now we want the callback we passed to .then to get called on the result. This callback is 
         called resolution handler, because it is invoked on resolution, and it 'handles' the result.
       </p>
@@ -227,7 +227,7 @@
         know we may need to call .then many times, which means there will be many resolution handlers. Line B should be very confusing.
         We are calling executor on _resolve, which is bound to our promise since we don't want its 'this' to be overwritten. 
         Why is it bound, and when is it called? Remember back
-        when we used HTTP.get? Look carefully where resolve is called on line D in the IgorHttp snippet. That's right, that function 
+        when we used HTTP.get? Look carefully where resolve is called on line D in the IgorsHTTP snippet. That's right, that function 
         is called in the definition of the executor, like this.
       </p>
 
@@ -250,7 +250,7 @@
 
       <p>
         We define our executor starting on G, and it contains a setTimeout that invokes resolve on foo. This resolve is a reference
-        to _resolve in our promise. It is being called on a string. Let's go back to D, and see our definition of _resolve takes a 
+        to _resolve in our promise. It is being called on a string. Let's go back to D, and see that our definition of _resolve takes a 
         handler off our resolution handler queue, and calls it on the value at E, which is our string at I and J. Trippy, right? If 
         you don't get it yet, that means you're normal, keep going over it. When you get it, move onto the next section where we 
         figure out how to chain resolution handlers. 
@@ -330,12 +330,11 @@
 
       <p>
         As you can see, at H, we have three promises. We have the promise that contains everything at I, the promise our .then returns
-        at C, and the promise that resolution that we passed to .then, at H. Let's go back and reread the logic of resolving our returned
+        at C, and the promise that we passed to .then, at H. Let's go back and reread the logic of resolving our returned
         promise. At E we ask if the returned value is a promise, and this references H. At F, we are passing that promise a resolution 
         handler which calls the _resolve method on a reference to the promise at C. However, what is V? We see that we get a reference 
         on V on F, then pass it to the _resolve method of the promise at C. Remember what our executor function is called on? V refers to 
-        what we pass to resolve on J, which is our varable foo. We get a hold of foo on line J, pass it to from the promise that contains 
-        it to the promise that our .then returns, and that's why we can reference it as 'string' on K. I know, give it a couple hours.
+        what we pass to resolve on J, which is our variable foo. We get a hold of foo on line J, pass it to from the promise that our .then returns, and that's why we can reference it as 'string' on K. I know, give it a couple hours.
       </p>
 
       <p>
@@ -409,7 +408,7 @@
       <p>
         At A we define a new promise, and it will resolve in a second. We give it a resolution handler at B which has a setTimeout 
         which, after two seconds, passes it a second resolution handler. At this point the original promise will be resolved. How 
-        do we handle this situation? For us to know whether a promise has been resolve or not, we need a state.
+        do we handle this situation? For us to know whether a promise has been resolved or not, we need a state.
       </p>
     
 
@@ -459,7 +458,7 @@
       </pre>
 
       <p>
-        First, big shock, we have a state. Second, we've taken some logic out of our _resolve method and placed in
+        First, big shock, we have a state. Second, we've taken some logic out of our _resolve method and placed it in
         _invokeResolutionHandlers. We also are referencing our 'value' in _value, and also flipping a default 'pending' state to 'resolved'. 
         Let's go through the flow of our promise so far. If our state is already resolved at D, we invoke what resolution handlers we have 
         remaining in the queue. Else, we set _value to whatever value we passed to resolve, which is usually foo. We change state from 
@@ -519,7 +518,7 @@
 
       <p>
         At A, we simply only resolve if current state is 'pending'. If a resolve was called previously, it would be at 'resolved'. But 
-        remember with IgorsHttp, we called reject on error, and that was handled by a rejection handler we passed to .catch? 
+        remember with IgorsHTTP, we called reject on error, and that was handled by a rejection handler we passed to .catch? 
       </p>
 
       <h3>
@@ -621,7 +620,7 @@
       <p>
         We've added quite a bit of code. At A, we see we have a catch method that's almost identical to then, but this time we populate 
         a _rejectionHandlerQueue, and also change state to 'rejected'. Our rejection handler calls reject, which is defined on B. We 
-        get a handle on the reason by assigningit o _rejectionReason on C, then flip the state, and invoke our rejection handlers on D, 
+        get a handle on the reason by assigning it to _rejectionReason on C, then flip the state, and invoke our rejection handlers on D, 
         and this function is very similar to our its counterpart. At F, we reject every handler passed to us by 'then', so that once we 
         reject, we don't invoke those handlers, since those are 'success' handlers, and we 'failed'. At G is our definition for the 
         method needed to invoke all the rejection handlers. At H, you can see that the second argument of the executor references 
@@ -741,6 +740,27 @@
         have to check if the executor has some kind of error at C. At D, our resolution handler doesn't run if we are in a rejected 
         state. At E, and a few other place, I placed process.nextTick, because resolution handlers are placed in a microtask queue,
         as we found out last article. 
+      </p>
+
+      <p>
+        This particular implementation of a promise was taken from vividbyte's 
+        <a href="https://www.vividbytes.io/how-to-implement-JS-promises/">article</a>. Check out his 
+        <a href="https://www.youtube.com/channel/UCowGkA97LtRo0cr7kse2eRA/videos"> youtube channel </a> 
+        for an in depth walk through of how to build a promise from scratch.
+      </p>
+
+      <p>
+        Today we got really deep into a specific implementation of a promise, but remember, a promise is a spec. It's a set of
+        rules that, as long as you implement them, you have a promise. You can look around and find many different versions, all 
+        of which have their strengths and weaknesses. The most important part to remember is that promises take care of of handling 
+        a result of an async action in a synchronous way. The code that goes into .then can be synchronous, yet it's invoked after 
+        the asynchronous code because it uses the microtask queue to execute at the end of the tick that the asynchronous code 
+        belongs to. Check out the articles section for part 4, where we implement async/await to get another solution on the sync/async 
+        problem.
+      </p>
+
+      <p>
+        <a href="articles.html">More Articles</a>
       </p>
 
     </div>
