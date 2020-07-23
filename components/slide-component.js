@@ -126,6 +126,7 @@
     }
   }
   </style>
+
   <div class="swiper-slide">
     <div class="home-icon-wrapper">
       <a href="/"> 
@@ -136,6 +137,7 @@
     <h2 class="name"></h2>
 
     <div class="project-container">
+
       <div class="summary-container">
         <div class="summary-wrapper">
           <h3>
@@ -152,7 +154,7 @@
           <ul class="sources"></ul>
         </div>
       </div>
-
+      
       <div class="image-container">
         <div class="image-wrapper">
           <a target="_blank" class="gif-link" >
@@ -179,6 +181,10 @@
       this.$sources = shadowRoot.querySelector('.sources')
       this.$gifLink = shadowRoot.querySelector('.gif-link')
       this.$gifPreview = shadowRoot.querySelector('.gif-preview')
+      this.$imageContainer = shadowRoot.querySelector(".image-container")
+      this.$projectContainer = shadowRoot.querySelector('.project-container')
+
+      // this.$imageWrapper = shadowRoot.querySelector(".i-wrapper")
     }
 
     get data() {
@@ -200,15 +206,32 @@
         li.innerText = ch
         this.$challenges.appendChild(li)
       })
+
       // Create list of sources
       this.jsonData.sources.forEach(ch => {
         const li = document.createElement('li')
         li.innerHTML = ch
         this.$sources.appendChild(li)
       })
-      this.$gifLink.href = this.jsonData.imgHref
-      this.$gifLink.title = this.jsonData.title
-      this.$gifPreview.src = this.jsonData.imgSrc
+
+      if(this.jsonData.app) {
+        const div = document.createElement('div')
+        const jsDiv = document.createElement('div')
+        this.$imageContainer.style.display = "none"
+        jsDiv.innerHTML = this.jsonData.js
+        div.innerHTML = this.jsonData.app
+        console.log(this.jsonData.js)
+
+        this.$projectContainer.appendChild(div)
+        this.$projectContainer.appendChild(jsDiv)
+
+
+      } else {
+        this.$gifLink.href = this.jsonData.imgHref
+        this.$gifLink.title = this.jsonData.title
+        this.$gifPreview.src = this.jsonData.imgSrc
+      }
+
     }
   });
 })()

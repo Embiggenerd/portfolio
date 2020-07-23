@@ -77,7 +77,7 @@
       <p>
         Before you get confused, here's what everything means: our memory is a zero indexed structure. We load up our
         instructions starting at index 0. These instructions are similar to our javascript code, but not exactly. They 
-        the machine code we talked about earlier that our JS gets translated into. Call
+        are the machine code that our JS gets translated into. Call
         and return get their own instructions, and beside those, we only call stdout. These are the 'real' instructions
         that any human readable language gets translated into. It's called machine code, and each instruction string 
         is associated with a binary CPU instruction, which is different for every instruction set. This structure grows 
@@ -122,7 +122,7 @@
       <img src="article-images/memoryDiagram_1.png" />
 
       <p>
-        We have the SP point to line 11 in the stack, and our PC points to line 2. We execute line two, which prints
+        We have the SP point to line 11 in the stack, and our PC points to line 2. We execute line 2, which prints
         'hi' to
         the user, and set PC to the return on line 3. People don't ordinarily put explicit returns at the end of void
         functions, but here we are trying to be really transparent.
@@ -188,8 +188,8 @@
         , we avoid threads because of the memory requirements and the latency overhead of context switching. The nice thing 
         about threads is that you don't need a schedular. When a thread comes back with some data, we interrupt our main thread,
         and place that data into our message queue. Without threads, we need a scheduler and a way to execute synchronous code 
-        associate with asynchronous code. For instance, making a get request to google maps API is asynch, logging to stdout is 
-        synch. Our sheduler is the event loop.
+        associated with asynchronous code. For instance, making a get request to google maps API is async, logging to stdout is 
+        sync. Our sheduler is the event loop.
       </p>
 
       <h2>
@@ -202,7 +202,7 @@
         on the message queue. However, without threads, we have the problem of scheduling. Let's remember one thing - we 
         are working on an event stream which will tell us when some network call comes back. When that call comes back, 
         we can execute some code we passed as a callback on whatever the network data is. That callback is executed by 
-        placing on a message queue. But this thing that places it on the queue - how does it know the network call 
+        placing it on the message queue. But this thing that places it on the queue - how does it know the network call 
         completed? Remember select()?
       </p>
 
@@ -211,7 +211,7 @@
         or write
         operation, and this could be a thousand different files. However, with things like network events, we can place
         all network
-        i/o events into one bucket - the network io bucket, and we can check that bucket, as well as other types of
+        I/O events into one bucket - the network I/O bucket, and we can check that bucket, as well as other types of
         buckets. For
         instance, using setTimeout(callback, timeout) registers a function in the setTimeout bucket, and at the
         beginnign of every loop, we can
@@ -261,9 +261,9 @@
       <p>
         So far, we have sort of figured out how to place async code onto our sync call stack to execute it. We have a
         loop
-        checking for async events to get done, then we place the callback associated with those events onto our sync
-        callstack
-        only when it is empty. This would explain this sort of code:
+        checking for async events to get done. When it's done, we place the callback we registered with the event loop onto 
+        our callback queue. When all of the synchronous code has been execute, we go to the callback queue, and start placing
+        then on the message queue to execute them. This would explain this sort of code:
       </p>
 
       <pre>
@@ -288,11 +288,11 @@
         last
         sync instruction off the call stack, it is not empty, and the callback queue is not even checked. The first
         setTimeout
-        make sense, but what is with the order of the next two? Shouldn't we execute them in order? The reason is that the
+        makes sense, but what is with the order of the next two? Shouldn't we execute them in order? The reason is that the
         event
         loop does not know about the second setTimeout callback until the first is invoked, and by that time, the third
         has
-        already been appended onto the queue. Every time we take a callback off the queue and execute its code, we call
+        already been added onto the callback queue. Every time we take a callback off the queue and execute its code, we call
         this
         a <b>tick</b>. The first tick can be considered the sync code, the next is first setTimeout, and then the third
         and second.
@@ -334,7 +334,8 @@
         queue to
         macrotask queue, and we are adding a microtask queue in the middle. The rules are, if we have anything in the
         microtask
-        queue, put all of it on the callstack, and only then go back to the next tick. Meaning, we have a step at the
+        queue, put all of it on the message queue when the sychronous code is done, and only then go to the next tick.
+        Meaning, we have a step at the
         end of each
         tick that checks the microtask queue. This is weird, because both a macrotask and a microtask can themselves add
         to the
@@ -359,7 +360,7 @@
       <p>
         Another way to place callbacks onto the microtask queue of the current tick is to use process.nextTick(). That's
         right, today
-        we learn that the people who designed these systems simply have no respect, and that's why they named the method
+        we learn that the people who designed these systems  - these people have no respect, and that's why they named the method
         that uses
         this tick as next tick, and the one that places on next tick as setImmediate. To add insult to injury,
         process.nextTick(callback)
@@ -495,7 +496,8 @@
         low level machine
         code that is made of CPU instructions. Those instructions change from machine to machine, since there are many
         different instruction
-        sets and their implementations on various machines. Byte code looks a lot like assembly language, except it
+        sets and their implementations on various machines. You may have heard of assembly language - this is simply those
+        machine instructions, but referenced by strings. Byte code looks a lot like assembly language, except it
         doesn't map directly
         to a single machine's instructions, but to any machine's instructions. How it does that is abstracted away from
         us, but regardless
@@ -540,8 +542,8 @@
       <p>
         As you can see, much lower level. Ignition however doesn't just translate JS into byte code as fast as it can,
         it helps the optimizers by keeping track of patterns in your code. For instance, JS doesn't care if you give a
-        funcition a string or a number to operate on, since it's a loosely typed language, however if you are
-        consistently calling a particular funcition on a certain data type, it will keep this information stored in
+        function a string or a number to operate on, since it's a loosely typed language, however if you are
+        consistently calling a particular function on a certain data type, it will keep this information stored in
         something called the feedbackVector. After doing this, ignition will indeed interpret that byte code, so
         you very quickly see a representation of a webpage, even if it isn't optimized yet. If you run the script
         again later, V8 will use turbofan to optimize on the bytecode further using information stored in
@@ -556,7 +558,7 @@
         profiler. The reason this thing is a big deal is that before we had something called crankshaft that did this
         job,
         however it had trouble with new ecma script updates, and was structured such that updating the language features
-        that it optimized was difficult, because it didn't work on the byte code, but a stage between JS and bytecode
+        that it optimized was difficult, because it didn't work on the byte code, but at a stage between JS and bytecode
         called the parse tree. If you think your job is tedious, there are engineers at Google who sit around and
         optimize
         one JS language feature at a time.
@@ -569,7 +571,7 @@
         JS into
         byte code, an 'optimization' layer that works on that byte code, and a 'backend' layer that does some bytecode
         generation,
-        and some optimization. Iginition uses the backend to do its job, and the reason it exists at all is that that
+        and some optimization. Iginition uses the backend to do its job, and the reason it exists at all is that the
         latency
         of optimizing code on the first run through would mean that the user would see a small hickup before his page
         loads quickly.
@@ -583,7 +585,7 @@
         it. Since
         c++ does have access to these system calls, nodejs comes with a layer of c++ bindings that allow the JS code
         exposed in node
-        to reference c++ language features. These are just another feature of node, which is described is an environment
+        to reference c++ language features. These are just another feature of node, which is described as an environment
         that
         combines libuv, V8, c++ bindings, and more to allow us to build servers out of Javascript.
       </p>
@@ -591,9 +593,13 @@
       <p>
         At this point, most people think they are done. However, there is one feature we only briefly mentioned, but one
         that is
-        very important, and that's promises. Tune in next time, when we deconstruct promises and async/await, and wonder
-        if there
-        really is such a thing as too big.
+        very important, and that's promises. You can read it in <a href="/node-part-three.html">Part Three</a>. 
+        Read on, and follow along as we implement promises froms scratch, and wonder
+        if there really is such a thing as too big.
+      </p>
+
+      <p>
+        <a href="articles.html">More Articles</a>
       </p>
 
     </div>

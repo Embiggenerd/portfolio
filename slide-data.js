@@ -4,11 +4,11 @@ const slideData = [
     description: "A MERN (with typsecript) stack app for budgeting. You can create, drag and drop items into envelopes. Delete by \
     dragging to a trash can. Edit text like a word processor to change the names of prices of everything.",
     challenges: [
-      "Drag and Drop from scratch",
-      "Formless updates resembling a word processor",
-      "Typescript on front and back",
-      "Domain driven, modular design for backend",
-      "Extensive use of Material UI"
+      "Drag and Drop from scratch.",
+      "Formless updates resembling a word processor.",
+      "Typescript on front and back.",
+      "Domain driven, modular design for backend.",
+      "Extensive use of Material UI."
     ],
     sources: [
       "Documentation, various blogs",
@@ -17,6 +17,27 @@ const slideData = [
     imgSrc: "gifs/envallot_1.gif",
     imgHref: "https://master.d3jy9j46ta2dag.amplifyapp.com/",
     title: "Deployed site"
+  },
+  {
+    name: "Dockerized Go Todos",
+    description: 'A dockerized todos app written using only the standard go \
+    library and plain SQL queries, with go templates for the front \
+    end.',
+    challenges: [
+      "Learned docker and docker-compose.",
+      "The go language, and learning to read source and documentation \
+      in general.",
+      "Learned raw SQL and postgres.",
+      "Memory profiling, request metrics, and logging"
+    ],
+    sources: [
+      '<a target="_blank" href="https://golang.org/doc/">The go documentation</a>',
+      'Various blogs and stackoverflow questions.',
+      '<a target="_blank" href="https://github.com/Embiggenerd/dockerizedGoTodos">Github repository</a>'
+    ],
+    imgSrc: "gifs/dockerized-go-todos_1.gif",
+    imgHref: "https://github.com/Embiggenerd/dockerizedGoTodos",
+    title: "Github Repository"
   },
   {
     name: "Angular Todos",
@@ -73,28 +94,6 @@ const slideData = [
     ],
     imgSrc: "gifs/weather-app_1.gif",
     imgHref: "https://github.com/Embiggenerd/weather_app2",
-    title: "Github Repository"
-  },
-  {
-    name: "Dockerized Go Todos",
-    description: 'A dockerized todos app written using only the standard go \
-    library and plain SQL queries, with go templates for the front \
-    end.',
-    challenges: [
-      "First dockerized application.",
-      "Built cache buster, used no frameworks.",
-      "The go language, and learning to read source and documentation \
-      in general.",
-      "Learned raw SQL and postgres.",
-      "Sessions and a cache buster for CSS files completely from scratch."
-    ],
-    sources: [
-      '<a target="_blank" href="https://golang.org/doc/">The go documentation</a>',
-      'Various blogs and stackoverflow questions.',
-      '<a target="_blank" href="https://github.com/Embiggenerd/dockerizedGoTodos">Github repository</a>'
-    ],
-    imgSrc: "gifs/dockerized-go-todos_1.gif",
-    imgHref: "https://github.com/Embiggenerd/dockerizedGoTodos",
     title: "Github Repository"
   },
   {
