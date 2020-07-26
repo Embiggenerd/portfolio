@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Inconsolata:wght@600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="article-style.css">
+  <style>
+    h3 {
+      font-size: 24px;
+      margin: 12px 0;
+    }
+  </style>
+  <title>Why people form pyramid hierarchies</title>
+</head>
+
+<body>
+
+  <div class="article-container">
+
+    <navbar-component showHome="true" showArticles="true" showContact="true"></navbar-component>
+    <script src="components/navbar-component.js"></script>
+
+    <div class="article-wrapper">
+
+      <h1>Why people form pyramid hierachies</h1>
+
+      <p>
+        In observing the behavior of any group of social animals, one thing that stands out is, a pyramid shaped social hierarchy
+        will eventuall form. This is so common that we take it for granted. Of course there's always a hierachy - why would't 
+        there be? When things are common, we stop asking why they are there, but wouldn't it be nice to find an explanation?
+      </p>
+
+      <p>
+        The big reason to try to explain common behavior is that there must be some value in it. If a person wants to accomplish
+        something, such as build the next big app, they invariably must form a group to achieve their goal. Whether they succeed 
+        or not has a lot do with how they manage to create that group - whether it's successful recruitment, appropriate
+        delegation, or common characterics amongs its members.
+      </p>
+
+      <p>
+        Why social hierachies exist then is an important question, and today we try to answer from the perspective of data science.
+      </p>
+
+      <h2>
+        Dimensional Complexity 
+      </h2>
+
+      <p>
+        In data science, dimensional complexity means how many varaibles are we considering when we train our model. Let's say 
+        we are training a model to predict Igor's favorite car. We have four in this sample cars: 
+      </p>
+
+      <pre>
++-----------+-------------+---------------+
+|   make    |    year     |     model     |
++-----------+-------------+---------------+
+| Ford      | 1998        | Taurus        |
+| Toyota    | 1997        | Camry         |
+| Honda     | 2000        | Accord        |
+| Tesla     | 2019        | Model S       |
++-----------+-------------+---------------+
+      </pre>
+
+      <p>
+        Igor chose the Honda Accord from this sample, and we can use that information on other samples. Every time we add a row 
+        to the data set, we increase the work we have to do linearly. When we add another column, it's a different story. Let's 
+        say we add color.
+      </p>
+
+      <pre>
++-----------+-------------+---------------+----------------+
+|   make    |    year     |     model     |   color        |
++-----------+-------------+---------------+----------------+
+| Ford      | 1998        | Taurus        | Red            |
+| Toyota    | 1997        | Camry         | Blue           |
+| Honda     | 2000        | Accord        | Yelow          |
+| Tesla     | 2019        | Model S       | Green          |
++-----------+-------------+---------------+----------------+
+      </pre>
+
+      <p>
+        To try to predict by color, our model has to consider the year, model, and make as well. Yellow on a honda may do it 
+        for him, but not on a Tesla. Adding another dimension other problem increases our computation costs exponentially.
+      </p>
+
+      <h2>
+        Dimensional complexity of every day life
+      </h2>
+
+      
+      
+      <p>
+        <a href="articles.html">More Articles</a>
+      </p>
+
+    </div>
+
+  </div>
+
+</body>
+
+</html>
