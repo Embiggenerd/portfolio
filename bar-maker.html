@@ -2,194 +2,195 @@
 <html lang="en">
 
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta http-equiv="Accept-Encoding" content="gzip" />
-  <link rel="icon" href="manbunorange.png">
-  <title>Bar Maker</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    * {
-      box-sizing: border-box;
-      padding: 0;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta http-equiv="Accept-Encoding" content="gzip" />
+    <link rel="icon" href="manbunorange.png">
+    <title>Bar Maker</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        * {
+            box-sizing: border-box;
+            padding: 0;
+        }
 
-    .tooltip {
-      width: 180px;
-      height: 220px;
-      font-size: 1em;
-      line-height: 1.5;
-      margin: 0;
-      list-style: none;
-      box-sizing: border-box;
-      position: absolute;
-      background: #fff;
-      color: #333333;
-      border-radius: 3px;
-      /* transition: all .1s ease; */
-      transform: translate(-50%, 0);
-      box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
-      /* padding: 10px 10px 8px; */
-      text-align: center;
-      opacity: 1;
-      left: 368.88px;
-      top: 16.646px;
-      display: none;
-    }
+        .tooltip {
+            width: 180px;
+            height: 220px;
+            font-size: 1em;
+            line-height: 1.5;
+            margin: 0;
+            list-style: none;
+            box-sizing: border-box;
+            position: absolute;
+            background: #fff;
+            color: #333333;
+            border-radius: 3px;
+            /* transition: all .1s ease; */
+            transform: translate(-50%, 0);
+            box-shadow: 0 3px 8px 0 rgba(0, 0, 0, 0.1);
+            /* padding: 10px 10px 8px; */
+            text-align: center;
+            opacity: 1;
+            left: 368.88px;
+            top: 16.646px;
+            display: none;
+        }
 
-    .tooltip:after {
-      content: '';
-      display: block;
-      width: 0;
-      height: 0;
-      position: absolute;
-      border-left: 10px solid transparent;
-      border-right: 10px solid transparent;
-      border-top: 10px solid #fff;
-      left: calc(50% - 14px);
-      bottom: -9px;
-    }
+        .tooltip:after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 0;
+            position: absolute;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid #fff;
+            left: calc(50% - 14px);
+            bottom: -9px;
+        }
 
-    .removeButton {
-      height: 25px;
-      width: 25px;
-      border-radius: 50%;
-      display: inline-block;
-    }
+        .removeButton {
+            height: 25px;
+            width: 25px;
+            border-radius: 50%;
+            display: inline-block;
+        }
 
-    .tabs {
-      position: relative;
-      /* min-height: 200px; */
-      /* This part sucks */
-      height: 55px;
-      width: 180px;
-      clear: both;
-      margin: 0;
-    }
+        .tabs {
+            position: relative;
+            /* min-height: 200px; */
+            /* This part sucks */
+            height: 55px;
+            width: 180px;
+            clear: both;
+            margin: 0;
+        }
 
-    .tab {
-      float: left;
-    }
+        .tab {
+            float: left;
+        }
 
-    .tab label {
-      background: #eee;
-      padding: 10px;
-      border: 1px solid #ccc;
-      margin-left: -1px;
-      position: relative;
-      left: 1px;
-    }
+        .tab label {
+            background: #eee;
+            padding: 10px;
+            border: 1px solid #ccc;
+            margin-left: -1px;
+            position: relative;
+            left: 1px;
+        }
 
-    .tab [type="radio"] {
-      display: none
-    }
+        .tab [type="radio"] {
+            display: none
+        }
 
-    .content {
-      position: absolute;
-      top: 28px;
-      left: 0;
-      background: white;
-      right: 0;
-      bottom: 0;
-      /* padding: 20px; */
-      border: 1px solid #ccc;
-      border-left: none;
-      border-right: none;
-      border-bottom: none;
-      overflow: hidden;
-    }
+        .content {
+            position: absolute;
+            top: 28px;
+            left: 0;
+            background: white;
+            right: 0;
+            bottom: 0;
+            /* padding: 20px; */
+            border: 1px solid #ccc;
+            border-left: none;
+            border-right: none;
+            border-bottom: none;
+            overflow: hidden;
+        }
 
-    .content>* {
-      opacity: 0;
-      transform: translateX(-100%);
-      transition: all 0.6s ease;
-    }
+        .content>* {
+            opacity: 0;
+            transform: translateX(-100%);
+            transition: all 0.6s ease;
+        }
 
-    [type="radio"]:focus~label {
-      outline: 2px solid blue;
-    }
+        [type="radio"]:focus~label {
+            outline: 2px solid blue;
+        }
 
-    [type="radio"]:checked~label {
-      background: white;
-      border-bottom: 1px solid white;
-      z-index: 2;
-    }
+        [type="radio"]:checked~label {
+            background: white;
+            border-bottom: 1px solid white;
+            z-index: 2;
+        }
 
-    [type="radio"]:checked~label~.content {
-      z-index: 1;
-    }
+        [type="radio"]:checked~label~.content {
+            z-index: 1;
+        }
 
-    [type="radio"]:checked~label~.content>* {
-      opacity: 1;
-      transform: translateX(0);
-    }
+        [type="radio"]:checked~label~.content>* {
+            opacity: 1;
+            transform: translateX(0);
+        }
 
-    .content p {
-      margin: 0;
-    }
+        .content p {
+            margin: 0;
+        }
 
-    .tooltip form {
-      /* border: 1px solid #ccc; */
-      border-top: none;
-      border-left: none;
-      border-right: none;
-    }
+        .tooltip form {
+            /* border: 1px solid #ccc; */
+            border-top: none;
+            border-left: none;
+            border-right: none;
+        }
 
-    .toggle-linear {
-      width: 60px;
-      height: 25px;
-      border-radius: 2px;
-      border: 1px blue solid
-    }
-  </style>
+        .toggle-linear {
+            width: 60px;
+            height: 25px;
+            border-radius: 2px;
+            border: 1px blue solid
+        }
+    </style>
 </head>
 
 <body>
-  <div class="tooltip" id="tooltip">
-    <div class="tabs">
-      <div class="tab">
-        <input type="radio" id="edit" name="tab-group" checked>
-        <label for="edit">Edit</label>
-        <div class="content">
-          <p>Edit a segment</p>
+    <div class="tooltip" id="tooltip">
+        <div class="tabs">
+            <div class="tab">
+                <input type="radio" id="edit" name="tab-group" checked>
+                <label for="edit">Edit</label>
+                <div class="content">
+                    <p>Edit a segment</p>
+                </div>
+            </div>
+            <div class="tab">
+                <input type="radio" id="add" name="tab-group">
+                <label for="add">Add</label>
+                <div class="content">
+                    <p>Add a new segment</p>
+                </div>
+            </div>
         </div>
-      </div>
-      <div class="tab">
-        <input type="radio" id="add" name="tab-group">
-        <label for="add">Add</label>
-        <div class="content">
-          <p>Add a new segment</p>
-        </div>
-      </div>
+        <form>
+            <label for="text">Text:</label><br>
+            <input type="text" id="text" name="text" value=""><br>
+
+            <label for="color">Color:</label><br>
+            <input type="color" id="color" name="color" value="#ffff00">
+
+            <input type="submit">
+        </form>
+
+        <button class="removeButton">-</button>
     </div>
-    <form>
-      <label for="text">Text:</label><br>
-      <input type="text" id="text" name="text" value=""><br>
 
-      <label for="color">Color:</label><br>
-      <input type="color" id="color" name="color" value="#ffff00">
+    <div style="margin-top:250px;" id="bar-parent"></div>
 
-      <input type="submit">
-    </form>
+    <div class="toggle-linear"></div>
+    <div id="values-bar-parent"></div>
+    <button class="printButton">PRINT</button>
 
-    <button class="removeButton">-</button>
-  </div>
-
-  <div style="margin-top:250px;" id="bar-parent"></div>
-
-  <div class="toggle-linear"></div>
-  <div id="values-bar-parent"></div>
-  <button class="printButton">PRINT</button>
-
-  <pre id="print">
+    <pre id="print">
 
   </pre>
-  <script src="barMaker.js"></script>
-  <script>
-    
-    const bar = new BarMaker()
+    <script src="barMaker.js"></script>
+    <script>
 
-  </script>
+        const bar = new BarMaker()
+
+    </script>
 </body>
 
 </html>
