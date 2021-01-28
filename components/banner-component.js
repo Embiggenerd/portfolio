@@ -15,7 +15,7 @@
       }
     </style>
 
-    <h1 class="banner">IGOR ATAKHANOV</h1>`
+    <h1 class="banner" id="hellow-there">IGOR ATAKHANOV</h1>`
 
   customElements.define('banner-component', class extends HTMLElement {
     constructor() {
