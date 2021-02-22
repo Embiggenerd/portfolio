@@ -180,6 +180,10 @@
   <pre id="print">
 
   </pre>
+
+  <button class="run-test">TEST</button>
+  <mobile-bar></mobile-bar>
+  
   <script>
     class BarMaker {
       constructor(initialState) {
@@ -212,13 +216,16 @@
         this.selectedDivider = null
         this.leftWidth = 0
         this.rightWidth = 0
+        this.printableState = {}
         this.bindHandlers = this.bindHandlers.bind(this)
         this.bindHandlers()
-        this.initBar(initialState);
+        this.initBar(initialState)
         this.initTooltip()
         this.initToggleLinear()
         this.initValuesBar()
         this.initPrintable()
+        this.adjustExampleBar()
+        this.initTesting()
       }
 
       initBar(initialState = {}) {
@@ -272,6 +279,7 @@
         this.drawBar()
         this.distributeLinearValues()
         this.parent.appendChild(this.bar)
+        this.testExampleBar()
       }
 
       drawBar() {
@@ -807,7 +815,6 @@
         }
         this.printState()
         console.log(this.state.segments, this.valueSegments)
-
       };
 
       // *************************** LinearToggle Methods *************************** \\
@@ -845,11 +852,44 @@
       }
 
       printState() {
-        const printableState = this.state.segments.map(({ innerText, width, backgroundColor, valueEnd, valueBegin }) => ({ width, backgroundColor, valueEnd, valueBegin, text: innerText }))
-        document.querySelector('#print').innerText = JSON.stringify(printableState, null, 1)
+        // const printableState = this.state.segments.map(({ width, backgroundColor, valueEnd, valueBegin }) => ({ width, backgroundColor, valueEnd, valueBegin }))
+        // this.printableState = this.getPrintableState()
+        document.querySelector('#print').innerText = JSON.stringify(this.getPrintableState(), null, 1)
+        this.adjustExampleBar()
       }
 
       // *************************** Utility Methods *************************** \\
+
+      initTesting(){
+        const testButton = document.querySelector('button.run-test')
+        console.log({testButton}, '^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^')
+        testButton.addEventListener('click', this.testExampleBar)
+      }
+
+      adjustExampleBar(){
+        // const printableState = this.state.segments.map(({ width, backgroundColor, valueEnd, valueBegin }) => ({ width, backgroundColor, valueEnd, valueBegin }))
+        const exampleBar = document.querySelector('mobile-bar')
+        console.log({printableState:this.getPrintableState()})
+        exampleBar.setAttribute('bardata', JSON.stringify(this.getPrintableState()))
+      }
+
+      getPrintableState(){
+        return this.state.segments.map(({ width, backgroundColor, valueEnd, valueBegin, innerText }) => ({ width, backgroundColor, valueEnd, valueBegin, innerText }))
+      }
+
+      testExampleBar(){
+        const testData = ['300', '400', '500', '600', '700', '800', '850', '483', '666']
+        const exampleBar = document.querySelector('mobile-bar')
+        console.log({exampleBar},'&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&')
+        for(let i = 0; i < testData.length; i++){
+          // console.log(i)
+          setTimeout(()=>{
+            
+            exampleBar.setAttribute('score', testData[i])
+
+         }, (i * 1500))
+        }
+      }
 
       getTotalWidthPercent(index = this.state.segments.length) {
         let totalWidthPercent = 0
@@ -891,11 +931,14 @@
         this.distributeCustomValues = this.distributeCustomValues.bind(this)
         this.initPrintable = this.initPrintable.bind(this)
         this.printState = this.printState.bind(this)
+        this.adjustExampleBar = this.adjustExampleBar.bind(this)
+        // this.initTesting = this.initTesting.bind(this)
       }
     }
     const bar = new BarMaker()
 
   </script>
+  <script src="mobile-bar.js"></script>
 </body>
 
 </html>
